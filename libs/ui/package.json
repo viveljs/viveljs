@@ -1,0 +1,32 @@
+{
+  "name": "vivel-ui",
+  "version": "0.4.0",
+  "author": "Muhammad Tsany Qudsi <tsanyqudsi@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/viveljs/vivel/tree/main/libs/ui"
+  },
+  "engines": {
+    "node": ">=16.8.0",
+    "npm": ">=7.20.0"
+  },
+  "scripts": {
+    "start": "vite serve",
+    "build": "vite build",
+    "cosmos": "cosmos",
+    "cosmos:export": "cosmos-export",
+    "start:renderer": "vite serve --port=8080"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
+    "babel-loader": "^8.2.2"
+  },
+  "peerDependencies": {
+    "lodash": "^4.17.21",
+    "react": "17.0.x",
+    "react-dom": "17.0.x"
+  }
+}

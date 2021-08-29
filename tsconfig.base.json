@@ -1,0 +1,19 @@
+// https://www.typescriptlang.org/ja/tsconfig
+{
+  "compilerOptions": {
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "noEmit": true,
+    "target": "ES2020",
+    "composite": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Node",
+    "declaration": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true
+  },
+  "exclude": ["node_modules", "**/*/lib", "**/*/dist"]
+}

@@ -1,0 +1,3 @@
+apps/**/dist/*
+libs/**/dist/*
+libs/**/cosmos/__fixtures__/*

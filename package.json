@@ -1,0 +1,56 @@
+{
+    "name": "viveljs",
+    "version": "0.4.0",
+    "description": "Visual Novel Engine",
+    "workspaces": [
+      "./apps/*",
+      "./libs/*"
+    ],
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "render": "npm run start:renderer -w ./libs/ui",
+      "rc": "npm run cosmos -w ./libs/ui",
+      "rc:export": "npm run cosmos:export -w ./libs/ui",
+      "la:dev": "npm run dev -w ./apps/leamica-advance",
+      "tut:dev": "npm run dev -w ./apps/tutorial"
+    },
+    "repository": {
+      "type": "git",
+      "url": "git+https://github.com/viveljs/vivel.git"
+    },
+    "keywords": [
+      "visualnovel",
+      "game-engine",
+      "visual-novel"
+    ],
+    "author": "Muhammad Tsany Qudsi",
+    "license": "GPL-3.0-or-later",
+    "bugs": {
+      "url": "https://github.com/viveljs/vivel/issues"
+    },
+    "homepage": "https://github.com/viveljs/vivel#readme",
+    "dependencies": {
+      "lodash": "^4.17.21",
+      "react": "17.0.x",
+      "react-dom": "17.0.x"
+    },
+    "devDependencies": {
+      "@types/react": "17.0.x",
+      "@types/react-dom": "17.0.x",
+      "@typescript-eslint/eslint-plugin": "^4.29.3",
+      "@typescript-eslint/parser": "^4.29.3",
+      "@types/lodash": "^4.14.172",
+      "@vitejs/plugin-react-refresh": "^1.3.1",
+      "eslint": "^7.32.0",
+      "eslint-config-google": "^0.14.0",
+      "eslint-config-prettier": "^8.3.0",
+      "eslint-plugin-prettier": "^3.4.1",
+      "eslint-plugin-react": "^7.24.0",
+      "prettier": "^2.3.2",
+      "react-cosmos": "5.6.x",
+      "typescript": "4.3.x",
+      "vite": "^2.5.1"
+    }
+  }
+  

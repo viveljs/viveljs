@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "references": [
+    {
+      "path": "./libs/ui"
+    },
+    {
+      "path": "./apps/leamica-advance"
+    }
+  ]
+}
