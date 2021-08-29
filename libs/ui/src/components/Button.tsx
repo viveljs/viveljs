@@ -2,13 +2,12 @@ import * as React from 'react';
 import { capitalize } from 'lodash';
 interface ButtonProps {
   text: string;
-  dialogue?: boolean;
-  onClick?: () => void;
+  onClick?: () => any;
 }
 
 export const Button = (props: ButtonProps) => {
   const handleClick = () => {
-    props.onClick;
+    props.onClick && props.onClick();
   };
 
   return (
