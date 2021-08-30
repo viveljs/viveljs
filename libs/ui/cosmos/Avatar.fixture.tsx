@@ -90,7 +90,7 @@ const Alias = () => {
 const WithButton = () => {
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
   const handleClick = () => {
-    setIndex(index + 1);
+   if(index < dialogue.length -1)  setIndex(index + 1);
   };
   return (
     <div>
