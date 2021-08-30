@@ -3,6 +3,8 @@ import { capitalize } from 'lodash';
 interface ButtonProps {
   text: string;
   onClick?: () => any;
+  className?: string;
+  index?: number;
 }
 
 export const Button = (props: ButtonProps) => {
@@ -11,7 +13,11 @@ export const Button = (props: ButtonProps) => {
   };
 
   return (
-    <button onClick={handleClick} className="button">
+    <button
+      onClick={handleClick}
+      id={`button-${props.index}`}
+      className={props.className}
+    >
       {capitalize(props.text)}
     </button>
   );

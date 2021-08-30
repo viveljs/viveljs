@@ -1,6 +1,8 @@
 # VivelJS
 
 Visual Novel Engine using Typescript and Vite
+Character assets for demo made by [Fülli](https://twitter.com/_fuelli)
+Backgorund asset for demo made by [LisadiKaprio](https://lisadikaprio.itch.io/)
 
 > Component Demo :
 > App Demo :

@@ -3,6 +3,6 @@
     "source.fixAll.eslint": true
   },
   "eslint.validate": ["javascript", "typescript"],
-  "css.validate": false,
+  "css.validate": true,
   "git.ignoreLimitWarning": true
 }

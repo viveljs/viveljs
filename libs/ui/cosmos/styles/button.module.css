@@ -1,0 +1,13 @@
+.button {
+  padding-left: 1.6rem;
+  padding-right: 1.6rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-family: 'Rubik', sans-serif;
+  border-radius: 1rem;
+  width: 100%;
+  background-color: rgba(132, 199, 219, 0.8);
+  color: rgba(44, 44, 44, 0.8);
+  font-weight: 600;
+  font-size: large;
+}
