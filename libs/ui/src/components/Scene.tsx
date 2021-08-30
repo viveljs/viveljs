@@ -7,6 +7,30 @@ interface SceneProps {
   index: number;
 }
 
+interface TransitionProps {
+  transition?: 'dark' | 'light';
+  children: React.ReactNode;
+  className?: string;
+  backgrounds: string[];
+  index: number;
+}
+
+export const Transition = (props: TransitionProps) => {
+  return (
+    <div
+      style={{
+        position: 'fixed',
+        width: '100%',
+        height: '100vh',
+        backgroundColor:
+          props.transition == 'dark'
+            ? 'rgba(0,0,0,0.8)'
+            : 'rgba(255,255,255,0.8)',
+      }}
+    ></div>
+  );
+};
+
 export const Scene = (props: SceneProps) => {
   return (
     <main

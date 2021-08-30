@@ -79,7 +79,14 @@ export const Avatar = (props: AvatarProps) => {
         >
           {images?.map((image, index) => {
             return (
-              <img src={image as string} style={avatarImageStyle} key={index} />
+              <img
+                src={image as string}
+                style={{
+                  ...avatarImageStyle,
+                  marginLeft: index > 0 ? '-1.2rem' : '0',
+                }}
+                key={index}
+              />
             );
           })}
         </div>

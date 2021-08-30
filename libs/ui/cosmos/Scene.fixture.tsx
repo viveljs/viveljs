@@ -5,7 +5,6 @@ import { Scene, Dialogue, Avatar, Button } from '../src/components';
 import xStyle from './styles/dialogueX.module.css';
 import styles from './styles/avatar.module.css';
 import buttonStyle from './styles/button.module.css';
-import sceneStyle from './styles/scene.module.css';
 
 import tom from './images/tom.png';
 import lee from './images/lee.png';
@@ -38,7 +37,7 @@ const Single = () => {
   };
 
   return (
-    <Scene backgrounds={scenes} index={index} className={sceneStyle.container}>
+    <Scene backgrounds={scenes} index={index}>
       <Dialogue
         text={lines}
         index={index}

@@ -27,7 +27,7 @@ const Horizontal = () => {
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
 
   const handleClick = () => {
-   if(index < dialogue.length -1)  setIndex(index + 1);
+    if (index < dialogue.length - 1) setIndex(index + 1);
   };
 
   return (
@@ -56,7 +56,7 @@ const Vertical = () => {
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
 
   const handleClick = () => {
-   if(index < dialogue.length -1)  setIndex(index + 1);
+    if (index < dialogue.length - 1) setIndex(index + 1);
   };
 
   return (
@@ -85,7 +85,7 @@ const BothX = () => {
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
 
   const handleClick = () => {
-   if(index < dialogue.length -1)  setIndex(index + 1);
+    if (index < dialogue.length - 1) setIndex(index + 1);
   };
 
   return (
@@ -121,7 +121,7 @@ const BothY = () => {
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
 
   const handleClick = () => {
-   if(index < dialogue.length -1)  setIndex(index + 1);
+    if (index < dialogue.length - 1) setIndex(index + 1);
   };
 
   return (
@@ -162,7 +162,7 @@ const BothNone = () => {
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
 
   const handleClick = () => {
-   if(index < dialogue.length -1)  setIndex(index + 1);
+    if (index < dialogue.length - 1) setIndex(index + 1);
   };
 
   return (
