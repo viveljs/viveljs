@@ -2,7 +2,6 @@
   "$schema": "../../node_modules/react-cosmos/config.schema.json",
 
   "userDepsFilePath": "./cosmos/cosmos.userdeps.js",
-  "experimentalRendererUrl": "http://localhost:8080/_renderer.html",
   "globalImports": ["./cosmos/style.css"],
   "watchDirs": ["./cosmos"],
   "webpack": {
