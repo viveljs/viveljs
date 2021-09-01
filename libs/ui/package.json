@@ -3,7 +3,9 @@
   "version": "0.4.0",
   "author": "Muhammad Tsany Qudsi <tsanyqudsi@gmail.com>",
   "license": "GPL-3.0-or-later",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/viveljs.umd.js",
   "module": "./dist/viveljs.es.js",
   "exports": {
@@ -31,7 +33,11 @@
     "@babel/preset-env": "^7.15.0",
     "@babel/preset-react": "^7.14.5",
     "@babel/preset-typescript": "^7.15.0",
-    "babel-loader": "^8.2.2"
+    "babel-loader": "^8.2.2",
+    "css-loader": "^6.2.0",
+    "file-loader": "^6.2.0",
+    "style-loader": "^3.2.1",
+    "url-loader": "^4.1.1"
   },
   "peerDependencies": {
     "lodash": "^4.17.21",

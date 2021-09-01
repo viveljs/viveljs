@@ -49,9 +49,11 @@
         "eslint-config-prettier": "^8.3.0",
         "eslint-plugin-prettier": "^3.4.1",
         "eslint-plugin-react": "^7.24.0",
+        "file-loader": "^6.2.0",
         "prettier": "^2.3.2",
         "react-cosmos": "5.6.x",
         "typescript": "4.3.x",
+        "url-loader": "^4.1.1",
         "vite": "^2.5.1"
     }
 }

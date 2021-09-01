@@ -32,7 +32,6 @@ const config: UserConfigFn = async () => {
         plugins: [
           typescript({
             target: 'es2020',
-            rootDir: resolvePath('./src/components'),
             declaration: true,
             declarationDir: resolvePath('./dist'),
             exclude: [
