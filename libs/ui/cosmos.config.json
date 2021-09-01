@@ -1,6 +1,6 @@
 {
   "globalImports": ["./cosmos/style.css"],
-  "publicUrl": "./viveljs/",
+  "publicUrl": "./",
 
   "webpack": {
     "overridePath": "./cosmos/webpack.override.js",
