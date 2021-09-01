@@ -1,8 +1,8 @@
 # Centralized gitignore
 libs/**/cosmos/cosmos.userdeps.js
 libs/**/cosmos-export/
-apps/**/node_modules/
-libs/**/node_modules/
+**/**/node_modules/
+**/**/.rollup.cache
 
 # Logs
 logs

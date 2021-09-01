@@ -2,14 +2,14 @@ import * as React from 'react';
 import { capitalize } from 'lodash';
 interface ButtonProps {
   text: string;
-  onClick?: () => any;
+  onClick?: (arg0: number) => any;
   className?: string;
   index?: number;
 }
 
 export const Button = (props: ButtonProps) => {
   const handleClick = () => {
-    props.onClick && props.onClick();
+    props.onClick && props.onClick(props.index as number);
   };
 
   return (

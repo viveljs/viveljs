@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { Avatar, Button } from '../src/components';
+import { Character, Button } from '../src/components';
 import { useValue } from 'react-cosmos/fixture';
-import styles from './styles/avatar.module.css';
+
 import buttonStyle from './styles/button.module.css';
 
 import tom from './images/tom.png';
@@ -14,75 +14,44 @@ const characterImages = [charlie, tom, arthur, lee];
 
 const Single = () => {
   return (
-    <Avatar
-      and="and"
+    <Character
       characters={characters}
       characterImages={characterImages}
       characterFlow={[[1]]}
       index={0}
-      slotDimension={['5rem']}
-      textClass={styles.text}
-      containerClass={styles.container}
     />
   );
 };
 
 const Double = () => {
   return (
-    <Avatar
-      and="and"
+    <Character
       characters={characters}
       characterImages={characterImages}
       characterFlow={[[1, 0]]}
       index={0}
-      slotDimension={['5rem']}
-      textClass={styles.text}
-      containerClass={styles.container}
     />
   );
 };
 
 const Triple = () => {
   return (
-    <Avatar
-      and="and"
+    <Character
       characters={characters}
       characterImages={characterImages}
       characterFlow={[[1, 0, 2]]}
       index={0}
-      slotDimension={['5rem']}
-      textClass={styles.text}
-      containerClass={styles.container}
     />
   );
 };
 
 const All = () => {
   return (
-    <Avatar
-      and="and"
+    <Character
       characters={characters}
       characterImages={characterImages}
       characterFlow={['displayAll']}
       index={0}
-      slotDimension={['5rem']}
-      textClass={styles.text}
-      containerClass={styles.container}
-    />
-  );
-};
-
-const Alias = () => {
-  return (
-    <Avatar
-      and="and"
-      characters={characters}
-      characterImages={characterImages}
-      characterFlow={['All the meddling kids']}
-      index={0}
-      slotDimension={['5rem']}
-      textClass={styles.text}
-      containerClass={styles.container}
     />
   );
 };
@@ -94,15 +63,11 @@ const WithButton = () => {
   };
   return (
     <div>
-      <Avatar
-        and="and"
+      <Character
         characters={characters}
         characterImages={characterImages}
         characterFlow={[[0], [1, 2], [0, 2, 3], [1, 2]]}
         index={index}
-        slotDimension={['5rem']}
-        textClass={styles.text}
-        containerClass={styles.container}
       />
       <Button
         text="next"
@@ -118,6 +83,5 @@ export default {
   Double: <Double />,
   Triple: <Triple />,
   'All Characters': <All />,
-  'Custom Alias': <Alias />,
   'Change Index with Button': <WithButton />,
 };

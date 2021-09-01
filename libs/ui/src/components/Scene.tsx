@@ -15,23 +15,49 @@ interface TransitionProps {
   index: number;
 }
 
-export const Transition = (props: TransitionProps) => {
+export const TransitionScene = (props: TransitionProps) => {
   return (
-    <div
-      style={{
-        position: 'fixed',
-        width: '100%',
-        height: '100vh',
-        backgroundColor:
-          props.transition == 'dark'
-            ? 'rgba(0,0,0,0.8)'
-            : 'rgba(255,255,255,0.8)',
-      }}
-    ></div>
+    <>
+      <div
+        style={{
+          position: 'fixed',
+          width: '100%',
+          height: '100vh',
+          backgroundColor:
+            props.transition == 'dark'
+              ? 'rgba(0,0,0,0.93)'
+              : 'rgba(255,255,255,0.9)',
+          flexDirection: 'column',
+          alignItems: 'center',
+          display: 'flex',
+          justifyContent:
+            React.Children.count(props.children) > 1
+              ? 'space-between'
+              : 'center',
+        }}
+      >
+        {props.children}
+        {React.Children.count(props.children) > 1 && <div></div>}
+        {/* Empty div because of doesn't know how to put center and top flex element*/}
+      </div>
+      <main
+        id={`scene-${props.index}`}
+        style={{
+          backgroundImage: `url(${props.backgrounds[props.index]})`,
+          backgroundSize: 'cover',
+          backgroundRepeat: 'no-repeat',
+          backgroundPositionX: 'center',
+          boxSizing: 'border-box',
+          height: '100vh',
+          width: '100%',
+        }}
+        className={props.className}
+      ></main>
+    </>
   );
 };
 
-export const Scene = (props: SceneProps) => {
+export const DefaultScene = (props: SceneProps) => {
   return (
     <main
       id={`scene-${props.index}`}
@@ -46,8 +72,7 @@ export const Scene = (props: SceneProps) => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent:
-          React.Children.count(props.children) > 1 ? 'space-between' : 'end',
+        justifyContent: 'flex-end',
       }}
       className={props.className}
     >
@@ -56,4 +81,4 @@ export const Scene = (props: SceneProps) => {
   );
 };
 
-export default Scene;
+export default DefaultScene;

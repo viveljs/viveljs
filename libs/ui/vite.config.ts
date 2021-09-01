@@ -1,12 +1,8 @@
-declare const process: {
-  readonly env: {
-    [name: string]: string;
-  };
-};
-
+import path from 'path';
 import { UserConfig, UserConfigFn } from 'vite';
+import typescript from '@rollup/plugin-typescript';
 
-const { BROWSER, PORT } = process.env;
+const resolvePath = (str: string) => path.resolve(__dirname, str);
 
 const config: UserConfigFn = async () => {
   const config: UserConfig = {
@@ -17,9 +13,36 @@ const config: UserConfigFn = async () => {
       jsxInject: 'import _implicit_React from "react"',
     },
 
-    server: {
-      port: (PORT && parseInt(PORT)) || 3000,
-      open: BROWSER || true,
+    build: {
+      lib: {
+        entry: resolvePath('./src/components/index.ts'),
+        name: 'viveljs',
+      },
+      rollupOptions: {
+        // make sure to externalize deps that shouldn't be bundled
+        // into your library
+        external: ['react', 'react-dom'],
+        output: {
+          // Provide global variables to use in the UMD build
+          // for externalized deps
+          globals: {
+            react: 'React',
+          },
+        },
+        plugins: [
+          typescript({
+            target: 'es2020',
+            rootDir: resolvePath('./src/components'),
+            declaration: true,
+            declarationDir: resolvePath('./dist'),
+            exclude: [
+              ...resolvePath('./node_modules/**'),
+              ...resolvePath('./cosmos'),
+            ],
+            allowSyntheticDefaultImports: true,
+          }),
+        ],
+      },
     },
   };
 

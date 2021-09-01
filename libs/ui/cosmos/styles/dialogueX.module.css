@@ -24,6 +24,7 @@
   padding-left: 2rem;
   padding-right: 2rem;
   gap: 2rem;
+  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;
 }
 
 .ySide {

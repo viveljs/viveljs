@@ -1,10 +1,17 @@
 import * as React from 'react';
 import { useValue } from 'react-cosmos/fixture';
-import { Scene, Dialogue, Avatar, Button } from '../src/components';
+import {
+  DefaultScene,
+  TransitionScene,
+  Dialogue,
+  Avatar,
+  Button,
+} from '../src/components';
 
 import xStyle from './styles/dialogueX.module.css';
 import styles from './styles/avatar.module.css';
 import buttonStyle from './styles/button.module.css';
+import transStyle from './styles/dialogueTransition.module.css';
 
 import tom from './images/tom.png';
 import lee from './images/lee.png';
@@ -27,7 +34,7 @@ import bg3 from './images/background3.png';
 
 const scenes = [bg0, bg1, bg2, bg3];
 
-const Single = () => {
+export const DefaultSingle = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -37,11 +44,11 @@ const Single = () => {
   };
 
   return (
-    <Scene backgrounds={scenes} index={index}>
+    <DefaultScene backgrounds={scenes} index={index}>
       <Dialogue
         text={lines}
         index={index}
-        ySide={
+        xSideAfter={
           <Button
             className={buttonStyle.button}
             text="next"
@@ -60,16 +67,47 @@ const Single = () => {
             containerClass={styles.container}
           />
         }
-        delayed="y"
+        delayed="x"
         dialogueClassName={xStyle.dialogue}
         xClassName={xStyle.xSide}
         yClassName={xStyle.ySide}
         linesClassName={xStyle.lines}
       />
-    </Scene>
+    </DefaultScene>
+  );
+};
+
+const TransitionSingle = () => {
+  const [lines] = useValue('lines', { defaultValue: dialogue });
+
+  const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
+
+  const handleClick = () => {
+    if (index < dialogue.length - 1) setIndex(index + 1);
+  };
+
+  return (
+    <TransitionScene backgrounds={scenes} index={index} transition="dark">
+      <Dialogue
+        text={lines}
+        index={index}
+        ySide={
+          <Button
+            className={buttonStyle.button}
+            text="next"
+            onClick={handleClick}
+          />
+        }
+        delayed="y"
+        dialogueClassName={transStyle.dialogue}
+        yClassName={xStyle.ySide}
+        linesClassName={transStyle.lines}
+      />
+    </TransitionScene>
   );
 };
 
 export default {
-  'Scene with one element': <Single />,
+  'Default Scene with one element': <DefaultSingle />,
+  'Transition Scene with one element': <TransitionSingle />,
 };
