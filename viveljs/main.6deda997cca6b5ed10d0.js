@@ -6847,7 +6847,7 @@ function load() {
 
   // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
   if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = ({"NODE_ENV":"production","PUBLIC_URL":""}).DEBUG;
+    r = ({"NODE_ENV":"production","PUBLIC_URL":"./viveljs"}).DEBUG;
   }
 
   return r;
@@ -34878,7 +34878,7 @@ function load() {
 
   // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
   if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = ({"NODE_ENV":"production","PUBLIC_URL":""}).DEBUG;
+    r = ({"NODE_ENV":"production","PUBLIC_URL":"./viveljs"}).DEBUG;
   }
 
   return r;
@@ -36247,7 +36247,7 @@ function load() {
 
   // If debug isn't set in LS, and we're in Electron, try to load $DEBUG
   if (!r && typeof process !== 'undefined' && 'env' in process) {
-    r = ({"NODE_ENV":"production","PUBLIC_URL":""}).DEBUG;
+    r = ({"NODE_ENV":"production","PUBLIC_URL":"./viveljs"}).DEBUG;
   }
 
   return r;
@@ -37145,7 +37145,7 @@ module.exports = yeast;
 /******/ 	
 /******/ 	/* webpack/runtime/publicPath */
 /******/ 	(() => {
-/******/ 		__webpack_require__.p = "/";
+/******/ 		__webpack_require__.p = "./viveljs/";
 /******/ 	})();
 /******/ 	
 /************************************************************************/
@@ -37209,4 +37209,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=main.6deda997cca6b5ed10d0.js.map
