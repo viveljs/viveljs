@@ -1,5 +1,8 @@
 {
+  "$schema": "../../node_modules/react-cosmos/config.schema.json",
+
   "globalImports": ["./cosmos/style.css"],
+  "watchDirs": ["./cosmos"],
   "webpack": {
     "overridePath": "./cosmos/webpack.override.js",
     "includeHashInOutputFilename": true
