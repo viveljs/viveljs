@@ -1,7 +1,9 @@
 {
   "globalImports": ["./cosmos/style.css"],
-  "experimentalRendererUrl": "/viveljs/_renderer.html",
+  "publicUrl": "./viveljs/",
+
   "webpack": {
-    "overridePath": "./cosmos/webpack.override.js"
+    "overridePath": "./cosmos/webpack.override.js",
+    "includeHashInOutputFilename": true
   }
 }
