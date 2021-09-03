@@ -14,6 +14,7 @@
         "rc:start": "npm start -w ./libs/ui",
         "rc:export": "npm run cosmos:export -w ./libs/ui",
         "ui:build": "npm run build -w ./libs/ui",
+        "ui:publish": "npm publish ./dist --workspace ./libs/ui --otp 40fbfa8a-bc3f-40ed-8ed0-fa2777a36d48 --access public",
         "tut:dev": "npm run dev -w ./apps/tutorial"
     },
     "repository": {
