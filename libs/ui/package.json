@@ -49,6 +49,7 @@
     "react-easyfullscreen": "^1.1.1",
     "react-full-screen": "^1.1.0",
     "react-simple-typewriter": "^3.0.1",
-    "react-switch": "^6.0.0"
+    "react-switch": "^6.0.0",
+    "swiper": "^7.0.3"
   }
 }

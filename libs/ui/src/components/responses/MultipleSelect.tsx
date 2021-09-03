@@ -40,8 +40,6 @@ export const MultipleSelect = (props: MultipleSelectProps) => {
     });
   };
 
-  console.log(values);
-
   const extractText = () => {
     const texts = Object.values(values).map((value: valueProps) => {
       return value.checked && value.text;
