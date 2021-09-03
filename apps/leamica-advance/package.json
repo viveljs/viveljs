@@ -1,9 +1,0 @@
-{
-  "name": "leamica-advance",
-  "version": "0.0.0",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "serve": "vite preview"
-  }
-}

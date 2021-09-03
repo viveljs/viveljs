@@ -1,7 +1,6 @@
 {
   "globalImports": ["./cosmos/style.css"],
   "publicUrl": "./",
-
   "webpack": {
     "overridePath": "./cosmos/webpack.override.js",
     "includeHashInOutputFilename": true

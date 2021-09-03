@@ -1,6 +1,8 @@
-export { Button } from './Button';
-export { Dialogue } from './Dialogue';
-export { Avatar } from './Avatar';
-export { DefaultScene, TransitionScene } from './Scene';
-export { Character } from './Character';
-export { Game } from './Game';
+export { Button } from './atoms/Button';
+export { Dialogue } from './core/Dialogue';
+export { Avatar } from './core/Avatar';
+export { DefaultScene, TransitionScene } from './core/Scene';
+export { Character } from './core/Character';
+export { Game } from './core/Game';
+export { MultipleChoice } from './responses/MultipleChoice';
+export { MultipleSelect } from './responses/MultipleSelect';

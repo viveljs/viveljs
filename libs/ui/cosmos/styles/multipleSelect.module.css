@@ -1,0 +1,16 @@
+.text {
+  font-size: large;
+  font-family: 'Rubik', sans-serif;
+  color: rgba(63, 61, 185, 0.9);
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.answers {
+  color:rgba(63, 61, 185, 0.9);
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

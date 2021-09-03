@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { multipleResult } from '../libs/multipleResults';
 
 interface AvatarProps {
   characterFlow: number[][] | 'displayAll'[] | string[];
@@ -13,25 +14,6 @@ interface AvatarProps {
   slotClass?: string;
   textClass?: string;
 }
-
-const characterDisplay = (names: string[], and: string) => {
-  const result = names.map((name, index) => {
-    const separator = () => {
-      if (index == names.length - 2) return ` ${and} `;
-      if (index == names.length - 1) return '';
-      return ', ';
-    };
-
-    return (
-      <span key={index}>
-        {name}
-        {separator()}
-      </span>
-    );
-  });
-
-  return result;
-};
 
 export const Avatar = (props: AvatarProps) => {
   if (props.index <= props.characterFlow.length - 1) {
@@ -93,7 +75,7 @@ export const Avatar = (props: AvatarProps) => {
         <div id="avatarText" className={props.textClass}>
           {typeof props.characterFlow[props.index] == 'object' ||
           props.characterFlow[props.index] == 'displayAll'
-            ? characterDisplay(characters, props.and)
+            ? multipleResult(characters, props.and)
             : props.characterFlow[props.index]}
         </div>
       </div>
