@@ -6,11 +6,21 @@
   margin-top: 2rem;
 }
 
-.answers {
-  color:rgba(63, 61, 185, 0.9);
+.answersActive, .answersNormal {
   font-family: 'Rubik', sans-serif;
   font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+  font-size: 1.2rem;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+  border: 0;
+  border-radius: 0.6rem;
+}
+
+.answersNormal {
+  color:rgba(223, 223, 223, 0.9);
+  background-color: rgba(194, 92, 151, 0.9);
+}
+
+.answersActive {
+  color:rgba(194, 92, 151, 0.9);
 }

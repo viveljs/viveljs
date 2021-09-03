@@ -1,6 +1,5 @@
 import * as React from 'react';
 import _ from 'lodash';
-import Switch from 'react-switch';
 import Button from '../atoms/Button';
 import { multipleResult } from '../libs/multipleResults';
 
@@ -8,7 +7,8 @@ interface MultipleSelectProps {
   responses: string[];
   and: string;
   buttonClass?: string;
-  answerClass?: string;
+  answerActive?: string;
+  answerNormal?: string;
   containerClass?: string;
   prefix?: string;
   columns?: string;
@@ -40,13 +40,23 @@ export const MultipleSelect = (props: MultipleSelectProps) => {
     });
   };
 
+  console.log(values);
+
   const extractText = () => {
     const texts = Object.values(values).map((value: valueProps) => {
       return value.checked && value.text;
     });
     return _.compact(texts);
   };
-  console.log(values);
+
+  const shuffle = React.useMemo(() => {
+    return _.shuffle(
+      props.responses.map((response, index) => {
+        return { answer: response, index: index };
+      })
+    );
+  }, []);
+
   return (
     <div className={props.containerClass}>
       <div
@@ -58,16 +68,19 @@ export const MultipleSelect = (props: MultipleSelectProps) => {
           marginBottom: props.marginBottom ?? '2rem',
         }}
       >
-        {props.responses.map((response, index) => {
+        {shuffle.map((value) => {
           return (
-            <label key={index} className={props.answerClass}>
-              <Switch
-                key={index}
-                checked={values[index] ? values[index].checked : false}
-                onChange={() => handleChange(index, response)}
-              />
-              <span>{response}</span>
-            </label>
+            <button
+              key={value.index}
+              className={
+                values[value.index] && values[value.index].checked
+                  ? props.answerActive
+                  : props.answerNormal
+              }
+              onClick={() => handleChange(value.index, value.answer)}
+            >
+              <span>{value.answer}</span>
+            </button>
           );
         })}
       </div>

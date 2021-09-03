@@ -14,7 +14,6 @@
         "rc:start": "npm start -w ./libs/ui",
         "rc:export": "npm run cosmos:export -w ./libs/ui",
         "ui:build": "npm run build -w ./libs/ui",
-        "la:dev": "npm run dev -w ./apps/leamica-advance",
         "tut:dev": "npm run dev -w ./apps/tutorial"
     },
     "repository": {

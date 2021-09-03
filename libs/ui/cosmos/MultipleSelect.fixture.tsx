@@ -18,7 +18,8 @@ const Bare = () => {
       <MultipleSelect
         responses={answers}
         buttonClass={buttonStyle.button}
-        answerClass={styles.answers}
+        answerNormal={styles.answersNormal}
+        answerActive={styles.answersActive}
         columns="auto auto"
         and="and"
         onClick={(index) => setValues(index)}
