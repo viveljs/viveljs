@@ -3,8 +3,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
 
 import 'swiper/css';
-import 'swiper/css/navigation';
-import { Navigation, Pagination } from 'swiper';
+import 'swiper/css/pagination';
+import { Pagination } from 'swiper';
 
 interface ZoomProps {
   slides: React.ReactNode[];
@@ -66,7 +66,7 @@ export const Slide = (props: ZoomProps) => {
           justifyContent: props.component ? 'space-between' : '',
         }}
       >
-        <Swiper modules={[Navigation]} navigation>
+        <Swiper modules={[Pagination]} pagination={{ clickable: true }}>
           <div slot="container-start">{props.containerStart}</div>
           <div slot="wrapper-start">{props.wrapperStart}</div>
           {props.slides.map((slide, index) => {
