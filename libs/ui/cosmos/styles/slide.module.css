@@ -1,0 +1,8 @@
+.fullscreen {
+  background-color: rgba(253, 199, 246, 0.8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+}

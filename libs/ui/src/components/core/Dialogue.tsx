@@ -12,6 +12,7 @@ interface DialogueProps {
   linesClassName?: string;
   xClassName?: string;
   yClassName?: string;
+  instant?: boolean;
 }
 
 export const Dialogue = (props: DialogueProps) => {
@@ -26,7 +27,7 @@ export const Dialogue = (props: DialogueProps) => {
   const Lines = () => {
     const { text } = useTypewriter({
       words: [line],
-      typeSpeed: 20,
+      typeSpeed: props.instant ? 2 : 20,
       onLoopDone: () => setVisibility(true),
     });
 

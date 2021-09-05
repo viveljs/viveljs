@@ -12,6 +12,7 @@ import xStyle from './styles/dialogueX.module.css';
 import styles from './styles/avatar.module.css';
 import buttonStyle from './styles/button.module.css';
 import transStyle from './styles/dialogueTransition.module.css';
+import logoStyle from './styles/logo.module.css';
 
 import tom from './images/tom.png';
 import lee from './images/lee.png';
@@ -107,7 +108,40 @@ const TransitionSingle = () => {
   );
 };
 
+const Instant = () => {
+  const [lines] = useValue('lines', { defaultValue: dialogue });
+
+  const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
+
+  const handleClick = () => {
+    if (index < dialogue.length - 1) setIndex(index + 1);
+  };
+
+  return (
+    <TransitionScene backgrounds={scenes} index={index} transition="dark">
+      <div className={logoStyle.logo}>Vivel</div>
+      <Dialogue
+        text={lines}
+        index={index}
+        ySide={
+          <Button
+            className={buttonStyle.button}
+            text="next"
+            onClick={handleClick}
+          />
+        }
+        delayed="y"
+        instant
+        dialogueClassName={transStyle.dialogue}
+        yClassName={xStyle.ySide}
+        linesClassName={transStyle.lines}
+      />
+    </TransitionScene>
+  );
+};
+
 export default {
   'Default Scene with one element': <DefaultSingle />,
   'Transition Scene with one element': <TransitionSingle />,
+  'Instant Transition Scene with two elements': <Instant />,
 };

@@ -30,10 +30,10 @@ export const TransitionScene = (props: TransitionProps) => {
           flexDirection: 'column',
           alignItems: 'center',
           display: 'flex',
-          justifyContent:
-            React.Children.count(props.children) > 1
-              ? 'space-between'
-              : 'center',
+          justifyContent: 'center',
+          // React.Children.count(props.children) > 1
+          //   ? 'space-between'
+          //   : 'center',
         }}
       >
         {props.children}

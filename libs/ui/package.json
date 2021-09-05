@@ -1,11 +1,13 @@
 {
   "name": "viveljs",
-  "version": "0.4.0",
+  "version": "0.4.2",
+  "description": "Visual Novel Engine",
   "author": "Muhammad Tsany Qudsi <tsanyqudsi@gmail.com>",
   "license": "GPL-3.0-or-later",
   "files": [
     "dist"
   ],
+  "types": "./src/components/index.d.ts",
   "main": "./dist/viveljs.umd.js",
   "module": "./dist/viveljs.es.js",
   "exports": {
@@ -49,7 +51,6 @@
     "react-easyfullscreen": "^1.1.1",
     "react-full-screen": "^1.1.0",
     "react-simple-typewriter": "^3.0.1",
-    "react-switch": "^6.0.0",
     "swiper": "^7.0.3"
   }
 }

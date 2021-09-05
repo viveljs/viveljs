@@ -4,6 +4,6 @@
 
   "userDepsFilePath": "./cosmos/cosmos.userdeps.js",
   "experimentalRendererUrl": "http://localhost:8080/_renderer.html",
-  "globalImports": ["./cosmos/style.css"],
+  "globalImports": ["./cosmos/styles/main.css"],
   "watchDirs": ["./cosmos"]
 }

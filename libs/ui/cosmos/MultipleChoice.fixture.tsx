@@ -5,7 +5,7 @@ import styles from './styles/multipleChoice.module.css';
 
 const responses = ['Is it ?', 'Who did it ?', 'Why ?'];
 
-const Bare = () => {
+export const Bare = () => {
   const [value, setValue] = React.useState<number>(0);
 
   const handleClick = (index: number) => {
