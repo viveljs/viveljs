@@ -4307,7 +4307,7 @@ ___CSS_LOADER_EXPORT___.locals = {
 
 /***/ }),
 
-/***/ 1754:
+/***/ 4376:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -4323,7 +4323,7 @@ ___CSS_LOADER_EXPORT___.locals = {
 
 var ___CSS_LOADER_EXPORT___ = _css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_css_loader_dist_runtime_cssWithMappingToString_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ":root{--swiper-navigation-size:44px}.swiper-button-next,.swiper-button-prev{position:absolute;top:50%;width:calc(var(--swiper-navigation-size)/ 44 * 27);height:var(--swiper-navigation-size);margin-top:calc(0px - (var(--swiper-navigation-size)/ 2));z-index:10;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--swiper-navigation-color,var(--swiper-theme-color))}.swiper-button-next.swiper-button-disabled,.swiper-button-prev.swiper-button-disabled{opacity:.35;cursor:auto;pointer-events:none}.swiper-button-next:after,.swiper-button-prev:after{font-family:swiper-icons;font-size:var(--swiper-navigation-size);text-transform:none!important;letter-spacing:0;text-transform:none;font-variant:initial;line-height:1}.swiper-button-prev,.swiper-rtl .swiper-button-next{left:10px;right:auto}.swiper-button-prev:after,.swiper-rtl .swiper-button-next:after{content:'prev'}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:10px;left:auto}.swiper-button-next:after,.swiper-rtl .swiper-button-prev:after{content:'next'}.swiper-button-lock{display:none}", "",{"version":3,"sources":["webpack://./../../node_modules/swiper/modules/navigation/navigation.min.css"],"names":[],"mappings":"AAAA,MAAM,6BAA6B,CAAC,wCAAwC,iBAAiB,CAAC,OAAO,CAAC,kDAAkD,CAAC,oCAAoC,CAAC,yDAAyD,CAAC,UAAU,CAAC,cAAc,CAAC,YAAY,CAAC,kBAAkB,CAAC,sBAAsB,CAAC,8DAA8D,CAAC,sFAAsF,WAAW,CAAC,WAAW,CAAC,mBAAmB,CAAC,oDAAoD,wBAAwB,CAAC,uCAAuC,CAAC,6BAA6B,CAAC,gBAAgB,CAAC,mBAAmB,CAAC,oBAAoB,CAAC,aAAa,CAAC,oDAAoD,SAAS,CAAC,UAAU,CAAC,gEAAgE,cAAc,CAAC,oDAAoD,UAAU,CAAC,SAAS,CAAC,gEAAgE,cAAc,CAAC,oBAAoB,YAAY","sourcesContent":[":root{--swiper-navigation-size:44px}.swiper-button-next,.swiper-button-prev{position:absolute;top:50%;width:calc(var(--swiper-navigation-size)/ 44 * 27);height:var(--swiper-navigation-size);margin-top:calc(0px - (var(--swiper-navigation-size)/ 2));z-index:10;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--swiper-navigation-color,var(--swiper-theme-color))}.swiper-button-next.swiper-button-disabled,.swiper-button-prev.swiper-button-disabled{opacity:.35;cursor:auto;pointer-events:none}.swiper-button-next:after,.swiper-button-prev:after{font-family:swiper-icons;font-size:var(--swiper-navigation-size);text-transform:none!important;letter-spacing:0;text-transform:none;font-variant:initial;line-height:1}.swiper-button-prev,.swiper-rtl .swiper-button-next{left:10px;right:auto}.swiper-button-prev:after,.swiper-rtl .swiper-button-next:after{content:'prev'}.swiper-button-next,.swiper-rtl .swiper-button-prev{right:10px;left:auto}.swiper-button-next:after,.swiper-rtl .swiper-button-prev:after{content:'next'}.swiper-button-lock{display:none}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".swiper-pagination{position:absolute;text-align:center;transition:.3s opacity;transform:translate3d(0,0,0);z-index:10}.swiper-pagination.swiper-pagination-hidden{opacity:0}.swiper-horizontal>.swiper-pagination-bullets,.swiper-pagination-bullets.swiper-pagination-horizontal,.swiper-pagination-custom,.swiper-pagination-fraction{bottom:10px;left:0;width:100%}.swiper-pagination-bullets-dynamic{overflow:hidden;font-size:0}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transform:scale(.33);position:relative}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-main{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev-prev{transform:scale(.33)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next-next{transform:scale(.33)}.swiper-pagination-bullet{width:8px;height:8px;display:inline-block;border-radius:50%;background:#000;opacity:.2}button.swiper-pagination-bullet{border:none;margin:0;padding:0;box-shadow:none;-webkit-appearance:none;appearance:none}.swiper-pagination-clickable .swiper-pagination-bullet{cursor:pointer}.swiper-pagination-bullet:only-child{display:none!important}.swiper-pagination-bullet-active{opacity:1;background:var(--swiper-pagination-color,var(--swiper-theme-color))}.swiper-pagination-vertical.swiper-pagination-bullets,.swiper-vertical>.swiper-pagination-bullets{right:10px;top:50%;transform:translate3d(0px,-50%,0)}.swiper-pagination-vertical.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets .swiper-pagination-bullet{margin:6px 0;display:block}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{top:50%;transform:translateY(-50%);width:8px}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{display:inline-block;transition:.2s transform,.2s top}.swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet{margin:0 4px}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{left:50%;transform:translateX(-50%);white-space:nowrap}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s left}.swiper-horizontal.swiper-rtl>.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s right}.swiper-pagination-progressbar{background:rgba(0,0,0,.25);position:absolute}.swiper-pagination-progressbar .swiper-pagination-progressbar-fill{background:var(--swiper-pagination-color,var(--swiper-theme-color));position:absolute;left:0;top:0;width:100%;height:100%;transform:scale(0);transform-origin:left top}.swiper-rtl .swiper-pagination-progressbar .swiper-pagination-progressbar-fill{transform-origin:right top}.swiper-horizontal>.swiper-pagination-progressbar,.swiper-pagination-progressbar.swiper-pagination-horizontal,.swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite,.swiper-vertical>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite{width:100%;height:4px;left:0;top:0}.swiper-horizontal>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-horizontal.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-vertical,.swiper-vertical>.swiper-pagination-progressbar{width:4px;height:100%;left:0;top:0}.swiper-pagination-lock{display:none}", "",{"version":3,"sources":["webpack://./../../node_modules/swiper/modules/pagination/pagination.min.css"],"names":[],"mappings":"AAAA,mBAAmB,iBAAiB,CAAC,iBAAiB,CAAC,sBAAsB,CAAC,4BAA4B,CAAC,UAAU,CAAC,4CAA4C,SAAS,CAAC,4JAA4J,WAAW,CAAC,MAAM,CAAC,UAAU,CAAC,mCAAmC,eAAe,CAAC,WAAW,CAAC,6DAA6D,oBAAoB,CAAC,iBAAiB,CAAC,oEAAoE,kBAAkB,CAAC,yEAAyE,kBAAkB,CAAC,yEAAyE,oBAAoB,CAAC,8EAA8E,oBAAoB,CAAC,yEAAyE,oBAAoB,CAAC,8EAA8E,oBAAoB,CAAC,0BAA0B,SAAS,CAAC,UAAU,CAAC,oBAAoB,CAAC,iBAAiB,CAAC,eAAe,CAAC,UAAU,CAAC,gCAAgC,WAAW,CAAC,QAAQ,CAAC,SAAS,CAAC,eAAe,CAAC,uBAAuB,CAAC,eAAe,CAAC,uDAAuD,cAAc,CAAC,qCAAqC,sBAAsB,CAAC,iCAAiC,SAAS,CAAC,mEAAmE,CAAC,kGAAkG,UAAU,CAAC,OAAO,CAAC,iCAAiC,CAAC,sJAAsJ,YAAY,CAAC,aAAa,CAAC,sKAAsK,OAAO,CAAC,0BAA0B,CAAC,SAAS,CAAC,0NAA0N,oBAAoB,CAAC,gCAAgC,CAAC,0JAA0J,YAAY,CAAC,0KAA0K,QAAQ,CAAC,0BAA0B,CAAC,kBAAkB,CAAC,8NAA8N,iCAAiC,CAAC,2FAA2F,kCAAkC,CAAC,+BAA+B,0BAA0B,CAAC,iBAAiB,CAAC,mEAAmE,mEAAmE,CAAC,iBAAiB,CAAC,MAAM,CAAC,KAAK,CAAC,UAAU,CAAC,WAAW,CAAC,kBAAkB,CAAC,yBAAyB,CAAC,+EAA+E,0BAA0B,CAAC,sSAAsS,UAAU,CAAC,UAAU,CAAC,MAAM,CAAC,KAAK,CAAC,sSAAsS,SAAS,CAAC,WAAW,CAAC,MAAM,CAAC,KAAK,CAAC,wBAAwB,YAAY","sourcesContent":[".swiper-pagination{position:absolute;text-align:center;transition:.3s opacity;transform:translate3d(0,0,0);z-index:10}.swiper-pagination.swiper-pagination-hidden{opacity:0}.swiper-horizontal>.swiper-pagination-bullets,.swiper-pagination-bullets.swiper-pagination-horizontal,.swiper-pagination-custom,.swiper-pagination-fraction{bottom:10px;left:0;width:100%}.swiper-pagination-bullets-dynamic{overflow:hidden;font-size:0}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transform:scale(.33);position:relative}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-main{transform:scale(1)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-prev-prev{transform:scale(.33)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next{transform:scale(.66)}.swiper-pagination-bullets-dynamic .swiper-pagination-bullet-active-next-next{transform:scale(.33)}.swiper-pagination-bullet{width:8px;height:8px;display:inline-block;border-radius:50%;background:#000;opacity:.2}button.swiper-pagination-bullet{border:none;margin:0;padding:0;box-shadow:none;-webkit-appearance:none;appearance:none}.swiper-pagination-clickable .swiper-pagination-bullet{cursor:pointer}.swiper-pagination-bullet:only-child{display:none!important}.swiper-pagination-bullet-active{opacity:1;background:var(--swiper-pagination-color,var(--swiper-theme-color))}.swiper-pagination-vertical.swiper-pagination-bullets,.swiper-vertical>.swiper-pagination-bullets{right:10px;top:50%;transform:translate3d(0px,-50%,0)}.swiper-pagination-vertical.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets .swiper-pagination-bullet{margin:6px 0;display:block}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{top:50%;transform:translateY(-50%);width:8px}.swiper-pagination-vertical.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-vertical>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{display:inline-block;transition:.2s transform,.2s top}.swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet{margin:0 4px}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic{left:50%;transform:translateX(-50%);white-space:nowrap}.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet,.swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s left}.swiper-horizontal.swiper-rtl>.swiper-pagination-bullets-dynamic .swiper-pagination-bullet{transition:.2s transform,.2s right}.swiper-pagination-progressbar{background:rgba(0,0,0,.25);position:absolute}.swiper-pagination-progressbar .swiper-pagination-progressbar-fill{background:var(--swiper-pagination-color,var(--swiper-theme-color));position:absolute;left:0;top:0;width:100%;height:100%;transform:scale(0);transform-origin:left top}.swiper-rtl .swiper-pagination-progressbar .swiper-pagination-progressbar-fill{transform-origin:right top}.swiper-horizontal>.swiper-pagination-progressbar,.swiper-pagination-progressbar.swiper-pagination-horizontal,.swiper-pagination-progressbar.swiper-pagination-vertical.swiper-pagination-progressbar-opposite,.swiper-vertical>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite{width:100%;height:4px;left:0;top:0}.swiper-horizontal>.swiper-pagination-progressbar.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-horizontal.swiper-pagination-progressbar-opposite,.swiper-pagination-progressbar.swiper-pagination-vertical,.swiper-vertical>.swiper-pagination-progressbar{width:4px;height:100%;left:0;top:0}.swiper-pagination-lock{display:none}"],"sourceRoot":""}]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 
@@ -30181,7 +30181,7 @@ if (false) { var webpackRendererConnect; }
 
 /***/ }),
 
-/***/ 8943:
+/***/ 3087:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -37038,7 +37038,7 @@ function Navigation({
     let $el;
 
     if (el) {
-      $el = dom(el);
+      $el = $(el);
 
       if (swiper.params.uniqueNavElements && typeof el === 'string' && $el.length > 1 && swiper.$el.find(el).length === 1) {
         $el = swiper.$el.find(el);
@@ -37086,7 +37086,7 @@ function Navigation({
 
   function init() {
     const params = swiper.params.navigation;
-    swiper.params.navigation = create_element_if_not_defined_createElementIfNotDefined(swiper, swiper.originalParams.navigation, swiper.params.navigation, {
+    swiper.params.navigation = createElementIfNotDefined(swiper, swiper.originalParams.navigation, swiper.params.navigation, {
       nextEl: 'swiper-button-next',
       prevEl: 'swiper-button-prev'
     });
@@ -37163,7 +37163,7 @@ function Navigation({
     } = swiper.navigation;
     const targetEl = e.target;
 
-    if (swiper.params.navigation.hideOnClick && !dom(targetEl).is($prevEl) && !dom(targetEl).is($nextEl)) {
+    if (swiper.params.navigation.hideOnClick && !$(targetEl).is($prevEl) && !$(targetEl).is($nextEl)) {
       if (swiper.pagination && swiper.params.pagination && swiper.params.pagination.clickable && (swiper.pagination.el === targetEl || swiper.pagination.el.contains(targetEl))) return;
       let isHidden;
 
@@ -37193,6 +37193,11 @@ function Navigation({
     init,
     destroy
   });
+}
+;// CONCATENATED MODULE: ../../node_modules/swiper/shared/classes-to-selector.js
+function classes_to_selector_classesToSelector(classes = '') {
+  return `.${classes.trim().replace(/([\.:!\/])/g, '\\$1') // eslint-disable-line
+  .replace(/ /g, '.')}`;
 }
 ;// CONCATENATED MODULE: ../../node_modules/swiper/modules/pagination/pagination.js
 
@@ -37311,7 +37316,7 @@ function Pagination({
 
       if ($el.length > 1) {
         bullets.each(bullet => {
-          const $bullet = $(bullet);
+          const $bullet = dom(bullet);
           const bulletIndex = $bullet.index();
 
           if (bulletIndex === current) {
@@ -37372,8 +37377,8 @@ function Pagination({
     }
 
     if (params.type === 'fraction') {
-      $el.find(classesToSelector(params.currentClass)).text(params.formatFractionCurrent(current + 1));
-      $el.find(classesToSelector(params.totalClass)).text(params.formatFractionTotal(total));
+      $el.find(classes_to_selector_classesToSelector(params.currentClass)).text(params.formatFractionCurrent(current + 1));
+      $el.find(classes_to_selector_classesToSelector(params.totalClass)).text(params.formatFractionTotal(total));
     }
 
     if (params.type === 'progressbar') {
@@ -37395,7 +37400,7 @@ function Pagination({
         scaleY = scale;
       }
 
-      $el.find(classesToSelector(params.progressbarFillClass)).transform(`translate3d(0,0,0) scaleX(${scaleX}) scaleY(${scaleY})`).transition(swiper.params.speed);
+      $el.find(classes_to_selector_classesToSelector(params.progressbarFillClass)).transform(`translate3d(0,0,0) scaleX(${scaleX}) scaleY(${scaleY})`).transition(swiper.params.speed);
     }
 
     if (params.type === 'custom' && params.renderCustom) {
@@ -37434,7 +37439,7 @@ function Pagination({
       }
 
       $el.html(paginationHTML);
-      swiper.pagination.bullets = $el.find(classesToSelector(params.bulletClass));
+      swiper.pagination.bullets = $el.find(classes_to_selector_classesToSelector(params.bulletClass));
     }
 
     if (params.type === 'fraction') {
@@ -37463,12 +37468,12 @@ function Pagination({
   }
 
   function init() {
-    swiper.params.pagination = createElementIfNotDefined(swiper, swiper.originalParams.pagination, swiper.params.pagination, {
+    swiper.params.pagination = create_element_if_not_defined_createElementIfNotDefined(swiper, swiper.originalParams.pagination, swiper.params.pagination, {
       el: 'swiper-pagination'
     });
     const params = swiper.params.pagination;
     if (!params.el) return;
-    let $el = $(params.el);
+    let $el = dom(params.el);
     if ($el.length === 0) return;
 
     if (swiper.params.uniqueNavElements && typeof params.el === 'string' && $el.length > 1) {
@@ -37476,7 +37481,7 @@ function Pagination({
 
       if ($el.length > 1) {
         $el = $el.filter(el => {
-          if ($(el).parents('.swiper')[0] !== swiper.el) return false;
+          if (dom(el).parents('.swiper')[0] !== swiper.el) return false;
           return true;
         });
       }
@@ -37503,9 +37508,9 @@ function Pagination({
     }
 
     if (params.clickable) {
-      $el.on('click', classesToSelector(params.bulletClass), function onClick(e) {
+      $el.on('click', classes_to_selector_classesToSelector(params.bulletClass), function onClick(e) {
         e.preventDefault();
-        let index = $(this).index() * swiper.params.slidesPerGroup;
+        let index = dom(this).index() * swiper.params.slidesPerGroup;
         if (swiper.params.loop) index += swiper.loopedSlides;
         swiper.slideTo(index);
       });
@@ -37531,7 +37536,7 @@ function Pagination({
     if (swiper.pagination.bullets && swiper.pagination.bullets.removeClass) swiper.pagination.bullets.removeClass(params.bulletActiveClass);
 
     if (params.clickable) {
-      $el.off('click', classesToSelector(params.bulletClass));
+      $el.off('click', classes_to_selector_classesToSelector(params.bulletClass));
     }
   }
 
@@ -37585,7 +37590,7 @@ function Pagination({
       $el
     } = swiper.pagination;
 
-    if (swiper.params.pagination.el && swiper.params.pagination.hideOnClick && $el.length > 0 && !$(targetEl).hasClass(swiper.params.pagination.bulletClass)) {
+    if (swiper.params.pagination.el && swiper.params.pagination.hideOnClick && $el.length > 0 && !dom(targetEl).hasClass(swiper.params.pagination.bulletClass)) {
       if (swiper.navigation && (swiper.navigation.nextEl && targetEl === swiper.navigation.nextEl || swiper.navigation.prevEl && targetEl === swiper.navigation.prevEl)) return;
       const isHidden = $el.hasClass(swiper.params.pagination.hiddenClass);
 
@@ -41885,9 +41890,9 @@ var swiper_min_update = injectStylesIntoStyleTag_default()(swiper_min/* default 
 
        /* harmony default export */ const swiper_swiper_min = (swiper_min/* default */.Z && swiper_min/* default.locals */.Z.locals ? swiper_min/* default.locals */.Z.locals : undefined);
 
-// EXTERNAL MODULE: ../../node_modules/css-loader/dist/cjs.js!../../node_modules/swiper/modules/navigation/navigation.min.css
-var navigation_min = __webpack_require__(1754);
-;// CONCATENATED MODULE: ../../node_modules/swiper/modules/navigation/navigation.min.css
+// EXTERNAL MODULE: ../../node_modules/css-loader/dist/cjs.js!../../node_modules/swiper/modules/pagination/pagination.min.css
+var pagination_min = __webpack_require__(4376);
+;// CONCATENATED MODULE: ../../node_modules/swiper/modules/pagination/pagination.min.css
 
       
       
@@ -41899,22 +41904,22 @@ var navigation_min = __webpack_require__(1754);
       
       
 
-var navigation_min_options = {};
+var pagination_min_options = {};
 
-navigation_min_options.styleTagTransform = (styleTagTransform_default());
-navigation_min_options.setAttributes = (setAttributesWithoutAttributes_default());
+pagination_min_options.styleTagTransform = (styleTagTransform_default());
+pagination_min_options.setAttributes = (setAttributesWithoutAttributes_default());
 
-      navigation_min_options.insert = insertBySelector_default().bind(null, "head");
+      pagination_min_options.insert = insertBySelector_default().bind(null, "head");
     
-navigation_min_options.domAPI = (styleDomAPI_default());
-navigation_min_options.insertStyleElement = (insertStyleElement_default());
+pagination_min_options.domAPI = (styleDomAPI_default());
+pagination_min_options.insertStyleElement = (insertStyleElement_default());
 
-var navigation_min_update = injectStylesIntoStyleTag_default()(navigation_min/* default */.Z, navigation_min_options);
-
-
+var pagination_min_update = injectStylesIntoStyleTag_default()(pagination_min/* default */.Z, pagination_min_options);
 
 
-       /* harmony default export */ const navigation_navigation_min = (navigation_min/* default */.Z && navigation_min/* default.locals */.Z.locals ? navigation_min/* default.locals */.Z.locals : undefined);
+
+
+       /* harmony default export */ const pagination_pagination_min = (pagination_min/* default */.Z && pagination_min/* default.locals */.Z.locals ? pagination_min/* default.locals */.Z.locals : undefined);
 
 ;// CONCATENATED MODULE: ./src/components/display/Slide.tsx
 function Slide_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
@@ -41962,8 +41967,10 @@ var Slide = function Slide(props) {
       justifyContent: props.component ? 'space-between' : ''
     }
   }, /*#__PURE__*/react.createElement(swiper_Swiper, {
-    modules: [Navigation],
-    navigation: true
+    modules: [Pagination],
+    pagination: {
+      clickable: true
+    }
   }, /*#__PURE__*/react.createElement("div", {
     slot: "container-start"
   }, props.containerStart), /*#__PURE__*/react.createElement("div", {
@@ -49176,7 +49183,7 @@ mount();
 
 function mount() {
   // Use dynamic import to load updated modules upon hot reloading
-  var _require = __webpack_require__(8943),
+  var _require = __webpack_require__(3087),
       rendererConfig = _require.rendererConfig,
       fixtures = _require.fixtures,
       decorators = _require.decorators;
@@ -49194,4 +49201,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.d9c0be87d264d28afd8f.js.map
+//# sourceMappingURL=main.db839ae2c9626b091958.js.map
