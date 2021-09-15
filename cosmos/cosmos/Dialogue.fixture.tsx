@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useValue } from 'react-cosmos/fixture';
-import { Dialogue, Button, Avatar } from '../src/components';
+import { Dialogue, Button, Avatar } from '../../ui';
 
 import xStyle from './styles/dialogueX.module.css';
 import yStyle from './styles/dialogueY.module.css';

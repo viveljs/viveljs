@@ -1,0 +1,41 @@
+{
+  "name": "viveljs",
+  "version": "0.4.2",
+  "description": "Visual Novel Engine",
+  "author": "Muhammad Tsany Qudsi <tsanyqudsi@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "files": [
+    "dist"
+  ],
+  "types": "./src/components/index.d.ts",
+  "main": "./dist/viveljs.umd.js",
+  "module": "./dist/viveljs.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/viveljs.es.js",
+      "require": "./dist/viveljs.umd.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/viveljs/vivel/tree/main/libs/ui"
+  },
+  "engines": {
+    "node": ">=16.8.0",
+    "npm": ">=7.20.0"
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "peerDependencies": {
+    "lodash": "^4.17.21",
+    "react": "17.0.x",
+    "react-dom": "17.0.x"
+  },
+  "dependencies": {
+    "react-easyfullscreen": "^1.1.1",
+    "react-full-screen": "^1.1.0",
+    "react-simple-typewriter": "^3.0.1",
+    "swiper": "^7.0.3"
+  }
+}

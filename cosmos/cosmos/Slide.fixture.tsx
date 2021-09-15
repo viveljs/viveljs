@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Slide } from '../src/components';
+import { Slide } from '../../ui';
 
 import exit from './images/fullExit.png';
 import enter from './images/fullEnter.png';

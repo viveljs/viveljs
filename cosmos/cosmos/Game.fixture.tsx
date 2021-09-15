@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Game } from '../src/components';
+import { Game } from '../../ui';
 import { DefaultSingle } from './Scene.fixture';
 import styles from './styles/game.module.css';
 
