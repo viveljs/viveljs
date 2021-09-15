@@ -1,20 +1,19 @@
 {
-  "name": "@viveljs/ui",
+  "name": "viveljs",
   "version": "0.4.3",
   "description": "Visual Novel Engine",
   "workspaces": [
-    "./cosmos/*",
-    "./ui/*"
+    "./workspaces/*"
   ],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "render": "npm run start:renderer -w ./cosmos",
-    "rc": "npm run cosmos -w ./cosmos",
-    "rc:start": "npm start -w ./cosmos",
-    "rc:export": "npm run cosmos:export -w ./cosmos",
-    "ui:build": "npm run build -w ./ui",
-    "ui:publish": "npm publish ./dist --workspace ./ui --otp 40fbfa8a-bc3f-40ed-8ed0-fa2777a36d48 --access public"
+    "render": "npm run start:renderer -w ./workspaces/cosmos",
+    "rc": "npm run cosmos -w ./workspaces/cosmos",
+    "rc:start": "npm start -w ./workspaces/cosmos",
+    "rc:export": "npm run cosmos:export -w ./workspaces/cosmos",
+    "ui:build": "npm run build -w ./workspaces/ui",
+    "ui:publish": "npm publish ./dist -w ./workspaces/ui --otp 40fbfa8a-bc3f-40ed-8ed0-fa2777a36d48 --access public"
   },
   "repository": {
     "type": "git",

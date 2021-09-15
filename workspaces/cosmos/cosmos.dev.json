@@ -1,5 +1,5 @@
 {
-  "$schema": "../node_modules/react-cosmos/config.schema.json",
+  "$schema": "../../node_modules/react-cosmos/config.schema.json",
 
 
   "userDepsFilePath": "./cosmos/cosmos.userdeps.js",
