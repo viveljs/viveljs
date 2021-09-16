@@ -8,8 +8,8 @@ const config: UserConfigFn = async () => {
   const config: UserConfig = {
     build: {
       lib: {
-        entry: resolvePath('./index.ts'),
-        name: 'viveljs',
+        entry: resolvePath('./src/index.ts'),
+        name: '@viveljs/ui',
       },
       rollupOptions: {
         // make sure to externalize deps that shouldn't be bundled
