@@ -1,6 +1,7 @@
 import path from 'path';
 import { UserConfig, UserConfigFn } from 'vite';
 import typescript from '@rollup/plugin-typescript';
+import pkg from './package.json';
 
 const resolvePath = (str: string) => path.resolve(__dirname, str);
 
@@ -9,7 +10,7 @@ const config: UserConfigFn = async () => {
     build: {
       lib: {
         entry: resolvePath('./src/index.ts'),
-        name: '@viveljs/ui',
+        name: pkg.name,
       },
       rollupOptions: {
         // make sure to externalize deps that shouldn't be bundled
