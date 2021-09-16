@@ -12,8 +12,7 @@
     "rc": "npm run cosmos -w ./workspaces/cosmos",
     "rc:start": "npm start -w ./workspaces/cosmos",
     "rc:export": "npm run cosmos:export -w ./workspaces/cosmos",
-    "ui:build": "npm run build -w ./workspaces/ui",
-    "ui:publish": "npm publish ./dist -w ./workspaces/ui --otp 40fbfa8a-bc3f-40ed-8ed0-fa2777a36d48 --access public"
+    "ui:build": "npm run build -w ./workspaces/ui"
   },
   "repository": {
     "type": "git",

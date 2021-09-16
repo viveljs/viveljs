@@ -1,8 +1,4 @@
-import path from 'path';
 import { UserConfig, UserConfigFn } from 'vite';
-import typescript from '@rollup/plugin-typescript';
-
-const resolvePath = (str: string) => path.resolve(__dirname, str);
 
 const config: UserConfigFn = async () => {
   const config: UserConfig = {

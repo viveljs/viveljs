@@ -27,7 +27,7 @@ const config: UserConfigFn = async () => {
           typescript({
             target: 'es2020',
             declaration: true,
-            declarationDir: resolvePath('./dist'),
+            declarationDir: resolvePath('./dist/src'),
             exclude: [...resolvePath('./node_modules/**')],
             allowSyntheticDefaultImports: true,
           }),
