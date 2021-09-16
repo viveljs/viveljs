@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Character, Button } from '../../ui';
+import { Character, Button } from '../../ui/src';
 import { useValue } from 'react-cosmos/fixture';
 
 import buttonStyle from './styles/button.module.css';

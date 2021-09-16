@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { MultipleChoice } from '../../ui';
+import { MultipleChoice } from '../../ui/src';
 import buttonStyles from './styles/button.module.css';
 import styles from './styles/multipleChoice.module.css';
 

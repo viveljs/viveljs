@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useValue } from 'react-cosmos/fixture';
-import { MultipleSelect } from '../../ui';
+import { MultipleSelect } from '../../ui/src';
 import { multipleResult } from '../../ui/libs/multipleResults';
 
 import styles from './styles/multipleSelect.module.css';

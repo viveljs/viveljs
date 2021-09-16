@@ -6,7 +6,7 @@ import {
   Dialogue,
   Avatar,
   Button,
-} from '../../ui';
+} from '../../ui/src';
 
 import xStyle from './styles/dialogueX.module.css';
 import styles from './styles/avatar.module.css';
