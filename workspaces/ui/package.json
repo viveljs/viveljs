@@ -7,7 +7,7 @@
   "files": [
     "dist"
   ],
-  "types": "./src/components/index.d.ts",
+  "types": "./index.d.ts",
   "main": "./dist/viveljs.umd.js",
   "module": "./dist/viveljs.es.js",
   "exports": {

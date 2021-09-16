@@ -8,7 +8,7 @@ const config: UserConfigFn = async () => {
   const config: UserConfig = {
     build: {
       lib: {
-        entry: resolvePath('./src/components/index.ts'),
+        entry: resolvePath('./index.ts'),
         name: 'viveljs',
       },
       rollupOptions: {
@@ -27,10 +27,7 @@ const config: UserConfigFn = async () => {
             target: 'es2020',
             declaration: true,
             declarationDir: resolvePath('./dist'),
-            exclude: [
-              ...resolvePath('./node_modules/**'),
-              ...resolvePath('./cosmos'),
-            ],
+            exclude: [...resolvePath('./node_modules/**')],
             allowSyntheticDefaultImports: true,
           }),
         ],
