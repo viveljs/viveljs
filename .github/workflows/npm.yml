@@ -14,6 +14,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm run build -w ./workspaces/ui
-      - run: npm publish ./dist -w ./workspaces/ui
+      - run: npm publish ./dist -w ./workspaces/ui --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
