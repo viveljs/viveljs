@@ -1,18 +1,13 @@
-# VivelJS
+# VivelJS Monorepo
 
 ![VivelJS](https://repository-images.githubusercontent.com/345090191/70e1a180-9f4f-11eb-842c-e1dd0844f6da 'VivelJS')
 
 Logo Prototype by [*Fi](https://www.instagram.com/afiifahputriiw/)
 
-Character assets for demo made by [Fülli](https://twitter.com/_fuelli)
-
-Background asset for demo made by [LisadiKaprio](https://lisadikaprio.itch.io/)
-
-> Component Demo :
-
-> App Demo :
-
 Vivel is an effort in creating a cross platform Visual Novel Games.
+
+### Sponsor(s)
+![](http://flip.co.id/assets/assets/image/logo.png)
 
 ## Getting Started
 
