@@ -16,7 +16,7 @@
     "start": "npx http-server ./cosmos-export",
     "cosmos": "cosmos --config cosmos.dev.json",
     "cosmos:export": "cosmos-export",
-    "start:renderer": "vite --port=8080"
+    "start:renderer": "vite --port=8080 --host"
   },
   "devDependencies": {
     "@babel/preset-env": "^7.15.0",

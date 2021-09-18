@@ -1,7 +1,6 @@
 import path from 'path';
 import { UserConfig, UserConfigFn } from 'vite';
 import typescript from '@rollup/plugin-typescript';
-import pkg from './package.json';
 
 const resolvePath = (str: string) => path.resolve(__dirname, str);
 
@@ -10,7 +9,7 @@ const config: UserConfigFn = async () => {
     build: {
       lib: {
         entry: resolvePath('./src/index.ts'),
-        name: pkg.name,
+        name: '@viveljs/ui',
       },
       rollupOptions: {
         // make sure to externalize deps that shouldn't be bundled
@@ -27,8 +26,8 @@ const config: UserConfigFn = async () => {
           typescript({
             target: 'es2020',
             declaration: true,
-            declarationDir: resolvePath('./dist/src'),
-            exclude: [...resolvePath('./node_modules/**')],
+            declarationDir: resolvePath('./dist'),
+            exclude: [resolvePath('./node_modules/**')],
             allowSyntheticDefaultImports: true,
           }),
         ],

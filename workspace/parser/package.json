@@ -1,0 +1,35 @@
+{
+  "name": "@viveljs/parser",
+  "version": "0.1.0",
+  "description": "Parser for VivelJS",
+  "author": "Muhammad Tsany Qudsi",
+  "license": "ISC",
+  "keywords": [
+    "VivelJS"
+  ],
+  "files": [
+    "dist"
+  ],
+  "types": "./src/index.d.ts",
+  "main": "./dist/parser.umd.js",
+  "module": "./dist/parser.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/parser.es.js",
+      "require": "./dist/parser.umd.js"
+    }
+  },
+  "scripts": {
+    "build": "vite build"
+  },
+  "devDependencies": {
+    "@types/node-xlsx": "^0.15.2",
+    "@types/yargs": "^17.0.2",
+    "rollup": "^2.56.3",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "node-xlsx": "^0.17.1",
+    "yargs": "^17.1.1"
+  }
+}

@@ -1,0 +1,9 @@
+// https://www.typescriptlang.org/ja/tsconfig
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "composite": true,
+    "noEmit": true
+  },
+  "include": ["src"]
+}

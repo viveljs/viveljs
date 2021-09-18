@@ -3,16 +3,17 @@
   "version": "0.4.3",
   "description": "Visual Novel Engine",
   "workspaces": [
-    "./workspaces/*"
+    "./workspace/*"
   ],
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "render": "npm run start:renderer -w ./workspaces/cosmos",
-    "rc": "npm run cosmos -w ./workspaces/cosmos",
-    "rc:start": "npm start -w ./workspaces/cosmos",
-    "rc:export": "npm run cosmos:export -w ./workspaces/cosmos",
-    "ui:build": "npm run build -w ./workspaces/ui"
+    "render": "npm run start:renderer -w @viveljs/cosmos",
+    "rc": "npm run cosmos -w @viveljs/cosmos",
+    "rc:start": "npm start -w @viveljs/cosmos",
+    "rc:export": "npm run cosmos:export -w @viveljs/cosmos",
+    "ui:build": "npm run build -w @viveljs/ui",
+    "p:build": "npm run build -w @viveljs/parser"
   },
   "repository": {
     "type": "git",

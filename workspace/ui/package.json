@@ -8,12 +8,12 @@
     "dist"
   ],
   "types": "./src/index.d.ts",
-  "main": "./dist/viveljs.umd.js",
-  "module": "./dist/viveljs.es.js",
+  "main": "./dist/ui.umd.js",
+  "module": "./dist/ui.es.js",
   "exports": {
     ".": {
-      "import": "./dist/viveljs.es.js",
-      "require": "./dist/viveljs.umd.js"
+      "import": "./dist/ui.es.js",
+      "require": "./dist/ui.umd.js"
     }
   },
   "repository": {
