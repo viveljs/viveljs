@@ -13,7 +13,9 @@
     "rc:start": "npm start -w @viveljs/cosmos",
     "rc:export": "npm run cosmos:export -w @viveljs/cosmos",
     "ui:build": "npm run build -w @viveljs/ui",
-    "p:build": "npm run build -w @viveljs/parser"
+    "p:build": "npm run build -w @viveljs/parser",
+    "p:run": "npm start -w @viveljs/parser",
+    "p:trial": "npm run trial -w @viveljs/parser"
   },
   "repository": {
     "type": "git",

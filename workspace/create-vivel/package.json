@@ -1,14 +1,16 @@
 {
-  "name": "@viveljs/parser",
+  "name": "create-vivel",
   "version": "0.1.0",
-  "description": "Parser for VivelJS",
+  "description": "CLI for VivelJS Templates",
   "author": "Muhammad Tsany Qudsi",
-  "license": "ISC",
+  "license": "MIT",
   "keywords": [
     "VivelJS"
   ],
   "files": [
-    "dist"
+    "dist",
+    "typescript",
+    "javascript"
   ],
   "types": "./src/index.d.ts",
   "main": "./dist/parser.js",
