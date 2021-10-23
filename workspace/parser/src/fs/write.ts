@@ -1,14 +1,10 @@
-import _ from 'lodash';
-import plur from 'plur';
+import fs from 'fs';
 
-const write = (keys: string[], values: any[]) => {
-  const pluralKeys = keys.map((key) => {
-    return plur(key, 2);
+const write = (content: string, file: string) => {
+  fs.writeFile(`${file}.json`, content, (err) => {
+    if (err) console.log(err);
+    console.log(`Parsed to ${file}.json`);
   });
-
-  const result = _.zipObject(pluralKeys, values);
-
-  return result;
 };
 
 export { write };

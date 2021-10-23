@@ -1,8 +1,8 @@
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import xlsx from 'xlsx';
-import { columnIndex, columnValues } from './lib';
-import { write } from './fs/write';
+import { columnValues } from './lib';
+import { writeContent, write } from './fs';
 
 const parser = yargs(hideBin(process.argv)).options({
   file: { type: 'string' },
@@ -13,16 +13,19 @@ const parser = yargs(hideBin(process.argv)).options({
 const main = async () => {
   const argv = await parser.argv;
   const keys = ['character', 'line', 'path', ...argv.fields];
+
   if (argv.file) {
-    const wb = xlsx.readFile(argv.file);
-    const value = Object.values(wb.Sheets).map((sheet) => {
-      const indexes = columnIndex(sheet, keys);
-      const values = columnValues(sheet, indexes);
+    const wb = xlsx.readFile(argv.file, { sheetStubs: true });
+    const value = Object.values(wb.SheetNames).map((sheet) => {
+      const jsonValues = xlsx.utils.sheet_to_json<[]>(wb.Sheets[sheet], {
+        defval: '',
+      });
+      const values = columnValues(jsonValues);
       return values;
     });
-    const result = write(keys, value[0]);
-    console.log(result);
-    console.log(value[0]);
+
+    const result = writeContent(keys, value[0]);
+    write(result, argv.output ?? 'content');
   } else {
     console.log('No file included');
   }

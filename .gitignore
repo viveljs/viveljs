@@ -1,7 +1,9 @@
-# Centralized gitignore
+# Vivel Related
 cosmos.userdeps.js
 cosmos-export
 .rollup.cache
+workspace/parser/content.json
+
 
 # Logs
 logs

@@ -33,7 +33,6 @@
     "react-dom": "17.0.x"
   },
   "dependencies": {
-    "react-easyfullscreen": "^1.1.1",
     "react-full-screen": "^1.1.0",
     "react-simple-typewriter": "^3.0.1",
     "swiper": "^7.0.3"

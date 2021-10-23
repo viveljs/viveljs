@@ -3,7 +3,7 @@ import { MultipleChoice } from '../../ui/src';
 import buttonStyles from './styles/button.module.css';
 import styles from './styles/multipleChoice.module.css';
 
-const responses = ['Is it ?', 'Who did it ?', 'Why ?'];
+const responses = ['You choose options ', 'Who did it ?', 'Why ?'];
 
 export const Bare = () => {
   const [value, setValue] = React.useState<number>(0);

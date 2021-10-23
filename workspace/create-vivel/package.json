@@ -9,8 +9,7 @@
   ],
   "files": [
     "dist",
-    "typescript",
-    "javascript"
+    "template-*"
   ],
   "types": "./src/index.d.ts",
   "main": "./dist/parser.js",
