@@ -1,19 +1,21 @@
 name: NPM Publish
+
+# Runs always on commits, will only release when requested, see below.
 on:
-  release:
-    types: [created]
+  push:
+    branches: [main]
+
 jobs:
-  build:
+  test:
+    # test step if necessary
+  release:
+    # needs: [test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      # Setup .npmrc file to publish to npm
-      - uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm run build -w @viveljs/ui
-      - run: npm publish ./dist -w @viveljs/ui --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+      - uses: tobua/release-npm-action@v1
+        with:
+          NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
