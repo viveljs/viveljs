@@ -3,7 +3,7 @@
   "version": "0.4.3",
   "description": "Visual Novel Engine",
   "workspaces": [
-    "./workspace/*"
+    "./workspaces/*"
   ],
   "main": "index.js",
   "scripts": {
