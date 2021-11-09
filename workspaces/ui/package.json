@@ -7,7 +7,7 @@
   "files": [
     "dist"
   ],
-  "types": "./src/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "main": "./dist/ui.umd.js",
   "module": "./dist/ui.es.js",
   "exports": {
