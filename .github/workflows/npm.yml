@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: npm install
-      - run: npm run build -w @viveljs/ui
+        - run: npm install
+        - run: npm run build -w @viveljs/ui
       - uses: tobua/release-npm-action@v1
         with:
           NPM_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
