@@ -11,7 +11,7 @@
     "dist",
     "template-*"
   ],
-  "types": "./src/index.d.ts",
+  "types": "./dist/src/index.d.ts",
   "main": "./dist/parser.js",
   "scripts": {
     "build": "rollup -c",
