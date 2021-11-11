@@ -41,6 +41,7 @@ export default [
         babelHelpers: 'bundled',
         presets: [['@babel/preset-env']],
         exclude: './node_modules/**',
+        compact: true,
       }),
       pluginNodeResolve({
         browser: false,

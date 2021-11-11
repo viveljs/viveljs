@@ -14,7 +14,12 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react"
+    "jsx": "react",
+    "paths": {
+      "@styles/*": ["./src/assets/styles/*"],
+      "@images/*": ["./src/assets/images/*"],
+      "@contentJSON": ["./src/content.json"]
+    }
   },
   "include": ["./src"]
 }

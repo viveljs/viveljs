@@ -1,0 +1,19 @@
+.dialogue {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: start;
+  align-items: center;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-bottom: 2rem;
+  gap: 1rem;
+  width: 80%;
+  min-height: 10rem;
+}
+
+.lines {
+  color: white;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 600;
+  font-size: xx-large;
+}

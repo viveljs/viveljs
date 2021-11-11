@@ -12,7 +12,17 @@ const parser = yargs(hideBin(process.argv)).options({
 
 const main = async () => {
   const argv = await parser.argv;
-  const keys = ['character', 'mood', 'line', ...argv.fields];
+  const keys = [
+    'character',
+    'characterFlow',
+    'mood',
+    'state',
+    'line',
+    'background',
+    'component',
+    'to',
+    ...argv.fields,
+  ];
 
   if (argv.file) {
     const wb = xlsx.readFile(argv.file, { sheetStubs: true });
