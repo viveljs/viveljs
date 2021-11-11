@@ -29,13 +29,11 @@ const Default = () => {
           <Button
             className={buttonStyles.button}
             text="next"
-            onClick={() =>
-              buttonHandleClick(
-                content.tos[state.index].length != 0
-                  ? content.tos[state.index]
-                  : 'default'
-              )
-            }
+            onClick={() => {
+              if (content.tos[state.index].length != 0)
+                buttonHandleClick(content.tos[state.index], false);
+              else buttonHandleClick('default');
+            }}
           />
         }
         xSideBefore={

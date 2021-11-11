@@ -12,7 +12,7 @@ const Ending = () => {
       <Button
         text="Go to Start"
         onClick={() => {
-          buttonHandleClick('opening');
+          buttonHandleClick('opening', false);
         }}
       />
     </TransitionScene>

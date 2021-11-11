@@ -1,7 +1,8 @@
 {
   "characters": [
     "tom",
-    "charlie"
+    "charlie",
+    "arthur"
   ],
   "characterFlows": [
     [
@@ -9,7 +10,7 @@
       1
     ],
     [
-      0
+      2
     ],
     [
       0
@@ -41,7 +42,7 @@
       "sad"
     ],
     [
-      "tom"
+      "smile"
     ],
     [
       "happy"
@@ -81,8 +82,8 @@
   ],
   "lines": [
     "Hello, there.",
-    "This is an intro to Vivel",
-    "Why are you sad Charlie ?",
+    "Kevin Jelek",
+    "Masa sih",
     "It’s just a demo",
     "But this is a start, we can create more.",
     "Really ???",

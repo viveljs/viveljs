@@ -1,19 +1,19 @@
 import content from '@contentJSON';
+import _ from 'lodash';
 import { stateProxy } from '../stores/game';
 
-const buttonHandleClick = (scene?: any, nextScene?: any) => {
+const buttonHandleClick = (scene?: string, nextScene: boolean = true) => {
   if (scene) {
-    stateProxy.type = scene;
-  }
-  if (nextScene) {
-    ++stateProxy.index;
+    stateProxy.type = _.lowerCase(scene);
   }
   if (
-    stateProxy.index < content.lines.length - 1 &&
-    content.tos[stateProxy.index].length == 0
+    nextScene ||
+    (stateProxy.index < content.lines.length - 1 &&
+      content.tos[stateProxy.index].length == 0)
   ) {
     ++stateProxy.index;
-  } else {
+  }
+  if (stateProxy.index == content.lines.length - 1) {
     stateProxy.type = 'ending';
     stateProxy.index = 0;
   }

@@ -16,7 +16,7 @@ const main = async () => {
     'character',
     'characterFlow',
     'mood',
-    'state',
+    'scene',
     'line',
     'background',
     'component',

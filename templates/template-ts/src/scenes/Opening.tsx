@@ -9,7 +9,10 @@ const Opening = () => {
   const [state] = useAtom(globalStateAtom);
   return (
     <TransitionScene backgrounds={[background]} index={state.index}>
-      <Button text="Start" onClick={() => buttonHandleClick('default')} />
+      <Button
+        text="Start"
+        onClick={() => buttonHandleClick('default', false)}
+      />
     </TransitionScene>
   );
 };
