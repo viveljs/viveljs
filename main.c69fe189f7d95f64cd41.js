@@ -30907,7 +30907,7 @@ if (false) { var webpackRendererConnect; }
 
 /***/ }),
 
-/***/ 3520:
+/***/ 502:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31052,7 +31052,61 @@ var Dialogue = function Dialogue(props) {
   }, "Dialogue Index Out of Bound");
 };
 /* harmony default export */ const core_Dialogue = ((/* unused pure expression or super */ null && (Dialogue)));
-;// CONCATENATED MODULE: ../ui/src/libs/multipleResults.tsx
+;// CONCATENATED MODULE: ../ui/src/libs/avatarFunctions.ts
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || avatarFunctions_unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function avatarFunctions_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return avatarFunctions_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return avatarFunctions_arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return avatarFunctions_arrayLikeToArray(arr); }
+
+function avatarFunctions_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+var avatarSlotStyle = function avatarSlotStyle(background, slotDimension) {
+  var _slotDimension$;
+
+  return {
+    backgroundImage: "url(".concat(background, ")"),
+    display: 'flex',
+    justifyContent: 'center',
+    width: slotDimension ? slotDimension[0] : 'auto',
+    height: slotDimension ? (_slotDimension$ = slotDimension[0]) !== null && _slotDimension$ !== void 0 ? _slotDimension$ : slotDimension[1] : 'auto',
+    overflow: 'hidden'
+  };
+};
+
+var avatarImageStyle = function avatarImageStyle(imageDimension) {
+  var _imageDimension$;
+
+  return {
+    width: imageDimension ? imageDimension[0] : 'auto',
+    height: imageDimension ? (_imageDimension$ = imageDimension[0]) !== null && _imageDimension$ !== void 0 ? _imageDimension$ : imageDimension[1] : 'auto'
+  };
+};
+
+var avatarCharacters = function avatarCharacters(characterFlow, index, characters) {
+  if (typeof characterFlow[index] == 'string') return _toConsumableArray(Array(characters.length).keys()).map(function (flow) {
+    return characters[flow];
+  });
+  return characterFlow[index].map(function (flow) {
+    return characters[flow];
+  });
+};
+
+var avatarImages = function avatarImages(characterFlow, index, characters, characterImages) {
+  if (typeof characterFlow[index] == 'string') return _toConsumableArray(Array(characters.length).keys()).map(function (flow) {
+    return characterImages ? characterImages[flow] : null;
+  });
+  return characterFlow[index].map(function (flow) {
+    return characterImages ? characterImages[flow] : null;
+  });
+};
+
+
+;// CONCATENATED MODULE: ../ui/src/libs/multipleResults.ts
 var multipleResult = function multipleResult(names, and) {
   var result = names.map(function (name, index) {
     var separator = function separator() {
@@ -31076,57 +31130,25 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || Avatar_unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function Avatar_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return Avatar_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return Avatar_arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return Avatar_arrayLikeToArray(arr); }
-
-function Avatar_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 
 
 var Avatar = function Avatar(props) {
   if (props.index <= props.characterFlow.length - 1) {
-    var _props$slotDimension$, _props$imageDimension;
-
-    var avatarSlotStyle = {
-      backgroundImage: "url(".concat(props.background, ")"),
-      display: 'flex',
-      justifyContent: 'center',
-      width: props.slotDimension ? props.slotDimension[0] : 'auto',
-      height: props.slotDimension ? (_props$slotDimension$ = props.slotDimension[0]) !== null && _props$slotDimension$ !== void 0 ? _props$slotDimension$ : props.slotDimension[1] : 'auto',
-      overflow: 'hidden'
-    };
-    var avatarImageStyle = {
-      width: props.imageDimension ? props.imageDimension[0] : 'auto',
-      height: props.imageDimension ? (_props$imageDimension = props.imageDimension[0]) !== null && _props$imageDimension !== void 0 ? _props$imageDimension : props.imageDimension[1] : 'auto'
-    };
-    var characters = typeof props.characterFlow[props.index] == 'string' ? _toConsumableArray(Array(props.characters.length).keys()).map(function (flow) {
-      return props.characters[flow];
-    }) : props.characterFlow[props.index].map(function (flow) {
-      return props.characters[flow];
-    });
-    var images = typeof props.characterFlow[props.index] == 'string' ? _toConsumableArray(Array(props.characters.length).keys()).map(function (flow) {
-      return props.characterImages ? props.characterImages[flow] : null;
-    }) : props.characterFlow[props.index].map(function (flow) {
-      return props.characterImages ? props.characterImages[flow] : null;
-    });
+    var avatarSlot = avatarSlotStyle(props.background, props.slotDimension);
+    var avatarImage = avatarImageStyle(props.imageDimension);
+    var characters = avatarCharacters(props.characterFlow, props.index, props.characters);
+    var images = avatarImages(props.characterFlow, props.index, props.characters, props.characterImages);
     return /*#__PURE__*/react.createElement("div", {
       id: "avatarContainer",
       className: props.containerClass
     }, /*#__PURE__*/react.createElement("div", {
       id: "avatarSlot",
       className: props.slotClass,
-      style: avatarSlotStyle
-    }, images === null || images === void 0 ? void 0 : images.map(function (image, index) {
-      return /*#__PURE__*/react.createElement("img", {
+      style: avatarSlot
+    }, images.map(function (image, index) {
+      if (typeof image == 'string') return /*#__PURE__*/react.createElement("img", {
         src: image,
-        style: _objectSpread(_objectSpread({}, avatarImageStyle), {}, {
+        style: _objectSpread(_objectSpread({}, avatarImage), {}, {
           marginLeft: index > 0 ? '-1.2rem' : '0'
         }),
         key: index
@@ -49894,7 +49916,7 @@ mount();
 
 function mount() {
   // Use dynamic import to load updated modules upon hot reloading
-  var _require = __webpack_require__(3520),
+  var _require = __webpack_require__(502),
       rendererConfig = _require.rendererConfig,
       fixtures = _require.fixtures,
       decorators = _require.decorators;
@@ -49912,4 +49934,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.8dc0fe8fb19e715f0391.js.map
+//# sourceMappingURL=main.c69fe189f7d95f64cd41.js.map
