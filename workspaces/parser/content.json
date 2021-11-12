@@ -13,7 +13,7 @@
       2
     ],
     [
-      0
+      1
     ],
     [
       1
@@ -29,12 +29,14 @@
     ],
     [
       1
+    ],
+    [
+      0
     ],
     [
       0,
       1
-    ],
-    []
+    ]
   ],
   "moods": [
     [
@@ -63,12 +65,14 @@
       "happy"
     ],
     [
-      "happy",
       "happy"
     ],
-    []
+    [
+      "happy",
+      "happy"
+    ]
   ],
-  "states": [
+  "scenes": [
     "",
     "",
     "",
@@ -78,19 +82,19 @@
     "",
     "",
     "",
-    "Iklan"
+    "havefun"
   ],
   "lines": [
     "Hello, there.",
-    "Kevin Jelek",
-    "Masa sih",
+    "Halo disini Flip",
+    "Ini Testing",
     "It’s just a demo",
     "But this is a start, we can create more.",
     "Really ???",
     "Yes, of course.. we can have fun later on",
     "ok then..",
-    "well then, Have fun in the future.",
-    ""
+    "Hey, before you go… Let me show you a simple thing.",
+    "well then, Have fun in the future."
   ],
   "backgrounds": [
     "default",
@@ -124,7 +128,7 @@
     "",
     "",
     "",
-    "Iklan",
+    "havefun",
     "",
     ""
   ]

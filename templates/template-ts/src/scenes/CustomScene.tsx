@@ -1,10 +1,10 @@
 import * as React from 'react';
-
-import { Button } from '@viveljs/ui';
 import { buttonHandleClick } from '../libs/buttonHandleClick';
 
-const Iklan = () => {
+import { Button } from '@viveljs/ui';
+
+const CustomScene = () => {
   return <Button onClick={() => buttonHandleClick('default')} text="test" />;
 };
 
-export default Iklan;
+export default CustomScene;

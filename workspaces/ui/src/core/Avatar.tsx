@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { multipleResult } from '../libs/multipleResults';
+import {
+  multipleResult,
+  avatarCharacters,
+  avatarImageStyle,
+  avatarImages,
+  avatarSlotStyle,
+} from '../libs';
 
 interface AvatarProps {
   characterFlow: number[][] | 'displayAll'[] | string[];
@@ -17,59 +23,38 @@ interface AvatarProps {
 
 export const Avatar = (props: AvatarProps) => {
   if (props.index <= props.characterFlow.length - 1) {
-    const avatarSlotStyle = {
-      backgroundImage: `url(${props.background})`,
-      display: 'flex',
-      justifyContent: 'center',
-      width: props.slotDimension ? props.slotDimension[0] : 'auto',
-      height: props.slotDimension
-        ? props.slotDimension[0] ?? props.slotDimension[1]
-        : 'auto',
-      overflow: 'hidden',
-    };
+    const avatarSlot = avatarSlotStyle(props.background, props.slotDimension);
 
-    const avatarImageStyle = {
-      width: props.imageDimension ? props.imageDimension[0] : 'auto',
-      height: props.imageDimension
-        ? props.imageDimension[0] ?? props.imageDimension[1]
-        : 'auto',
-    };
+    const avatarImage = avatarImageStyle(props.imageDimension);
 
-    const characters =
-      typeof props.characterFlow[props.index] == 'string'
-        ? [...Array(props.characters.length).keys()].map((flow) => {
-            return props.characters[flow];
-          })
-        : (props.characterFlow[props.index] as number[]).map((flow) => {
-            return props.characters[flow];
-          });
+    const characters = avatarCharacters(
+      props.characterFlow,
+      props.index,
+      props.characters
+    );
 
-    const images =
-      typeof props.characterFlow[props.index] == 'string'
-        ? [...Array(props.characters.length).keys()].map((flow) => {
-            return props.characterImages ? props.characterImages[flow] : null;
-          })
-        : (props.characterFlow[props.index] as number[]).map((flow) => {
-            return props.characterImages ? props.characterImages[flow] : null;
-          });
+    const images = avatarImages(
+      props.characterFlow,
+      props.index,
+      props.characters,
+      props.characterImages
+    );
+
     return (
       <div id="avatarContainer" className={props.containerClass}>
-        <div
-          id="avatarSlot"
-          className={props.slotClass}
-          style={avatarSlotStyle}
-        >
-          {images?.map((image, index) => {
-            return (
-              <img
-                src={image as string}
-                style={{
-                  ...avatarImageStyle,
-                  marginLeft: index > 0 ? '-1.2rem' : '0',
-                }}
-                key={index}
-              />
-            );
+        <div id="avatarSlot" className={props.slotClass} style={avatarSlot}>
+          {images.map((image: string | null, index: number) => {
+            if (typeof image == 'string')
+              return (
+                <img
+                  src={image}
+                  style={{
+                    ...avatarImage,
+                    marginLeft: index > 0 ? '-1.2rem' : '0',
+                  }}
+                  key={index}
+                />
+              );
           })}
         </div>
         <div id="avatarText" className={props.textClass}>

@@ -3,7 +3,7 @@ import { Game } from '@viveljs/ui';
 import { useAtom } from 'jotai';
 import { globalStateAtom } from './stores/game';
 import { scenesAtom } from './stores/assets';
-import { fileFinder } from './libs/finder';
+import { sceneFinder } from './libs/finder';
 
 import exit from '@images/misc/fullExit.png';
 import enter from '@images/misc/fullEnter.png';
@@ -14,7 +14,9 @@ const App = () => {
   const [state] = useAtom(globalStateAtom);
   const [scenes] = useAtom(scenesAtom);
 
-  const CurrentScene = fileFinder(state.type, scenes);
+  const CurrentScene = sceneFinder(state.scene, scenes).custom
+    ? sceneFinder(state.scene, scenes).value
+    : sceneFinder('default', scenes).value;
 
   return (
     <Game enableFullScreen icon={[enter, exit]}>

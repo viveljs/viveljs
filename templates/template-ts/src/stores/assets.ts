@@ -8,7 +8,7 @@ const backgroundsAtom = atom<{ [key: string]: any }>(
 
 const imagesAtom = atom<{ [key: string]: any }>(
   import.meta.globEager(
-    '../assets/images/*.{jpg,jpeg,png,svg,JPG,JPEG,PNG,SVG}'
+    '../assets/images/misc/.{jpg,jpeg,png,svg,JPG,JPEG,PNG,SVG}'
   )
 );
 
