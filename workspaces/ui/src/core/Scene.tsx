@@ -17,7 +17,19 @@ interface TransitionProps {
 
 export const TransitionScene = (props: TransitionProps) => {
   return (
-    <>
+    <main
+      id={`scene-${props.index}`}
+      style={{
+        backgroundImage: `url(${props.backgrounds[props.index]})`,
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPositionX: 'center',
+        boxSizing: 'border-box',
+        height: '100vh',
+        width: '100%',
+      }}
+      className={props.className}
+    >
       <div
         style={{
           position: 'fixed',
@@ -31,29 +43,11 @@ export const TransitionScene = (props: TransitionProps) => {
           alignItems: 'center',
           display: 'flex',
           justifyContent: 'center',
-          // React.Children.count(props.children) > 1
-          //   ? 'space-between'
-          //   : 'center',
         }}
       >
         {props.children}
-        {React.Children.count(props.children) > 1 && <div></div>}
-        {/* Empty div because of doesn't know how to put center and top flex element*/}
       </div>
-      <main
-        id={`scene-${props.index}`}
-        style={{
-          backgroundImage: `url(${props.backgrounds[props.index]})`,
-          backgroundSize: 'cover',
-          backgroundRepeat: 'no-repeat',
-          backgroundPositionX: 'center',
-          boxSizing: 'border-box',
-          height: '100vh',
-          width: '100%',
-        }}
-        className={props.className}
-      ></main>
-    </>
+    </main>
   );
 };
 
@@ -76,7 +70,7 @@ export const DefaultScene = (props: SceneProps) => {
       }}
       className={props.className}
     >
-      {props.children}
+      <div style={{ width: '90%' }}>{props.children}</div>
     </main>
   );
 };

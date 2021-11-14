@@ -13,7 +13,7 @@
       2
     ],
     [
-      1
+      0
     ],
     [
       1
@@ -86,27 +86,27 @@
   ],
   "lines": [
     "Hello, there.",
-    "Halo disini Flip",
-    "Ini Testing",
+    "This is an intro to Vivel",
+    "Why are you sad Charlie ?",
     "It’s just a demo",
     "But this is a start, we can create more.",
     "Really ???",
-    "Yes, of course.. we can have fun later on",
+    "Wisnu Jelek",
     "ok then..",
     "Hey, before you go… Let me show you a simple thing.",
     "well then, Have fun in the future."
   ],
   "backgrounds": [
-    "default",
-    "default",
-    "default",
-    "default",
-    "default",
-    "default",
-    "default",
-    "default",
-    "default",
-    "default"
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    ""
   ],
   "components": [
     "Button",

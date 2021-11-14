@@ -6,6 +6,7 @@ import {
   Dialogue,
   Avatar,
   Button,
+  Character,
 } from '../../ui/src';
 
 import xStyle from './styles/dialogueX.module.css';
@@ -66,6 +67,43 @@ export const DefaultSingle = () => {
             slotDimension={['5rem']}
             textClass={styles.text}
             containerClass={styles.container}
+          />
+        }
+        delayed="x"
+        dialogueClassName={xStyle.dialogue}
+        xClassName={xStyle.xSide}
+        yClassName={xStyle.ySide}
+        linesClassName={xStyle.lines}
+      />
+    </DefaultScene>
+  );
+};
+
+export const CharacterSingle = () => {
+  const [lines] = useValue('lines', { defaultValue: dialogue });
+
+  const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
+
+  const handleClick = () => {
+    if (index < dialogue.length - 1) setIndex(index + 1);
+  };
+
+  return (
+    <DefaultScene backgrounds={scenes} index={index}>
+      <Character
+        index={index}
+        characters={characters}
+        characterImages={characterImages}
+        characterFlow={[[0], [1, 2], [0, 2, 3], [1, 2]]}
+      />
+      <Dialogue
+        text={lines}
+        index={index}
+        xSideAfter={
+          <Button
+            className={buttonStyle.button}
+            text="next"
+            onClick={handleClick}
           />
         }
         delayed="x"
@@ -141,7 +179,8 @@ const Instant = () => {
 };
 
 export default {
-  'Default Scene with one element': <DefaultSingle />,
+  'Default Scene with one avatar element': <DefaultSingle />,
+  'Default Scene with one character element': <CharacterSingle />,
   'Transition Scene with one element': <TransitionSingle />,
   'Instant Transition Scene with two elements': <Instant />,
 };

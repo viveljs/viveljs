@@ -7,6 +7,7 @@ interface CharacterProps {
   characterImages?: string[];
   imageDimension?: string[];
   containerClass?: string;
+  imageClass?: string;
 }
 
 export const Character = (props: CharacterProps) => {
@@ -24,15 +25,24 @@ export const Character = (props: CharacterProps) => {
       id="characters"
       style={{
         display: 'flex',
-        justifyContent: 'center',
+        position: 'fixed',
+        bottom: '2rem',
+        zIndex: 0,
+        justifyContent: 'around',
         alignItems: 'end',
-        width: '80%',
+        width: '50%',
       }}
       className={props.containerClass}
     >
       {images.map((imageURL, index) => {
         return imageURL == 'none' ? null : (
-          <img key={index} src={imageURL as string} />
+          <div key={index} style={{ maxWidth: '10rem' }}>
+            <img
+              src={imageURL as string}
+              className={props.imageClass}
+              style={{ height: 'auto', maxWidth: '20rem' }}
+            />
+          </div>
         );
       })}
     </section>
