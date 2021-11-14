@@ -31091,6 +31091,21 @@ var Dialogue = function Dialogue(props) {
   }, "Dialogue Index Out of Bound");
 };
 /* harmony default export */ const core_Dialogue = ((/* unused pure expression or super */ null && (Dialogue)));
+;// CONCATENATED MODULE: ../ui/src/libs/multipleResults.ts
+var multipleResult = function multipleResult(names, and) {
+  var result = names.map(function (name, index) {
+    var separator = function separator() {
+      if (index == names.length - 2) return " ".concat(and, " ");
+      if (index == names.length - 1) return '';
+      return ', ';
+    };
+
+    return "".concat(name).concat(separator());
+  });
+  return result;
+};
+
+
 ;// CONCATENATED MODULE: ../ui/src/libs/avatarFunctions.ts
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || avatarFunctions_unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 
@@ -31145,21 +31160,6 @@ var avatarImages = function avatarImages(characterFlow, index, characters, chara
 };
 
 
-;// CONCATENATED MODULE: ../ui/src/libs/multipleResults.ts
-var multipleResult = function multipleResult(names, and) {
-  var result = names.map(function (name, index) {
-    var separator = function separator() {
-      if (index == names.length - 2) return " ".concat(and, " ");
-      if (index == names.length - 1) return '';
-      return ', ';
-    };
-
-    return "".concat(name).concat(separator());
-  });
-  return result;
-};
-
-
 ;// CONCATENATED MODULE: ../ui/src/core/Avatar.tsx
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
@@ -31168,6 +31168,7 @@ function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (O
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 
 
 
@@ -42858,6 +42859,7 @@ function CharacterNames_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symb
 
 
 
+
 var CharacterNames = function CharacterNames(props) {
   if (props.index <= props.characterFlow.length - 1) {
     var characters = avatarCharacters(props.characterFlow, props.index, props.characters);
@@ -43917,8 +43919,8 @@ var Instant = function Instant() {
 };
 
 /* harmony default export */ const Scene_fixture = ({
-  'Default Scene with one avatar element': /*#__PURE__*/react.createElement(DefaultSingle, null),
-  'Default Scene with one character element': /*#__PURE__*/react.createElement(CharacterSingle, null),
+  'Default Scene with avatar element': /*#__PURE__*/react.createElement(DefaultSingle, null),
+  'Default Scene with character element': /*#__PURE__*/react.createElement(CharacterSingle, null),
   'Transition Scene with one element': /*#__PURE__*/react.createElement(TransitionSingle, null),
   'Instant Transition Scene with two elements': /*#__PURE__*/react.createElement(Instant, null)
 });
@@ -50090,4 +50092,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.070110e7ab3912c5ae9c.js.map
+//# sourceMappingURL=main.ee6dea12d841902f23e2.js.map
