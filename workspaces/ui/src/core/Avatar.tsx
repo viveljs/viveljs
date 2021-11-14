@@ -1,11 +1,11 @@
 import * as React from 'react';
+import { multipleResult } from '../libs/multipleResults';
 import {
-  multipleResult,
   avatarCharacters,
   avatarImageStyle,
   avatarImages,
   avatarSlotStyle,
-} from '../libs';
+} from '../libs/avatarFunctions';
 
 interface AvatarProps {
   characterFlow: number[][] | 'displayAll'[] | string[];

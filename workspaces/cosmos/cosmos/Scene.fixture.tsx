@@ -190,8 +190,8 @@ const Instant = () => {
 };
 
 export default {
-  'Default Scene with one avatar element': <DefaultSingle />,
-  'Default Scene with one character element': <CharacterSingle />,
+  'Default Scene with avatar element': <DefaultSingle />,
+  'Default Scene with character element': <CharacterSingle />,
   'Transition Scene with one element': <TransitionSingle />,
   'Instant Transition Scene with two elements': <Instant />,
 };
