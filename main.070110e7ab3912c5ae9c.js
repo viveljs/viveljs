@@ -4775,6 +4775,32 @@ ___CSS_LOADER_EXPORT___.locals = {
 
 /***/ }),
 
+/***/ 9042:
+/***/ ((module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Z": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(272);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2609);
+/* harmony import */ var _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1__);
+// Imports
+
+
+var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
+// Module
+___CSS_LOADER_EXPORT___.push([module.id, "._voTX3qzr8tgnoMFIURw {\n  font-family: 'Rubik', sans-serif;\n  font-size: large;\n  color: rgba(219, 72, 109, 0.8);\n  background-color: rgba(255,255,255,0.9);\n  border-radius: 0.5rem;\n  border: 2px solid rgba(0,0,0,0.6);\n  padding: 0.6rem 0.5rem;\n  font-weight: 600;\n}", "",{"version":3,"sources":["webpack://./cosmos/styles/characterNames.module.css"],"names":[],"mappings":"AAAA;EACE,gCAAgC;EAChC,gBAAgB;EAChB,8BAA8B;EAC9B,uCAAuC;EACvC,qBAAqB;EACrB,iCAAiC;EACjC,sBAAsB;EACtB,gBAAgB;AAClB","sourcesContent":[".text {\n  font-family: 'Rubik', sans-serif;\n  font-size: large;\n  color: rgba(219, 72, 109, 0.8);\n  background-color: rgba(255,255,255,0.9);\n  border-radius: 0.5rem;\n  border: 2px solid rgba(0,0,0,0.6);\n  padding: 0.6rem 0.5rem;\n  font-weight: 600;\n}"],"sourceRoot":""}]);
+// Exports
+___CSS_LOADER_EXPORT___.locals = {
+	"text": "_voTX3qzr8tgnoMFIURw"
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
+
+
+/***/ }),
+
 /***/ 943:
 /***/ ((module, __webpack_exports__, __webpack_require__) => {
 
@@ -4818,7 +4844,7 @@ ___CSS_LOADER_EXPORT___.locals = {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "._h4o65XV9X4wceWojzQF {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  z-index: 2; \n  position: relative;\n}\n\n._rJGgl5dw2sxJrn2maen {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  width: 100%;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.95);\n  min-height: 8rem;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  gap: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.nux7qvNnfJMsAEApQwmE {\n  width: 100%;\n}\n\n._JYtq9P485nG6zG_NevB {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n}\n", "",{"version":3,"sources":["webpack://./cosmos/styles/dialogueX.module.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,mBAAmB;EACnB,kBAAkB;EAClB,mBAAmB;EACnB,oBAAoB;EACpB,SAAS;EACT,UAAU;EACV,kBAAkB;AACpB;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,mBAAmB;EACnB,WAAW;EACX,iCAAiC;EACjC,wCAAwC;EACxC,gBAAgB;EAChB,gCAAgC;EAChC,sBAAsB;EACtB,kBAAkB;EAClB,mBAAmB;EACnB,SAAS;EACT,gDAAgD;AAClD;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,YAAY;AACd","sourcesContent":[".dialogue {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  z-index: 2; \n  position: relative;\n}\n\n.xSide {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  width: 100%;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.95);\n  min-height: 8rem;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  gap: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.ySide {\n  width: 100%;\n}\n\n.lines {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "._h4o65XV9X4wceWojzQF {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 0.4rem;\n  z-index: 2; \n  position: relative;\n}\n\n._rJGgl5dw2sxJrn2maen {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  width: 100%;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.95);\n  min-height: 8rem;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  gap: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.nux7qvNnfJMsAEApQwmE {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n}\n\n._JYtq9P485nG6zG_NevB {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n}\n", "",{"version":3,"sources":["webpack://./cosmos/styles/dialogueX.module.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,mBAAmB;EACnB,kBAAkB;EAClB,mBAAmB;EACnB,oBAAoB;EACpB,WAAW;EACX,UAAU;EACV,kBAAkB;AACpB;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,mBAAmB;EACnB,WAAW;EACX,iCAAiC;EACjC,wCAAwC;EACxC,gBAAgB;EAChB,gCAAgC;EAChC,sBAAsB;EACtB,kBAAkB;EAClB,mBAAmB;EACnB,SAAS;EACT,gDAAgD;AAClD;;AAEA;EACE,WAAW;EACX,aAAa;EACb,8BAA8B;AAChC;;AAEA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,YAAY;AACd","sourcesContent":[".dialogue {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 0.4rem;\n  z-index: 2; \n  position: relative;\n}\n\n.xSide {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  width: 100%;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.95);\n  min-height: 8rem;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  gap: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.ySide {\n  width: 100%;\n  display: flex;\n  justify-content: space-between;\n}\n\n.lines {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n}\n"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"dialogue": "_h4o65XV9X4wceWojzQF",
@@ -30907,7 +30933,7 @@ if (false) { var webpackRendererConnect; }
 
 /***/ }),
 
-/***/ 502:
+/***/ 3771:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31018,6 +31044,22 @@ var Dialogue = function Dialogue(props) {
     setVisibility(false);
   }, [line]);
 
+  var YSide = function YSide() {
+    if (!props.characterNames && props.ySide) return /*#__PURE__*/react.createElement("div", {
+      id: "yLines",
+      className: props.yClassName
+    }, props.ySide);
+    if (props.characterNames && !props.ySide) return /*#__PURE__*/react.createElement("div", {
+      id: "yLines",
+      className: props.yClassName
+    }, /*#__PURE__*/react.createElement("div", null, props.characterNames));
+    if (props.characterNames && props.ySide) return /*#__PURE__*/react.createElement("div", {
+      id: "yLines",
+      className: props.yClassName
+    }, /*#__PURE__*/react.createElement("div", null, props.characterNames), props.ySide);
+    return null;
+  };
+
   var Lines = function Lines() {
     var _useTypewriter = (0,dist/* useTypewriter */.Ku)({
       words: [line],
@@ -31043,10 +31085,7 @@ var Dialogue = function Dialogue(props) {
   if (props.index <= props.text.length - 1) return /*#__PURE__*/react.createElement("section", {
     id: "dialogue",
     className: props.dialogueClassName
-  }, (props.delayed == 'y' ? visible : true) && props.ySide && /*#__PURE__*/react.createElement("div", {
-    id: "yLines",
-    className: props.yClassName
-  }, props.ySide), /*#__PURE__*/react.createElement(Lines, null));
+  }, (props.delayed == 'y' ? visible : true) && /*#__PURE__*/react.createElement(YSide, null), /*#__PURE__*/react.createElement(Lines, null));
   return /*#__PURE__*/react.createElement("div", {
     className: "error"
   }, "Dialogue Index Out of Bound");
@@ -42814,6 +42853,28 @@ var Slide = function Slide(props) {
   }, /*#__PURE__*/react.createElement(FullScreenButton, null)));
 };
 /* harmony default export */ const display_Slide = ((/* unused pure expression or super */ null && (Slide)));
+;// CONCATENATED MODULE: ../ui/src/display/CharacterNames.tsx
+function CharacterNames_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { CharacterNames_typeof = function _typeof(obj) { return typeof obj; }; } else { CharacterNames_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return CharacterNames_typeof(obj); }
+
+
+
+var CharacterNames = function CharacterNames(props) {
+  if (props.index <= props.characterFlow.length - 1) {
+    var characters = avatarCharacters(props.characterFlow, props.index, props.characters);
+    return /*#__PURE__*/react.createElement("div", {
+      id: "avatarContainer",
+      className: props.containerClass
+    }, /*#__PURE__*/react.createElement("div", {
+      id: "avatarText",
+      className: props.textClass
+    }, CharacterNames_typeof(props.characterFlow[props.index]) == 'object' || props.characterFlow[props.index] == 'displayAll' ? multipleResult(characters, props.and) : props.characterFlow[props.index]));
+  }
+
+  return /*#__PURE__*/react.createElement("div", {
+    className: "error"
+  }, "Avatar Index Out of Bound");
+};
+/* harmony default export */ const display_CharacterNames = ((/* unused pure expression or super */ null && (CharacterNames)));
 ;// CONCATENATED MODULE: ../ui/src/responses/MultipleChoice.tsx
 
 
@@ -42920,6 +42981,7 @@ var MultipleSelect = function MultipleSelect(props) {
 };
 /* harmony default export */ const responses_MultipleSelect = ((/* unused pure expression or super */ null && (MultipleSelect)));
 ;// CONCATENATED MODULE: ../ui/src/index.ts
+
 
 
 
@@ -43609,6 +43671,37 @@ var logo_module_update = injectStylesIntoStyleTag_default()(logo_module/* defaul
 
        /* harmony default export */ const styles_logo_module = (logo_module/* default */.Z && logo_module/* default.locals */.Z.locals ? logo_module/* default.locals */.Z.locals : undefined);
 
+// EXTERNAL MODULE: ../../node_modules/css-loader/dist/cjs.js!./cosmos/styles/characterNames.module.css
+var characterNames_module = __webpack_require__(9042);
+;// CONCATENATED MODULE: ./cosmos/styles/characterNames.module.css
+
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+var characterNames_module_options = {};
+
+characterNames_module_options.styleTagTransform = (styleTagTransform_default());
+characterNames_module_options.setAttributes = (setAttributesWithoutAttributes_default());
+
+      characterNames_module_options.insert = insertBySelector_default().bind(null, "head");
+    
+characterNames_module_options.domAPI = (styleDomAPI_default());
+characterNames_module_options.insertStyleElement = (insertStyleElement_default());
+
+var characterNames_module_update = injectStylesIntoStyleTag_default()(characterNames_module/* default */.Z, characterNames_module_options);
+
+
+
+
+       /* harmony default export */ const styles_characterNames_module = (characterNames_module/* default */.Z && characterNames_module/* default.locals */.Z.locals ? characterNames_module/* default.locals */.Z.locals : undefined);
+
 ;// CONCATENATED MODULE: ./cosmos/images/background0.jpg
 /* harmony default export */ const background0 = (__webpack_require__.p + "7c03d988c1e18b0777b68cd9620b5aba.jpg");
 ;// CONCATENATED MODULE: ./cosmos/images/background1.png
@@ -43629,6 +43722,7 @@ function Scene_fixture_arrayLikeToArray(arr, len) { if (len == null || len > arr
 function Scene_fixture_iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function Scene_fixture_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
 
 
 
@@ -43725,6 +43819,13 @@ var CharacterSingle = function CharacterSingle() {
   }), /*#__PURE__*/react.createElement(Dialogue, {
     text: lines,
     index: index,
+    characterNames: /*#__PURE__*/react.createElement(CharacterNames, {
+      index: index,
+      characters: Scene_fixture_characters,
+      characterFlow: [[0], [1, 2], [0, 2, 3], [1, 2]],
+      and: "and",
+      containerClass: styles_characterNames_module.text
+    }),
     xSideAfter: /*#__PURE__*/react.createElement(Button, {
       className: styles_button_module.button,
       text: "next",
@@ -49971,7 +50072,7 @@ mount();
 
 function mount() {
   // Use dynamic import to load updated modules upon hot reloading
-  var _require = __webpack_require__(502),
+  var _require = __webpack_require__(3771),
       rendererConfig = _require.rendererConfig,
       fixtures = _require.fixtures,
       decorators = _require.decorators;
@@ -49989,4 +50090,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.ba295ae244f555425ce5.js.map
+//# sourceMappingURL=main.070110e7ab3912c5ae9c.js.map
