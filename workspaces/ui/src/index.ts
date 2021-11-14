@@ -1,4 +1,4 @@
-export { Button } from './atoms/Button';
+export { Button } from './core/Button';
 
 export { Dialogue } from './core/Dialogue';
 export { Avatar } from './core/Avatar';

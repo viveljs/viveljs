@@ -7,7 +7,6 @@ interface CharacterNamesProps {
   characters: string[];
   and: string;
   index: number;
-  containerClass?: string;
   textClass?: string;
 }
 
@@ -20,13 +19,11 @@ export const CharacterNames = (props: CharacterNamesProps) => {
     );
 
     return (
-      <div id="avatarContainer" className={props.containerClass}>
-        <div id="avatarText" className={props.textClass}>
-          {typeof props.characterFlow[props.index] == 'object' ||
-          props.characterFlow[props.index] == 'displayAll'
-            ? multipleResult(characters, props.and)
-            : props.characterFlow[props.index]}
-        </div>
+      <div id="characterNamesText" className={props.textClass}>
+        {typeof props.characterFlow[props.index] == 'object' ||
+        props.characterFlow[props.index] == 'displayAll'
+          ? multipleResult(characters, props.and)
+          : props.characterFlow[props.index]}
       </div>
     );
   }

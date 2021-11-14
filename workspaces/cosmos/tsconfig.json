@@ -1,7 +1,5 @@
 // https://www.typescriptlang.org/ja/tsconfig
 {
   "extends": "../../tsconfig.base.json",
-  "references": [{
-    "path": "../../ui"
-  }]
+
 }

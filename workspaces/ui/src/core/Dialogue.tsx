@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useTypewriter } from 'react-simple-typewriter';
+import { XSideAfter } from '../atoms/XSideAfter';
 
 interface DialogueProps {
   text: string[];
@@ -27,22 +28,9 @@ export const Dialogue = (props: DialogueProps) => {
   }, [line]);
 
   const YSide = () => {
-    if (!props.characterNames && props.ySide)
+    if (props.ySide)
       return (
         <div id="yLines" className={props.yClassName}>
-          {props.ySide}
-        </div>
-      );
-    if (props.characterNames && !props.ySide)
-      return (
-        <div id="yLines" className={props.yClassName}>
-          <div>{props.characterNames}</div>
-        </div>
-      );
-    if (props.characterNames && props.ySide)
-      return (
-        <div id="yLines" className={props.yClassName}>
-          <div>{props.characterNames}</div>
           {props.ySide}
         </div>
       );
@@ -59,12 +47,11 @@ export const Dialogue = (props: DialogueProps) => {
     return (
       <div className={props.xClassName}>
         {props.xSideBefore && <div id="xSideBefore">{props.xSideBefore}</div>}
+        {props.characterNames && <div>{props.characterNames}</div>}
         <div id="lines" className={props.linesClassName}>
           {visible ? line : text}
         </div>
-        {(props.delayed == 'x' ? visible : true) && props.xSideAfter && (
-          <div id="xSideAfter">{props.xSideAfter}</div>
-        )}
+        {(props.delayed == 'x' ? visible : true) && <XSideAfter />}
       </div>
     );
   };

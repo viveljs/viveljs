@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import * as React from 'react';
-import { Button } from '../atoms/Button';
+import { Button } from '../core/Button';
 
 interface MultipleChoiceProps {
   code?: number;
