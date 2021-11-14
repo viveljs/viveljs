@@ -7,6 +7,7 @@ export { Character } from './core/Character';
 export { Game } from './core/Game';
 
 export { Slide } from './display/Slide';
+export { CharacterNames } from './display/CharacterNames';
 
 export { MultipleChoice } from './responses/MultipleChoice';
 export { MultipleSelect } from './responses/MultipleSelect';

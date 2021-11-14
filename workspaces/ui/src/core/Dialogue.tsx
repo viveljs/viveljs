@@ -5,6 +5,8 @@ interface DialogueProps {
   text: string[];
   delayed: 'x' | 'y' | 'none';
   index: number;
+  characterNames?: React.ReactNode;
+  and?: string;
   xSideBefore?: React.ReactNode;
   xSideAfter?: React.ReactNode;
   ySide?: React.ReactNode;
@@ -23,6 +25,29 @@ export const Dialogue = (props: DialogueProps) => {
   React.useEffect(() => {
     setVisibility(false);
   }, [line]);
+
+  const YSide = () => {
+    if (!props.characterNames && props.ySide)
+      return (
+        <div id="yLines" className={props.yClassName}>
+          {props.ySide}
+        </div>
+      );
+    if (props.characterNames && !props.ySide)
+      return (
+        <div id="yLines" className={props.yClassName}>
+          <div>{props.characterNames}</div>
+        </div>
+      );
+    if (props.characterNames && props.ySide)
+      return (
+        <div id="yLines" className={props.yClassName}>
+          <div>{props.characterNames}</div>
+          {props.ySide}
+        </div>
+      );
+    return null;
+  };
 
   const Lines = () => {
     const { text } = useTypewriter({
@@ -47,11 +72,7 @@ export const Dialogue = (props: DialogueProps) => {
   if (props.index <= props.text.length - 1)
     return (
       <section id="dialogue" className={props.dialogueClassName}>
-        {(props.delayed == 'y' ? visible : true) && props.ySide && (
-          <div id="yLines" className={props.yClassName}>
-            {props.ySide}
-          </div>
-        )}
+        {(props.delayed == 'y' ? visible : true) && <YSide />}
         <Lines />
       </section>
     );

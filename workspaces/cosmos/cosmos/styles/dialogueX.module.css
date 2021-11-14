@@ -6,7 +6,7 @@
   padding-left: 2rem;
   padding-right: 2rem;
   padding-bottom: 2rem;
-  gap: 1rem;
+  gap: 0.4rem;
   z-index: 2; 
   position: relative;
 }
@@ -30,6 +30,8 @@
 
 .ySide {
   width: 100%;
+  display: flex;
+  justify-content: space-between;
 }
 
 .lines {

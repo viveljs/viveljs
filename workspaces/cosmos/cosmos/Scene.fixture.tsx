@@ -7,6 +7,7 @@ import {
   Avatar,
   Button,
   Character,
+  CharacterNames,
 } from '../../ui/src';
 
 import xStyle from './styles/dialogueX.module.css';
@@ -14,6 +15,7 @@ import styles from './styles/avatar.module.css';
 import buttonStyle from './styles/button.module.css';
 import transStyle from './styles/dialogueTransition.module.css';
 import logoStyle from './styles/logo.module.css';
+import characterNamesStyle from './styles/characterNames.module.css';
 
 import tom from './images/tom.png';
 import lee from './images/lee.png';
@@ -99,6 +101,15 @@ export const CharacterSingle = () => {
       <Dialogue
         text={lines}
         index={index}
+        characterNames={
+          <CharacterNames
+            index={index}
+            characters={characters}
+            characterFlow={[[0], [1, 2], [0, 2, 3], [1, 2]]}
+            and="and"
+            containerClass={characterNamesStyle.text}
+          />
+        }
         xSideAfter={
           <Button
             className={buttonStyle.button}
