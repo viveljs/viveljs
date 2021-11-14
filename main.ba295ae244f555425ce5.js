@@ -4818,7 +4818,7 @@ ___CSS_LOADER_EXPORT___.locals = {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "._h4o65XV9X4wceWojzQF {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  width: 80%;\n}\n\n._rJGgl5dw2sxJrn2maen {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  width: 100%;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.8);\n  min-height: 8rem;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  gap: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.nux7qvNnfJMsAEApQwmE {\n  width: 100%;\n}\n\n._JYtq9P485nG6zG_NevB {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n}\n", "",{"version":3,"sources":["webpack://./cosmos/styles/dialogueX.module.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,mBAAmB;EACnB,kBAAkB;EAClB,mBAAmB;EACnB,oBAAoB;EACpB,SAAS;EACT,UAAU;AACZ;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,mBAAmB;EACnB,WAAW;EACX,iCAAiC;EACjC,uCAAuC;EACvC,gBAAgB;EAChB,gCAAgC;EAChC,sBAAsB;EACtB,kBAAkB;EAClB,mBAAmB;EACnB,SAAS;EACT,gDAAgD;AAClD;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,YAAY;AACd","sourcesContent":[".dialogue {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  width: 80%;\n}\n\n.xSide {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  width: 100%;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.8);\n  min-height: 8rem;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  gap: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.ySide {\n  width: 100%;\n}\n\n.lines {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "._h4o65XV9X4wceWojzQF {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  z-index: 2; \n  position: relative;\n}\n\n._rJGgl5dw2sxJrn2maen {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  width: 100%;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.95);\n  min-height: 8rem;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  gap: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.nux7qvNnfJMsAEApQwmE {\n  width: 100%;\n}\n\n._JYtq9P485nG6zG_NevB {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n}\n", "",{"version":3,"sources":["webpack://./cosmos/styles/dialogueX.module.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,mBAAmB;EACnB,kBAAkB;EAClB,mBAAmB;EACnB,oBAAoB;EACpB,SAAS;EACT,UAAU;EACV,kBAAkB;AACpB;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,mBAAmB;EACnB,WAAW;EACX,iCAAiC;EACjC,wCAAwC;EACxC,gBAAgB;EAChB,gCAAgC;EAChC,sBAAsB;EACtB,kBAAkB;EAClB,mBAAmB;EACnB,SAAS;EACT,gDAAgD;AAClD;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,YAAY;AACd","sourcesContent":[".dialogue {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  z-index: 2; \n  position: relative;\n}\n\n.xSide {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  width: 100%;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.95);\n  min-height: 8rem;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  gap: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.ySide {\n  width: 100%;\n}\n\n.lines {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n}\n"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"dialogue": "_h4o65XV9X4wceWojzQF",
@@ -4847,7 +4847,7 @@ ___CSS_LOADER_EXPORT___.locals = {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".fhg6UfcMBTc5hOANC4_A {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  width: 80%;\n}\n\n.ZDc4BogQfCosPTGD4gpg {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.8);\n  min-height: 8rem;\n  width: 100%;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.nqh9kBDUsT_fvXDaSzPi {\n  width: 100%;\n}\n\n.kCuGAoBQ2WiSH7WVjErS {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n  margin-left: 2rem;\n}\n", "",{"version":3,"sources":["webpack://./cosmos/styles/dialogueY.module.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,mBAAmB;EACnB,kBAAkB;EAClB,mBAAmB;EACnB,oBAAoB;EACpB,SAAS;EACT,UAAU;AACZ;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,mBAAmB;EACnB,iCAAiC;EACjC,uCAAuC;EACvC,gBAAgB;EAChB,WAAW;EACX,gCAAgC;EAChC,sBAAsB;EACtB,kBAAkB;EAClB,mBAAmB;EACnB,gDAAgD;AAClD;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,YAAY;EACZ,iBAAiB;AACnB","sourcesContent":[".dialogue {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  width: 80%;\n}\n\n.xSide {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.8);\n  min-height: 8rem;\n  width: 100%;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.ySide {\n  width: 100%;\n}\n\n.lines {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n  margin-left: 2rem;\n}\n"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, ".fhg6UfcMBTc5hOANC4_A {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  z-index: 2; \n  position: relative;\n}\n\n.ZDc4BogQfCosPTGD4gpg {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.8);\n  min-height: 8rem;\n  width: 100%;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.nqh9kBDUsT_fvXDaSzPi {\n  width: 100%;\n}\n\n.kCuGAoBQ2WiSH7WVjErS {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n  margin-left: 2rem;\n}\n", "",{"version":3,"sources":["webpack://./cosmos/styles/dialogueY.module.css"],"names":[],"mappings":"AAAA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,mBAAmB;EACnB,kBAAkB;EAClB,mBAAmB;EACnB,oBAAoB;EACpB,SAAS;EACT,UAAU;EACV,kBAAkB;AACpB;;AAEA;EACE,aAAa;EACb,8BAA8B;EAC9B,mBAAmB;EACnB,mBAAmB;EACnB,iCAAiC;EACjC,uCAAuC;EACvC,gBAAgB;EAChB,WAAW;EACX,gCAAgC;EAChC,sBAAsB;EACtB,kBAAkB;EAClB,mBAAmB;EACnB,gDAAgD;AAClD;;AAEA;EACE,WAAW;AACb;;AAEA;EACE,aAAa;EACb,sBAAsB;EACtB,uBAAuB;EACvB,YAAY;EACZ,iBAAiB;AACnB","sourcesContent":[".dialogue {\n  display: flex;\n  flex-direction: column;\n  justify-content: center;\n  align-items: center;\n  padding-left: 2rem;\n  padding-right: 2rem;\n  padding-bottom: 2rem;\n  gap: 1rem;\n  z-index: 2; \n  position: relative;\n}\n\n.xSide {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  border-radius: 1rem;\n  border: 2px solid rgba(0,0,0,0.5);\n  background-color: rgba(255,255,255,0.8);\n  min-height: 8rem;\n  width: 100%;\n  font-family: 'Rubik', sans-serif;\n  color: rgba(0,0,0,0.8);\n  padding-left: 2rem;\n  padding-right: 2rem;\n  box-shadow: rgba(0,0,0,0.2) 0.2rem 0.3rem 0.5rem;\n}\n\n.ySide {\n  width: 100%;\n}\n\n.lines {\n  display: flex;\n  justify-content: start;\n  align-items: flex-start;\n  flex-grow: 1;\n  margin-left: 2rem;\n}\n"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"dialogue": "fhg6UfcMBTc5hOANC4_A",
@@ -31167,21 +31167,7 @@ var Avatar = function Avatar(props) {
 ;// CONCATENATED MODULE: ../ui/src/core/Scene.tsx
 
 var TransitionScene = function TransitionScene(props) {
-  return /*#__PURE__*/react.createElement(react.Fragment, null, /*#__PURE__*/react.createElement("div", {
-    style: {
-      position: 'fixed',
-      width: '100%',
-      height: '100vh',
-      backgroundColor: props.transition == 'dark' ? 'rgba(0,0,0,0.93)' : 'rgba(255,255,255,0.9)',
-      flexDirection: 'column',
-      alignItems: 'center',
-      display: 'flex',
-      justifyContent: 'center' // React.Children.count(props.children) > 1
-      //   ? 'space-between'
-      //   : 'center',
-
-    }
-  }, props.children, react.Children.count(props.children) > 1 && /*#__PURE__*/react.createElement("div", null)), /*#__PURE__*/react.createElement("main", {
+  return /*#__PURE__*/react.createElement("main", {
     id: "scene-".concat(props.index),
     style: {
       backgroundImage: "url(".concat(props.backgrounds[props.index], ")"),
@@ -31193,7 +31179,18 @@ var TransitionScene = function TransitionScene(props) {
       width: '100%'
     },
     className: props.className
-  }));
+  }, /*#__PURE__*/react.createElement("div", {
+    style: {
+      position: 'fixed',
+      width: '100%',
+      height: '100vh',
+      backgroundColor: props.transition == 'dark' ? 'rgba(0,0,0,0.93)' : 'rgba(255,255,255,0.9)',
+      flexDirection: 'column',
+      alignItems: 'center',
+      display: 'flex',
+      justifyContent: 'center'
+    }
+  }, props.children));
 };
 var DefaultScene = function DefaultScene(props) {
   return /*#__PURE__*/react.createElement("main", {
@@ -31212,7 +31209,11 @@ var DefaultScene = function DefaultScene(props) {
       justifyContent: 'flex-end'
     },
     className: props.className
-  }, props.children);
+  }, /*#__PURE__*/react.createElement("div", {
+    style: {
+      width: '90%'
+    }
+  }, props.children));
 };
 /* harmony default export */ const Scene = ((/* unused pure expression or super */ null && (DefaultScene)));
 ;// CONCATENATED MODULE: ../ui/src/core/Character.tsx
@@ -31239,16 +31240,28 @@ var Character = function Character(props) {
     id: "characters",
     style: {
       display: 'flex',
-      justifyContent: 'center',
+      position: 'fixed',
+      bottom: '2rem',
+      zIndex: 0,
+      justifyContent: 'around',
       alignItems: 'end',
-      width: '80%'
+      width: '50%'
     },
     className: props.containerClass
   }, images.map(function (imageURL, index) {
-    return imageURL == 'none' ? null : /*#__PURE__*/react.createElement("img", {
+    return imageURL == 'none' ? null : /*#__PURE__*/react.createElement("div", {
       key: index,
-      src: imageURL
-    });
+      style: {
+        maxWidth: '10rem'
+      }
+    }, /*#__PURE__*/react.createElement("img", {
+      src: imageURL,
+      className: props.imageClass,
+      style: {
+        height: 'auto',
+        maxWidth: '20rem'
+      }
+    }));
   }));
 };
 /* harmony default export */ const core_Character = ((/* unused pure expression or super */ null && (Character)));
@@ -43683,8 +43696,7 @@ var DefaultSingle = function DefaultSingle() {
     linesClassName: styles_dialogueX_module.lines
   }));
 };
-
-var TransitionSingle = function TransitionSingle() {
+var CharacterSingle = function CharacterSingle() {
   var _useValue5 = (0,fixture.useValue)('lines', {
     defaultValue: Scene_fixture_dialogue
   }),
@@ -43697,6 +43709,48 @@ var TransitionSingle = function TransitionSingle() {
       _useValue8 = Scene_fixture_slicedToArray(_useValue7, 2),
       index = _useValue8[0],
       setIndex = _useValue8[1];
+
+  var handleClick = function handleClick() {
+    if (index < Scene_fixture_dialogue.length - 1) setIndex(index + 1);
+  };
+
+  return /*#__PURE__*/react.createElement(DefaultScene, {
+    backgrounds: scenes,
+    index: index
+  }, /*#__PURE__*/react.createElement(Character, {
+    index: index,
+    characters: Scene_fixture_characters,
+    characterImages: Scene_fixture_characterImages,
+    characterFlow: [[0], [1, 2], [0, 2, 3], [1, 2]]
+  }), /*#__PURE__*/react.createElement(Dialogue, {
+    text: lines,
+    index: index,
+    xSideAfter: /*#__PURE__*/react.createElement(Button, {
+      className: styles_button_module.button,
+      text: "next",
+      onClick: handleClick
+    }),
+    delayed: "x",
+    dialogueClassName: styles_dialogueX_module.dialogue,
+    xClassName: styles_dialogueX_module.xSide,
+    yClassName: styles_dialogueX_module.ySide,
+    linesClassName: styles_dialogueX_module.lines
+  }));
+};
+
+var TransitionSingle = function TransitionSingle() {
+  var _useValue9 = (0,fixture.useValue)('lines', {
+    defaultValue: Scene_fixture_dialogue
+  }),
+      _useValue10 = Scene_fixture_slicedToArray(_useValue9, 1),
+      lines = _useValue10[0];
+
+  var _useValue11 = (0,fixture.useValue)('index', {
+    defaultValue: 0
+  }),
+      _useValue12 = Scene_fixture_slicedToArray(_useValue11, 2),
+      index = _useValue12[0],
+      setIndex = _useValue12[1];
 
   var handleClick = function handleClick() {
     if (index < Scene_fixture_dialogue.length - 1) setIndex(index + 1);
@@ -43722,18 +43776,18 @@ var TransitionSingle = function TransitionSingle() {
 };
 
 var Instant = function Instant() {
-  var _useValue9 = (0,fixture.useValue)('lines', {
+  var _useValue13 = (0,fixture.useValue)('lines', {
     defaultValue: Scene_fixture_dialogue
   }),
-      _useValue10 = Scene_fixture_slicedToArray(_useValue9, 1),
-      lines = _useValue10[0];
+      _useValue14 = Scene_fixture_slicedToArray(_useValue13, 1),
+      lines = _useValue14[0];
 
-  var _useValue11 = (0,fixture.useValue)('index', {
+  var _useValue15 = (0,fixture.useValue)('index', {
     defaultValue: 0
   }),
-      _useValue12 = Scene_fixture_slicedToArray(_useValue11, 2),
-      index = _useValue12[0],
-      setIndex = _useValue12[1];
+      _useValue16 = Scene_fixture_slicedToArray(_useValue15, 2),
+      index = _useValue16[0],
+      setIndex = _useValue16[1];
 
   var handleClick = function handleClick() {
     if (index < Scene_fixture_dialogue.length - 1) setIndex(index + 1);
@@ -43762,7 +43816,8 @@ var Instant = function Instant() {
 };
 
 /* harmony default export */ const Scene_fixture = ({
-  'Default Scene with one element': /*#__PURE__*/react.createElement(DefaultSingle, null),
+  'Default Scene with one avatar element': /*#__PURE__*/react.createElement(DefaultSingle, null),
+  'Default Scene with one character element': /*#__PURE__*/react.createElement(CharacterSingle, null),
   'Transition Scene with one element': /*#__PURE__*/react.createElement(TransitionSingle, null),
   'Instant Transition Scene with two elements': /*#__PURE__*/react.createElement(Instant, null)
 });
@@ -49934,4 +49989,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.c69fe189f7d95f64cd41.js.map
+//# sourceMappingURL=main.ba295ae244f555425ce5.js.map
