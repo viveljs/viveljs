@@ -1,7 +1,7 @@
 import * as React from 'react';
 import _ from 'lodash';
 import Button from '../atoms/Button';
-import { multipleResult } from '../libs';
+import { multipleResult } from '../libs/multipleResults';
 
 interface MultipleSelectProps {
   responses: string[];

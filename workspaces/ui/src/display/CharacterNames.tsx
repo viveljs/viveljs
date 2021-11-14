@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { multipleResult, avatarCharacters } from '../libs';
+import { multipleResult } from '../libs/multipleResults';
+import { avatarCharacters } from '../libs/avatarFunctions';
 
 interface CharacterNamesProps {
   characterFlow: number[][] | 'displayAll'[] | string[];
