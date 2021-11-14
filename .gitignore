@@ -3,7 +3,7 @@ cosmos.userdeps.js
 cosmos-export
 .rollup.cache
 workspace/parser/content.json
-
+.~lock.*
 
 # Logs
 logs
