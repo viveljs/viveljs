@@ -4791,7 +4791,7 @@ ___CSS_LOADER_EXPORT___.locals = {
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_1___default()((_node_modules_css_loader_dist_runtime_sourceMaps_js__WEBPACK_IMPORTED_MODULE_0___default()));
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, "._voTX3qzr8tgnoMFIURw {\n  font-family: 'Rubik', sans-serif;\n  font-size: large;\n  color: rgba(219, 72, 109, 0.8);\n  background-color: rgba(255,255,255,0.9);\n  border-radius: 0.5rem;\n  border: 2px solid rgba(0,0,0,0.6);\n  padding: 0.6rem 0.5rem;\n  font-weight: 600;\n}", "",{"version":3,"sources":["webpack://./cosmos/styles/characterNames.module.css"],"names":[],"mappings":"AAAA;EACE,gCAAgC;EAChC,gBAAgB;EAChB,8BAA8B;EAC9B,uCAAuC;EACvC,qBAAqB;EACrB,iCAAiC;EACjC,sBAAsB;EACtB,gBAAgB;AAClB","sourcesContent":[".text {\n  font-family: 'Rubik', sans-serif;\n  font-size: large;\n  color: rgba(219, 72, 109, 0.8);\n  background-color: rgba(255,255,255,0.9);\n  border-radius: 0.5rem;\n  border: 2px solid rgba(0,0,0,0.6);\n  padding: 0.6rem 0.5rem;\n  font-weight: 600;\n}"],"sourceRoot":""}]);
+___CSS_LOADER_EXPORT___.push([module.id, "._voTX3qzr8tgnoMFIURw {\n  font-family: 'Rubik', sans-serif;\n  font-size: large;\n  color: rgba(219, 72, 109, 0.8);\n  /* background-color: rgba(255,255,255,0.9);\n  border-radius: 0.5rem;\n  border: 2px solid rgba(0,0,0,0.6);\n  padding: 0.6rem 0.5rem; */\n  font-weight: 600;\n}", "",{"version":3,"sources":["webpack://./cosmos/styles/characterNames.module.css"],"names":[],"mappings":"AAAA;EACE,gCAAgC;EAChC,gBAAgB;EAChB,8BAA8B;EAC9B;;;2BAGyB;EACzB,gBAAgB;AAClB","sourcesContent":[".text {\n  font-family: 'Rubik', sans-serif;\n  font-size: large;\n  color: rgba(219, 72, 109, 0.8);\n  /* background-color: rgba(255,255,255,0.9);\n  border-radius: 0.5rem;\n  border: 2px solid rgba(0,0,0,0.6);\n  padding: 0.6rem 0.5rem; */\n  font-weight: 600;\n}"],"sourceRoot":""}]);
 // Exports
 ___CSS_LOADER_EXPORT___.locals = {
 	"text": "_voTX3qzr8tgnoMFIURw"
@@ -30933,7 +30933,7 @@ if (false) { var webpackRendererConnect; }
 
 /***/ }),
 
-/***/ 3771:
+/***/ 9288:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -31001,7 +31001,7 @@ var react = __webpack_require__(2784);
 // EXTERNAL MODULE: ../../node_modules/lodash/lodash.js
 var lodash = __webpack_require__(6635);
 var lodash_default = /*#__PURE__*/__webpack_require__.n(lodash);
-;// CONCATENATED MODULE: ../ui/src/atoms/Button.tsx
+;// CONCATENATED MODULE: ../ui/src/core/Button.tsx
 
 
 var Button = function Button(props) {
@@ -31015,9 +31015,20 @@ var Button = function Button(props) {
     className: props.className
   }, (0,lodash.capitalize)(props.text));
 };
-/* harmony default export */ const atoms_Button = (Button);
+/* harmony default export */ const core_Button = (Button);
 // EXTERNAL MODULE: ../../node_modules/react-simple-typewriter/dist/index.js
 var dist = __webpack_require__(2092);
+;// CONCATENATED MODULE: ../ui/src/atoms/XSideAfter.tsx
+
+
+var XSideAfter = function XSideAfter(xSideAfter) {
+  if (xSideAfter) return /*#__PURE__*/react.createElement("div", {
+    id: "xSideAfter"
+  }, xSideAfter);
+  return null;
+};
+
+
 ;// CONCATENATED MODULE: ../ui/src/core/Dialogue.tsx
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -31033,6 +31044,7 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 
+
 var Dialogue = function Dialogue(props) {
   var _React$useState = react.useState(false),
       _React$useState2 = _slicedToArray(_React$useState, 2),
@@ -31045,18 +31057,10 @@ var Dialogue = function Dialogue(props) {
   }, [line]);
 
   var YSide = function YSide() {
-    if (!props.characterNames && props.ySide) return /*#__PURE__*/react.createElement("div", {
+    if (props.ySide) return /*#__PURE__*/react.createElement("div", {
       id: "yLines",
       className: props.yClassName
     }, props.ySide);
-    if (props.characterNames && !props.ySide) return /*#__PURE__*/react.createElement("div", {
-      id: "yLines",
-      className: props.yClassName
-    }, /*#__PURE__*/react.createElement("div", null, props.characterNames));
-    if (props.characterNames && props.ySide) return /*#__PURE__*/react.createElement("div", {
-      id: "yLines",
-      className: props.yClassName
-    }, /*#__PURE__*/react.createElement("div", null, props.characterNames), props.ySide);
     return null;
   };
 
@@ -31074,12 +31078,10 @@ var Dialogue = function Dialogue(props) {
       className: props.xClassName
     }, props.xSideBefore && /*#__PURE__*/react.createElement("div", {
       id: "xSideBefore"
-    }, props.xSideBefore), /*#__PURE__*/react.createElement("div", {
+    }, props.xSideBefore), props.characterNames && /*#__PURE__*/react.createElement("div", null, props.characterNames), /*#__PURE__*/react.createElement("div", {
       id: "lines",
       className: props.linesClassName
-    }, visible ? line : text), (props.delayed == 'x' ? visible : true) && props.xSideAfter && /*#__PURE__*/react.createElement("div", {
-      id: "xSideAfter"
-    }, props.xSideAfter));
+    }, visible ? line : text), (props.delayed == 'x' ? visible : true) && /*#__PURE__*/react.createElement(XSideAfter, null));
   };
 
   if (props.index <= props.text.length - 1) return /*#__PURE__*/react.createElement("section", {
@@ -42864,12 +42866,9 @@ var CharacterNames = function CharacterNames(props) {
   if (props.index <= props.characterFlow.length - 1) {
     var characters = avatarCharacters(props.characterFlow, props.index, props.characters);
     return /*#__PURE__*/react.createElement("div", {
-      id: "avatarContainer",
-      className: props.containerClass
-    }, /*#__PURE__*/react.createElement("div", {
-      id: "avatarText",
+      id: "characterNamesText",
       className: props.textClass
-    }, CharacterNames_typeof(props.characterFlow[props.index]) == 'object' || props.characterFlow[props.index] == 'displayAll' ? multipleResult(characters, props.and) : props.characterFlow[props.index]));
+    }, CharacterNames_typeof(props.characterFlow[props.index]) == 'object' || props.characterFlow[props.index] == 'displayAll' ? multipleResult(characters, props.and) : props.characterFlow[props.index]);
   }
 
   return /*#__PURE__*/react.createElement("div", {
@@ -42971,7 +42970,7 @@ var MultipleSelect = function MultipleSelect(props) {
         return handleChange(value.index, value.answer);
       }
     }, /*#__PURE__*/react.createElement("span", null, value.answer));
-  })), /*#__PURE__*/react.createElement(atoms_Button, {
+  })), /*#__PURE__*/react.createElement(core_Button, {
     className: props.buttonClass,
     onClick: function onClick() {
       return props.onClick && props.onClick(Object.keys(values).filter(function (value) {
@@ -50074,7 +50073,7 @@ mount();
 
 function mount() {
   // Use dynamic import to load updated modules upon hot reloading
-  var _require = __webpack_require__(3771),
+  var _require = __webpack_require__(9288),
       rendererConfig = _require.rendererConfig,
       fixtures = _require.fixtures,
       decorators = _require.decorators;
@@ -50092,4 +50091,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.ee6dea12d841902f23e2.js.map
+//# sourceMappingURL=main.73308f251575cd452e5e.js.map
