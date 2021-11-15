@@ -43835,7 +43835,7 @@ var CharacterSingle = function CharacterSingle() {
       characters: Scene_fixture_characters,
       characterFlow: [[0], [1, 2], [0, 2, 3], [1, 2]],
       and: "and",
-      containerClass: styles_characterNames_module.text
+      textClass: styles_characterNames_module.text
     }),
     xSideAfter: /*#__PURE__*/react.createElement(Button, {
       className: styles_button_module.button,
@@ -50101,4 +50101,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.6e1cb9688b71541f499c.js.map
+//# sourceMappingURL=main.1b96894fc4ade3989a33.js.map
