@@ -107,7 +107,7 @@ export const CharacterSingle = () => {
             characters={characters}
             characterFlow={[[0], [1, 2], [0, 2, 3], [1, 2]]}
             and="and"
-            containerClass={characterNamesStyle.text}
+            textClass={characterNamesStyle.text}
           />
         }
         xSideAfter={
