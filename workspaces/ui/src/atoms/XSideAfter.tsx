@@ -1,7 +1,11 @@
 import * as React from 'react';
 
-const XSideAfter = (xSideAfter: React.ReactNode) => {
-  if (xSideAfter) return <div id="xSideAfter">{xSideAfter}</div>;
+interface xSideAfterProps {
+  component: React.ReactNode;
+}
+
+const XSideAfter = (props: xSideAfterProps) => {
+  if (props.component) return <div id="xSideAfter">{props.component}</div>;
   return null;
 };
 

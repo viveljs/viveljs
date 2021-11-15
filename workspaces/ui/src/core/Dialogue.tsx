@@ -44,14 +44,30 @@ export const Dialogue = (props: DialogueProps) => {
       onLoopDone: () => setVisibility(true),
     });
 
-    return (
-      <div className={props.xClassName}>
-        {props.xSideBefore && <div id="xSideBefore">{props.xSideBefore}</div>}
-        {props.characterNames && <div>{props.characterNames}</div>}
+    const Line = () => {
+      if (props.characterNames)
+        return (
+          <div>
+            {props.characterNames}
+            <div id="lines" className={props.linesClassName}>
+              {visible ? line : text}
+            </div>
+          </div>
+        );
+      return (
         <div id="lines" className={props.linesClassName}>
           {visible ? line : text}
         </div>
-        {(props.delayed == 'x' ? visible : true) && <XSideAfter />}
+      );
+    };
+
+    return (
+      <div className={props.xClassName}>
+        {props.xSideBefore && <div id="xSideBefore">{props.xSideBefore}</div>}
+        <Line />
+        {(props.delayed == 'x' ? visible : true) && (
+          <XSideAfter component={props.xSideAfter} />
+        )}
       </div>
     );
   };
