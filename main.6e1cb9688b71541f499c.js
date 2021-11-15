@@ -31021,10 +31021,10 @@ var dist = __webpack_require__(2092);
 ;// CONCATENATED MODULE: ../ui/src/atoms/XSideAfter.tsx
 
 
-var XSideAfter = function XSideAfter(xSideAfter) {
-  if (xSideAfter) return /*#__PURE__*/react.createElement("div", {
+var XSideAfter = function XSideAfter(props) {
+  if (props.component) return /*#__PURE__*/react.createElement("div", {
     id: "xSideAfter"
-  }, xSideAfter);
+  }, props.component);
   return null;
 };
 
@@ -31074,14 +31074,24 @@ var Dialogue = function Dialogue(props) {
     }),
         text = _useTypewriter.text;
 
+    var Line = function Line() {
+      if (props.characterNames) return /*#__PURE__*/react.createElement("div", null, props.characterNames, /*#__PURE__*/react.createElement("div", {
+        id: "lines",
+        className: props.linesClassName
+      }, visible ? line : text));
+      return /*#__PURE__*/react.createElement("div", {
+        id: "lines",
+        className: props.linesClassName
+      }, visible ? line : text);
+    };
+
     return /*#__PURE__*/react.createElement("div", {
       className: props.xClassName
     }, props.xSideBefore && /*#__PURE__*/react.createElement("div", {
       id: "xSideBefore"
-    }, props.xSideBefore), props.characterNames && /*#__PURE__*/react.createElement("div", null, props.characterNames), /*#__PURE__*/react.createElement("div", {
-      id: "lines",
-      className: props.linesClassName
-    }, visible ? line : text), (props.delayed == 'x' ? visible : true) && /*#__PURE__*/react.createElement(XSideAfter, null));
+    }, props.xSideBefore), /*#__PURE__*/react.createElement(Line, null), (props.delayed == 'x' ? visible : true) && /*#__PURE__*/react.createElement(XSideAfter, {
+      component: props.xSideAfter
+    }));
   };
 
   if (props.index <= props.text.length - 1) return /*#__PURE__*/react.createElement("section", {
@@ -50091,4 +50101,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.73308f251575cd452e5e.js.map
+//# sourceMappingURL=main.6e1cb9688b71541f499c.js.map
