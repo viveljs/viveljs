@@ -69,5 +69,3 @@ export const Avatar = (props: AvatarProps) => {
 
   return <div className="error">Avatar Index Out of Bound</div>;
 };
-
-export default Avatar;

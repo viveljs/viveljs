@@ -81,5 +81,3 @@ export const Dialogue = (props: DialogueProps) => {
     );
   return <div className="error">Dialogue Index Out of Bound</div>;
 };
-
-export default Dialogue;

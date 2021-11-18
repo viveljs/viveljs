@@ -42,5 +42,3 @@ export const Game = (props: GameProps) => {
     </FullScreen>
   );
 };
-
-export default Game;

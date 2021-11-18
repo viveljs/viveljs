@@ -30,5 +30,3 @@ export const CharacterNames = (props: CharacterNamesProps) => {
 
   return <div className="error">Avatar Index Out of Bound</div>;
 };
-
-export default CharacterNames;

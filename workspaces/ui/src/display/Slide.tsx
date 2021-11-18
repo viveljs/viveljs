@@ -117,5 +117,3 @@ export const Slide = (props: ZoomProps) => {
     </FullScreen>
   );
 };
-
-export default Slide;

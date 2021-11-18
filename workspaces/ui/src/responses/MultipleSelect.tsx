@@ -1,6 +1,6 @@
 import * as React from 'react';
 import _ from 'lodash';
-import Button from '../core/Button';
+import { Button } from '../core/Button';
 import { multipleResult } from '../libs/multipleResults';
 
 interface MultipleSelectProps {
@@ -98,5 +98,3 @@ export const MultipleSelect = (props: MultipleSelectProps) => {
     </div>
   );
 };
-
-export default MultipleSelect;

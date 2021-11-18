@@ -40,7 +40,7 @@ export const Character = (props: CharacterProps) => {
             <img
               src={imageURL as string}
               className={props.imageClass}
-              style={{ height: 'auto', maxWidth: '20rem' }}
+              style={{ height: 'auto', maxWidth: '20rem', maxHeight: '70vh' }}
             />
           </div>
         );
@@ -48,5 +48,3 @@ export const Character = (props: CharacterProps) => {
     </section>
   );
 };
-
-export default Character;

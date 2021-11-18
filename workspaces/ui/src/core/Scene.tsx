@@ -74,5 +74,3 @@ export const DefaultScene = (props: SceneProps) => {
     </main>
   );
 };
-
-export default DefaultScene;
