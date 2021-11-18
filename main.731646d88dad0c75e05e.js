@@ -31015,11 +31015,9 @@ var Button = function Button(props) {
     className: props.className
   }, (0,lodash.capitalize)(props.text));
 };
-/* harmony default export */ const core_Button = (Button);
 // EXTERNAL MODULE: ../../node_modules/react-simple-typewriter/dist/index.js
 var dist = __webpack_require__(2092);
 ;// CONCATENATED MODULE: ../ui/src/atoms/XSideAfter.tsx
-
 
 var XSideAfter = function XSideAfter(props) {
   if (props.component) return /*#__PURE__*/react.createElement("div", {
@@ -31027,8 +31025,6 @@ var XSideAfter = function XSideAfter(props) {
   }, props.component);
   return null;
 };
-
-
 ;// CONCATENATED MODULE: ../ui/src/core/Dialogue.tsx
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -31102,7 +31098,6 @@ var Dialogue = function Dialogue(props) {
     className: "error"
   }, "Dialogue Index Out of Bound");
 };
-/* harmony default export */ const core_Dialogue = ((/* unused pure expression or super */ null && (Dialogue)));
 ;// CONCATENATED MODULE: ../ui/src/libs/multipleResults.ts
 var multipleResult = function multipleResult(names, and) {
   var result = names.map(function (name, index) {
@@ -31215,7 +31210,6 @@ var Avatar = function Avatar(props) {
     className: "error"
   }, "Avatar Index Out of Bound");
 };
-/* harmony default export */ const core_Avatar = ((/* unused pure expression or super */ null && (Avatar)));
 ;// CONCATENATED MODULE: ../ui/src/core/Scene.tsx
 
 var TransitionScene = function TransitionScene(props) {
@@ -31267,7 +31261,6 @@ var DefaultScene = function DefaultScene(props) {
     }
   }, props.children));
 };
-/* harmony default export */ const Scene = ((/* unused pure expression or super */ null && (DefaultScene)));
 ;// CONCATENATED MODULE: ../ui/src/core/Character.tsx
 function Character_toConsumableArray(arr) { return Character_arrayWithoutHoles(arr) || Character_iterableToArray(arr) || Character_unsupportedIterableToArray(arr) || Character_nonIterableSpread(); }
 
@@ -31311,12 +31304,12 @@ var Character = function Character(props) {
       className: props.imageClass,
       style: {
         height: 'auto',
-        maxWidth: '20rem'
+        maxWidth: '20rem',
+        maxHeight: '70vh'
       }
     }));
   }));
 };
-/* harmony default export */ const core_Character = ((/* unused pure expression or super */ null && (Character)));
 ;// CONCATENATED MODULE: ../../node_modules/fscreen/dist/fscreen.esm.js
 var key = {
     fullscreenEnabled: 0,
@@ -31490,7 +31483,6 @@ var Game = function Game(props) {
     id: "game"
   }, props.children), props.enableFullScreen && /*#__PURE__*/react.createElement(FullScreenButton, null));
 };
-/* harmony default export */ const core_Game = ((/* unused pure expression or super */ null && (Game)));
 ;// CONCATENATED MODULE: ../../node_modules/ssr-window/ssr-window.esm.js
 /**
  * SSR Window 4.0.1
@@ -42865,7 +42857,6 @@ var Slide = function Slide(props) {
     }
   }, /*#__PURE__*/react.createElement(FullScreenButton, null)));
 };
-/* harmony default export */ const display_Slide = ((/* unused pure expression or super */ null && (Slide)));
 ;// CONCATENATED MODULE: ../ui/src/display/CharacterNames.tsx
 function CharacterNames_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { CharacterNames_typeof = function _typeof(obj) { return typeof obj; }; } else { CharacterNames_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return CharacterNames_typeof(obj); }
 
@@ -42885,7 +42876,6 @@ var CharacterNames = function CharacterNames(props) {
     className: "error"
   }, "Avatar Index Out of Bound");
 };
-/* harmony default export */ const display_CharacterNames = ((/* unused pure expression or super */ null && (CharacterNames)));
 ;// CONCATENATED MODULE: ../ui/src/responses/MultipleChoice.tsx
 
 
@@ -42908,7 +42898,6 @@ var MultipleChoice = function MultipleChoice(props) {
     className: props.containerClass
   }, shuffle);
 };
-/* harmony default export */ const responses_MultipleChoice = ((/* unused pure expression or super */ null && (MultipleChoice)));
 ;// CONCATENATED MODULE: ../ui/src/responses/MultipleSelect.tsx
 function MultipleSelect_ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) { symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); } keys.push.apply(keys, symbols); } return keys; }
 
@@ -42980,7 +42969,7 @@ var MultipleSelect = function MultipleSelect(props) {
         return handleChange(value.index, value.answer);
       }
     }, /*#__PURE__*/react.createElement("span", null, value.answer));
-  })), /*#__PURE__*/react.createElement(core_Button, {
+  })), /*#__PURE__*/react.createElement(Button, {
     className: props.buttonClass,
     onClick: function onClick() {
       return props.onClick && props.onClick(Object.keys(values).filter(function (value) {
@@ -42990,7 +42979,6 @@ var MultipleSelect = function MultipleSelect(props) {
     text: "".concat(props.prefix ? props.prefix : '... ').concat(multipleResult(extractText(), props.and).join(''))
   }));
 };
-/* harmony default export */ const responses_MultipleSelect = ((/* unused pure expression or super */ null && (MultipleSelect)));
 ;// CONCATENATED MODULE: ../ui/src/index.ts
 
 
@@ -50101,4 +50089,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.1b96894fc4ade3989a33.js.map
+//# sourceMappingURL=main.731646d88dad0c75e05e.js.map
