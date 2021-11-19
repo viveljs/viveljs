@@ -168,6 +168,75 @@ exports.prettyPrint = prettyPrint;
 
 /***/ }),
 
+/***/ 2719:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+var __webpack_unused_export__;
+
+__webpack_unused_export__ = ({ value: true });
+function composeRefs() {
+    var refs = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        refs[_i] = arguments[_i];
+    }
+    if (refs.length === 2) { // micro-optimize the hot path
+        return composeTwoRefs(refs[0], refs[1]) || null;
+    }
+    var composedRef = refs.slice(1).reduce(function (semiCombinedRef, refToInclude) { return composeTwoRefs(semiCombinedRef, refToInclude); }, refs[0]);
+    return composedRef || null;
+}
+exports.Z = composeRefs;
+var composedRefCache = new WeakMap();
+function composeTwoRefs(ref1, ref2) {
+    if (ref1 && ref2) {
+        var ref1Cache = composedRefCache.get(ref1) || new WeakMap();
+        composedRefCache.set(ref1, ref1Cache);
+        var composedRef = ref1Cache.get(ref2) || (function (instance) {
+            updateRef(ref1, instance);
+            updateRef(ref2, instance);
+        });
+        ref1Cache.set(ref2, composedRef);
+        return composedRef;
+    }
+    if (!ref1) {
+        return ref2;
+    }
+    else {
+        return ref1;
+    }
+}
+function updateRef(ref, instance) {
+    if (typeof ref === 'function') {
+        ref(instance);
+    }
+    else {
+        ref.current = instance;
+    }
+}
+//# sourceMappingURL=composeRefs.js.map
+
+/***/ }),
+
+/***/ 9027:
+/***/ ((module) => {
+
+function webpackEmptyAsyncContext(req) {
+	// Here Promise.resolve().then() is used instead of new Promise() to prevent
+	// uncaught exception popping up in devtools
+	return Promise.resolve().then(() => {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	});
+}
+webpackEmptyAsyncContext.keys = () => ([]);
+webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
+webpackEmptyAsyncContext.id = 9027;
+module.exports = webpackEmptyAsyncContext;
+
+/***/ }),
+
 /***/ 540:
 /***/ ((module) => {
 
@@ -30933,7 +31002,7 @@ if (false) { var webpackRendererConnect; }
 
 /***/ }),
 
-/***/ 9288:
+/***/ 6343:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -42857,6 +42926,11839 @@ var Slide = function Slide(props) {
     }
   }, /*#__PURE__*/react.createElement(FullScreenButton, null)));
 };
+// EXTERNAL MODULE: ../../node_modules/@seznam/compose-react-refs/composeRefs.js
+var composeRefs = __webpack_require__(2719);
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/lib.jsx
+var __rest = (undefined && undefined.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+/* eslint-disable react/prop-types */
+
+
+const lib_define = (tagName, clazz) => {
+    const isClient = typeof window !== 'undefined';
+    if (isClient && !customElements.get(tagName))
+        customElements.define(tagName, clazz);
+};
+const dashToPascalCase = (str) => str
+    .toLowerCase()
+    .split('-')
+    .map(segment => segment.charAt(0).toUpperCase() + segment.slice(1))
+    .join('');
+const isEvent = (prop) => { var _a; return prop.indexOf('on') === 0 && prop[2] === ((_a = prop[2]) === null || _a === void 0 ? void 0 : _a.toUpperCase()); };
+const toDomEventName = (prop) => prop.charAt(2).toLowerCase() + prop.substring(3);
+function createComponent(tagName, componentProps) {
+    const Component = (0,react.forwardRef)((_a, forwardedRef) => {
+        var { children } = _a, props = __rest(_a, ["children"]);
+        const [ref, setRef] = (0,react.useState)(null);
+        const setRefCb = (0,react.useCallback)((node) => {
+            setRef(node);
+        }, []);
+        const eventHandlers = (0,react.useRef)(new Map());
+        const domProps = (0,react.useMemo)(() => Object.keys(props)
+            .filter(prop => !componentProps.has(prop) && !isEvent(prop))
+            .reduce((p, c) => (Object.assign(Object.assign({}, p), { [c]: props[c] })), {}), [props]);
+        const wcProps = (0,react.useMemo)(() => Object.keys(props)
+            .filter(prop => componentProps.has(prop) || isEvent(prop))
+            .reduce((p, c) => (Object.assign(Object.assign({}, p), { [c]: props[c] })), {}), [props]);
+        const listen = (0,react.useCallback)((prop, handler) => {
+            var _a;
+            const domEvent = toDomEventName(prop);
+            (_a = eventHandlers.current.get(domEvent)) === null || _a === void 0 ? void 0 : _a();
+            if (!ref || !handler)
+                return;
+            ref.addEventListener(domEvent, handler);
+            eventHandlers.current.set(domEvent, () => {
+                ref.removeEventListener(domEvent, handler);
+            });
+        }, [ref]);
+        const cleanup = (0,react.useCallback)(() => {
+            eventHandlers.current.forEach(fn => fn());
+            eventHandlers.current.clear();
+        }, []);
+        (0,react.useEffect)(() => () => {
+            cleanup();
+        }, []);
+        (0,react.useEffect)(() => {
+            if (!ref)
+                return;
+            Object.keys(wcProps).forEach(prop => {
+                if (isEvent(prop)) {
+                    listen(prop, wcProps[prop]);
+                    return;
+                }
+                if (ref[prop] !== wcProps[prop]) {
+                    ref[prop] = wcProps[prop];
+                }
+            });
+        }, [ref, wcProps]);
+        return (0,react.createElement)(tagName, Object.assign({ ref: (0,composeRefs/* default */.Z)(setRefCb, forwardedRef) }, domProps), children);
+    });
+    Component.displayName = dashToPascalCase(tagName);
+    return Component;
+}
+//# sourceMappingURL=lib.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@stencil/core/internal/app-data/index.js
+const app_data_BUILD = {
+    allRenderFn: false,
+    cmpDidLoad: true,
+    cmpDidUnload: false,
+    cmpDidUpdate: true,
+    cmpDidRender: true,
+    cmpWillLoad: true,
+    cmpWillUpdate: true,
+    cmpWillRender: true,
+    connectedCallback: true,
+    disconnectedCallback: true,
+    element: true,
+    event: true,
+    hasRenderFn: true,
+    lifecycle: true,
+    hostListener: true,
+    hostListenerTargetWindow: true,
+    hostListenerTargetDocument: true,
+    hostListenerTargetBody: true,
+    hostListenerTargetParent: false,
+    hostListenerTarget: true,
+    member: true,
+    method: true,
+    mode: true,
+    observeAttribute: true,
+    prop: true,
+    propMutable: true,
+    reflect: true,
+    scoped: true,
+    shadowDom: true,
+    slot: true,
+    cssAnnotations: true,
+    state: true,
+    style: true,
+    svg: true,
+    updatable: true,
+    vdomAttribute: true,
+    vdomXlink: true,
+    vdomClass: true,
+    vdomFunctional: true,
+    vdomKey: true,
+    vdomListener: true,
+    vdomRef: true,
+    vdomPropOrAttr: true,
+    vdomRender: true,
+    vdomStyle: true,
+    vdomText: true,
+    watchCallback: true,
+    taskQueue: true,
+    hotModuleReplacement: false,
+    isDebug: false,
+    isDev: false,
+    isTesting: false,
+    hydrateServerSide: false,
+    hydrateClientSide: false,
+    lifecycleDOMEvents: false,
+    lazyLoad: false,
+    profile: false,
+    slotRelocation: true,
+    appendChildSlotFix: false,
+    cloneNodeFix: false,
+    hydratedAttribute: false,
+    hydratedClass: true,
+    safari10: false,
+    scriptDataOpts: false,
+    shadowDomShim: false,
+    slotChildNodesFix: false,
+    propBoolean: true,
+    propNumber: true,
+    propString: true,
+    cssVarShim: false,
+    constructableCSS: true,
+    cmpShouldUpdate: true,
+    devTools: false,
+    dynamicImportShim: false,
+    shadowDelegatesFocus: true,
+    initializeNextTick: false,
+    asyncLoading: false,
+    asyncQueue: false,
+    transformTagName: false,
+    attachStyles: true,
+};
+const Env = {};
+const NAMESPACE = /* default */ 'app';
+
+
+
+;// CONCATENATED MODULE: ../../node_modules/@stencil/core/internal/client/index.js
+let scopeId;
+let contentRef;
+let hostTagName;
+let customError;
+let i = 0;
+let useNativeShadowDom = false;
+let checkSlotFallbackVisibility = false;
+let checkSlotRelocate = false;
+let isSvgMode = false;
+let renderingRef = null;
+let queueCongestion = 0;
+let queuePending = false;
+/*
+ Stencil Client Platform v2.5.2 | MIT Licensed | https://stenciljs.com
+ */
+
+const win = typeof window !== 'undefined' ? window : {};
+const CSS = app_data_BUILD.cssVarShim ? win.CSS : null;
+const doc = win.document || { head: {} };
+const H = (win.HTMLElement || class {
+});
+const plt = {
+    $flags$: 0,
+    $resourcesUrl$: '',
+    jmp: h => h(),
+    raf: h => requestAnimationFrame(h),
+    ael: (el, eventName, listener, opts) => el.addEventListener(eventName, listener, opts),
+    rel: (el, eventName, listener, opts) => el.removeEventListener(eventName, listener, opts),
+    ce: (eventName, opts) => new CustomEvent(eventName, opts),
+};
+const supportsShadow = app_data_BUILD.shadowDomShim && app_data_BUILD.shadowDom ? /*@__PURE__*/ (() => (doc.head.attachShadow + '').indexOf('[native') > -1)() : true;
+const supportsListenerOptions = /*@__PURE__*/ (() => {
+    let supportsListenerOptions = false;
+    try {
+        doc.addEventListener('e', null, Object.defineProperty({}, 'passive', {
+            get() {
+                supportsListenerOptions = true;
+            },
+        }));
+    }
+    catch (e) { }
+    return supportsListenerOptions;
+})();
+const promiseResolve = (v) => Promise.resolve(v);
+const supportsConstructibleStylesheets = app_data_BUILD.constructableCSS
+    ? /*@__PURE__*/ (() => {
+        try {
+            new CSSStyleSheet();
+            return typeof (new CSSStyleSheet()).replace === 'function';
+        }
+        catch (e) { }
+        return false;
+    })()
+    : false;
+const Context = {};
+const addHostEventListeners = (elm, hostRef, listeners, attachParentListeners) => {
+    if (app_data_BUILD.hostListener && listeners) {
+        // this is called immediately within the element's constructor
+        // initialize our event listeners on the host element
+        // we do this now so that we can listen to events that may
+        // have fired even before the instance is ready
+        if (app_data_BUILD.hostListenerTargetParent) {
+            // this component may have event listeners that should be attached to the parent
+            if (attachParentListeners) {
+                // this is being ran from within the connectedCallback
+                // which is important so that we know the host element actually has a parent element
+                // filter out the listeners to only have the ones that ARE being attached to the parent
+                listeners = listeners.filter(([flags]) => flags & 32 /* TargetParent */);
+            }
+            else {
+                // this is being ran from within the component constructor
+                // everything BUT the parent element listeners should be attached at this time
+                // filter out the listeners that are NOT being attached to the parent
+                listeners = listeners.filter(([flags]) => !(flags & 32 /* TargetParent */));
+            }
+        }
+        listeners.map(([flags, name, method]) => {
+            const target = app_data_BUILD.hostListenerTarget ? getHostListenerTarget(elm, flags) : elm;
+            const handler = hostListenerProxy(hostRef, method);
+            const opts = hostListenerOpts(flags);
+            plt.ael(target, name, handler, opts);
+            (hostRef.$rmListeners$ = hostRef.$rmListeners$ || []).push(() => plt.rel(target, name, handler, opts));
+        });
+    }
+};
+const hostListenerProxy = (hostRef, methodName) => (ev) => {
+    try {
+        if (app_data_BUILD.lazyLoad) {
+            if (hostRef.$flags$ & 256 /* isListenReady */) {
+                // instance is ready, let's call it's member method for this event
+                hostRef.$lazyInstance$[methodName](ev);
+            }
+            else {
+                (hostRef.$queuedListeners$ = hostRef.$queuedListeners$ || []).push([methodName, ev]);
+            }
+        }
+        else {
+            hostRef.$hostElement$[methodName](ev);
+        }
+    }
+    catch (e) {
+        consoleError(e);
+    }
+};
+const getHostListenerTarget = (elm, flags) => {
+    if (app_data_BUILD.hostListenerTargetDocument && flags & 4 /* TargetDocument */)
+        return doc;
+    if (app_data_BUILD.hostListenerTargetWindow && flags & 8 /* TargetWindow */)
+        return win;
+    if (app_data_BUILD.hostListenerTargetBody && flags & 16 /* TargetBody */)
+        return doc.body;
+    if (app_data_BUILD.hostListenerTargetParent && flags & 32 /* TargetParent */)
+        return elm.parentElement;
+    return elm;
+};
+// prettier-ignore
+const hostListenerOpts = (flags) => supportsListenerOptions
+    ? ({
+        passive: (flags & 1 /* Passive */) !== 0,
+        capture: (flags & 2 /* Capture */) !== 0,
+    })
+    : (flags & 2 /* Capture */) !== 0;
+const CONTENT_REF_ID = 'r';
+const ORG_LOCATION_ID = 'o';
+const SLOT_NODE_ID = 's';
+const TEXT_NODE_ID = 't';
+const HYDRATE_ID = 's-id';
+const HYDRATED_STYLE_ID = 'sty-id';
+const HYDRATE_CHILD_ID = 'c-id';
+const HYDRATED_CSS = '{visibility:hidden}.hydrated{visibility:inherit}';
+const XLINK_NS = 'http://www.w3.org/1999/xlink';
+const createTime = (fnName, tagName = '') => {
+    if (app_data_BUILD.profile && performance.mark) {
+        const key = `st:${fnName}:${tagName}:${i++}`;
+        // Start
+        performance.mark(key);
+        // End
+        return () => performance.measure(`[Stencil] ${fnName}() <${tagName}>`, key);
+    }
+    else {
+        return () => {
+            return;
+        };
+    }
+};
+const uniqueTime = (key, measureText) => {
+    if (app_data_BUILD.profile && performance.mark) {
+        if (performance.getEntriesByName(key).length === 0) {
+            performance.mark(key);
+        }
+        return () => {
+            if (performance.getEntriesByName(measureText).length === 0) {
+                performance.measure(measureText, key);
+            }
+        };
+    }
+    else {
+        return () => {
+            return;
+        };
+    }
+};
+const inspect = (ref) => {
+    const hostRef = getHostRef(ref);
+    if (!hostRef) {
+        return undefined;
+    }
+    const flags = hostRef.$flags$;
+    const hostElement = hostRef.$hostElement$;
+    return {
+        renderCount: hostRef.$renderCount$,
+        flags: {
+            hasRendered: !!(flags & 2 /* hasRendered */),
+            hasConnected: !!(flags & 1 /* hasConnected */),
+            isWaitingForChildren: !!(flags & 4 /* isWaitingForChildren */),
+            isConstructingInstance: !!(flags & 8 /* isConstructingInstance */),
+            isQueuedForUpdate: !!(flags & 16 /* isQueuedForUpdate */),
+            hasInitializedComponent: !!(flags & 32 /* hasInitializedComponent */),
+            hasLoadedComponent: !!(flags & 64 /* hasLoadedComponent */),
+            isWatchReady: !!(flags & 128 /* isWatchReady */),
+            isListenReady: !!(flags & 256 /* isListenReady */),
+            needsRerender: !!(flags & 512 /* needsRerender */),
+        },
+        instanceValues: hostRef.$instanceValues$,
+        ancestorComponent: hostRef.$ancestorComponent$,
+        hostElement,
+        lazyInstance: hostRef.$lazyInstance$,
+        vnode: hostRef.$vnode$,
+        modeName: hostRef.$modeName$,
+        onReadyPromise: hostRef.$onReadyPromise$,
+        onReadyResolve: hostRef.$onReadyResolve$,
+        onInstancePromise: hostRef.$onInstancePromise$,
+        onInstanceResolve: hostRef.$onInstanceResolve$,
+        onRenderResolve: hostRef.$onRenderResolve$,
+        queuedListeners: hostRef.$queuedListeners$,
+        rmListeners: hostRef.$rmListeners$,
+        ['s-id']: hostElement['s-id'],
+        ['s-cr']: hostElement['s-cr'],
+        ['s-lr']: hostElement['s-lr'],
+        ['s-p']: hostElement['s-p'],
+        ['s-rc']: hostElement['s-rc'],
+        ['s-sc']: hostElement['s-sc'],
+    };
+};
+const installDevTools = () => {
+    if (BUILD.devTools) {
+        const stencil = (win.stencil = win.stencil || {});
+        const originalInspect = stencil.inspect;
+        stencil.inspect = (ref) => {
+            let result = inspect(ref);
+            if (!result && typeof originalInspect === 'function') {
+                result = originalInspect(ref);
+            }
+            return result;
+        };
+    }
+};
+const rootAppliedStyles = new WeakMap();
+const registerStyle = (scopeId, cssText, allowCS) => {
+    let style = client_styles.get(scopeId);
+    if (supportsConstructibleStylesheets && allowCS) {
+        style = (style || new CSSStyleSheet());
+        style.replace(cssText);
+    }
+    else {
+        style = cssText;
+    }
+    client_styles.set(scopeId, style);
+};
+const addStyle = (styleContainerNode, cmpMeta, mode, hostElm) => {
+    let scopeId = getScopeId(cmpMeta, mode);
+    let style = client_styles.get(scopeId);
+    if (!app_data_BUILD.attachStyles) {
+        return scopeId;
+    }
+    // if an element is NOT connected then getRootNode() will return the wrong root node
+    // so the fallback is to always use the document for the root node in those cases
+    styleContainerNode = styleContainerNode.nodeType === 11 /* DocumentFragment */ ? styleContainerNode : doc;
+    if (style) {
+        if (typeof style === 'string') {
+            styleContainerNode = styleContainerNode.head || styleContainerNode;
+            let appliedStyles = rootAppliedStyles.get(styleContainerNode);
+            let styleElm;
+            if (!appliedStyles) {
+                rootAppliedStyles.set(styleContainerNode, (appliedStyles = new Set()));
+            }
+            if (!appliedStyles.has(scopeId)) {
+                if (app_data_BUILD.hydrateClientSide && styleContainerNode.host && (styleElm = styleContainerNode.querySelector(`[${HYDRATED_STYLE_ID}="${scopeId}"]`))) {
+                    // This is only happening on native shadow-dom, do not needs CSS var shim
+                    styleElm.innerHTML = style;
+                }
+                else {
+                    if (app_data_BUILD.cssVarShim && plt.$cssShim$) {
+                        styleElm = plt.$cssShim$.createHostStyle(hostElm, scopeId, style, !!(cmpMeta.$flags$ & 10 /* needsScopedEncapsulation */));
+                        const newScopeId = styleElm['s-sc'];
+                        if (newScopeId) {
+                            scopeId = newScopeId;
+                            // we don't want to add this styleID to the appliedStyles Set
+                            // since the cssVarShim might need to apply several different
+                            // stylesheets for the same component
+                            appliedStyles = null;
+                        }
+                    }
+                    else {
+                        styleElm = doc.createElement('style');
+                        styleElm.innerHTML = style;
+                    }
+                    if (app_data_BUILD.hydrateServerSide || app_data_BUILD.hotModuleReplacement) {
+                        styleElm.setAttribute(HYDRATED_STYLE_ID, scopeId);
+                    }
+                    styleContainerNode.insertBefore(styleElm, styleContainerNode.querySelector('link'));
+                }
+                if (appliedStyles) {
+                    appliedStyles.add(scopeId);
+                }
+            }
+        }
+        else if (app_data_BUILD.constructableCSS && !styleContainerNode.adoptedStyleSheets.includes(style)) {
+            styleContainerNode.adoptedStyleSheets = [...styleContainerNode.adoptedStyleSheets, style];
+        }
+    }
+    return scopeId;
+};
+const attachStyles = (hostRef) => {
+    const cmpMeta = hostRef.$cmpMeta$;
+    const elm = hostRef.$hostElement$;
+    const flags = cmpMeta.$flags$;
+    const endAttachStyles = createTime('attachStyles', cmpMeta.$tagName$);
+    const scopeId = addStyle(app_data_BUILD.shadowDom && supportsShadow && elm.shadowRoot ? elm.shadowRoot : elm.getRootNode(), cmpMeta, hostRef.$modeName$, elm);
+    if ((app_data_BUILD.shadowDom || app_data_BUILD.scoped) && app_data_BUILD.cssAnnotations && flags & 10 /* needsScopedEncapsulation */) {
+        // only required when we're NOT using native shadow dom (slot)
+        // or this browser doesn't support native shadow dom
+        // and this host element was NOT created with SSR
+        // let's pick out the inner content for slot projection
+        // create a node to represent where the original
+        // content was first placed, which is useful later on
+        // DOM WRITE!!
+        elm['s-sc'] = scopeId;
+        elm.classList.add(scopeId + '-h');
+        if (app_data_BUILD.scoped && flags & 2 /* scopedCssEncapsulation */) {
+            elm.classList.add(scopeId + '-s');
+        }
+    }
+    endAttachStyles();
+};
+const getScopeId = (cmp, mode) => 'sc-' + (app_data_BUILD.mode && mode && cmp.$flags$ & 32 /* hasMode */ ? cmp.$tagName$ + '-' + mode : cmp.$tagName$);
+const convertScopedToShadow = (css) => css.replace(/\/\*!@([^\/]+)\*\/[^\{]+\{/g, '$1{');
+// Private
+const computeMode = (elm) => modeResolutionChain.map(h => h(elm)).find(m => !!m);
+// Public
+const setMode = (handler) => modeResolutionChain.push(handler);
+const getMode = (ref) => getHostRef(ref).$modeName$;
+/**
+ * Default style mode id
+ */
+/**
+ * Reusable empty obj/array
+ * Don't add values to these!!
+ */
+const EMPTY_OBJ = {};
+/**
+ * Namespaces
+ */
+const SVG_NS = 'http://www.w3.org/2000/svg';
+const HTML_NS = 'http://www.w3.org/1999/xhtml';
+const isDef = (v) => v != null;
+const isComplexType = (o) => {
+    // https://jsperf.com/typeof-fn-object/5
+    o = typeof o;
+    return o === 'object' || o === 'function';
+};
+/**
+ * Production h() function based on Preact by
+ * Jason Miller (@developit)
+ * Licensed under the MIT License
+ * https://github.com/developit/preact/blob/master/LICENSE
+ *
+ * Modified for Stencil's compiler and vdom
+ */
+// const stack: any[] = [];
+// export function h(nodeName: string | d.FunctionalComponent, vnodeData: d.PropsType, child?: d.ChildType): d.VNode;
+// export function h(nodeName: string | d.FunctionalComponent, vnodeData: d.PropsType, ...children: d.ChildType[]): d.VNode;
+const h = (nodeName, vnodeData, ...children) => {
+    let child = null;
+    let key = null;
+    let slotName = null;
+    let simple = false;
+    let lastSimple = false;
+    let vNodeChildren = [];
+    const walk = (c) => {
+        for (let i = 0; i < c.length; i++) {
+            child = c[i];
+            if (Array.isArray(child)) {
+                walk(child);
+            }
+            else if (child != null && typeof child !== 'boolean') {
+                if ((simple = typeof nodeName !== 'function' && !isComplexType(child))) {
+                    child = String(child);
+                }
+                else if (app_data_BUILD.isDev && typeof nodeName !== 'function' && child.$flags$ === undefined) {
+                    consoleDevError(`vNode passed as children has unexpected type.
+Make sure it's using the correct h() function.
+Empty objects can also be the cause, look for JSX comments that became objects.`);
+                }
+                if (simple && lastSimple) {
+                    // If the previous child was simple (string), we merge both
+                    vNodeChildren[vNodeChildren.length - 1].$text$ += child;
+                }
+                else {
+                    // Append a new vNode, if it's text, we create a text vNode
+                    vNodeChildren.push(simple ? newVNode(null, child) : child);
+                }
+                lastSimple = simple;
+            }
+        }
+    };
+    walk(children);
+    if (vnodeData) {
+        if (app_data_BUILD.isDev && nodeName === 'input') {
+            validateInputProperties(vnodeData);
+        }
+        // normalize class / classname attributes
+        if (app_data_BUILD.vdomKey && vnodeData.key) {
+            key = vnodeData.key;
+        }
+        if (app_data_BUILD.slotRelocation && vnodeData.name) {
+            slotName = vnodeData.name;
+        }
+        if (app_data_BUILD.vdomClass) {
+            const classData = vnodeData.className || vnodeData.class;
+            if (classData) {
+                vnodeData.class =
+                    typeof classData !== 'object'
+                        ? classData
+                        : Object.keys(classData)
+                            .filter(k => classData[k])
+                            .join(' ');
+            }
+        }
+    }
+    if (app_data_BUILD.isDev && vNodeChildren.some(isHost)) {
+        consoleDevError(`The <Host> must be the single root component. Make sure:
+- You are NOT using hostData() and <Host> in the same component.
+- <Host> is used once, and it's the single root component of the render() function.`);
+    }
+    if (app_data_BUILD.vdomFunctional && typeof nodeName === 'function') {
+        // nodeName is a functional component
+        return nodeName(vnodeData === null ? {} : vnodeData, vNodeChildren, vdomFnUtils);
+    }
+    const vnode = newVNode(nodeName, null);
+    vnode.$attrs$ = vnodeData;
+    if (vNodeChildren.length > 0) {
+        vnode.$children$ = vNodeChildren;
+    }
+    if (app_data_BUILD.vdomKey) {
+        vnode.$key$ = key;
+    }
+    if (app_data_BUILD.slotRelocation) {
+        vnode.$name$ = slotName;
+    }
+    return vnode;
+};
+const newVNode = (tag, text) => {
+    const vnode = {
+        $flags$: 0,
+        $tag$: tag,
+        $text$: text,
+        $elm$: null,
+        $children$: null,
+    };
+    if (app_data_BUILD.vdomAttribute) {
+        vnode.$attrs$ = null;
+    }
+    if (app_data_BUILD.vdomKey) {
+        vnode.$key$ = null;
+    }
+    if (app_data_BUILD.slotRelocation) {
+        vnode.$name$ = null;
+    }
+    return vnode;
+};
+const Host = {};
+const isHost = (node) => node && node.$tag$ === Host;
+const vdomFnUtils = {
+    forEach: (children, cb) => children.map(convertToPublic).forEach(cb),
+    map: (children, cb) => children.map(convertToPublic).map(cb).map(convertToPrivate),
+};
+const convertToPublic = (node) => ({
+    vattrs: node.$attrs$,
+    vchildren: node.$children$,
+    vkey: node.$key$,
+    vname: node.$name$,
+    vtag: node.$tag$,
+    vtext: node.$text$,
+});
+const convertToPrivate = (node) => {
+    if (typeof node.vtag === 'function') {
+        const vnodeData = Object.assign({}, node.vattrs);
+        if (node.vkey) {
+            vnodeData.key = node.vkey;
+        }
+        if (node.vname) {
+            vnodeData.name = node.vname;
+        }
+        return h(node.vtag, vnodeData, ...(node.vchildren || []));
+    }
+    const vnode = newVNode(node.vtag, node.vtext);
+    vnode.$attrs$ = node.vattrs;
+    vnode.$children$ = node.vchildren;
+    vnode.$key$ = node.vkey;
+    vnode.$name$ = node.vname;
+    return vnode;
+};
+const validateInputProperties = (vnodeData) => {
+    const props = Object.keys(vnodeData);
+    const typeIndex = props.indexOf('type');
+    const minIndex = props.indexOf('min');
+    const maxIndex = props.indexOf('max');
+    const stepIndex = props.indexOf('min');
+    const value = props.indexOf('value');
+    if (value === -1) {
+        return;
+    }
+    if (value < typeIndex || value < minIndex || value < maxIndex || value < stepIndex) {
+        consoleDevWarn(`The "value" prop of <input> should be set after "min", "max", "type" and "step"`);
+    }
+};
+/**
+ * Production setAccessor() function based on Preact by
+ * Jason Miller (@developit)
+ * Licensed under the MIT License
+ * https://github.com/developit/preact/blob/master/LICENSE
+ *
+ * Modified for Stencil's compiler and vdom
+ */
+const setAccessor = (elm, memberName, oldValue, newValue, isSvg, flags) => {
+    if (oldValue !== newValue) {
+        let isProp = isMemberInElement(elm, memberName);
+        let ln = memberName.toLowerCase();
+        if (app_data_BUILD.vdomClass && memberName === 'class') {
+            const classList = elm.classList;
+            const oldClasses = parseClassList(oldValue);
+            const newClasses = parseClassList(newValue);
+            classList.remove(...oldClasses.filter(c => c && !newClasses.includes(c)));
+            classList.add(...newClasses.filter(c => c && !oldClasses.includes(c)));
+        }
+        else if (app_data_BUILD.vdomStyle && memberName === 'style') {
+            // update style attribute, css properties and values
+            if (app_data_BUILD.updatable) {
+                for (const prop in oldValue) {
+                    if (!newValue || newValue[prop] == null) {
+                        if (!app_data_BUILD.hydrateServerSide && prop.includes('-')) {
+                            elm.style.removeProperty(prop);
+                        }
+                        else {
+                            elm.style[prop] = '';
+                        }
+                    }
+                }
+            }
+            for (const prop in newValue) {
+                if (!oldValue || newValue[prop] !== oldValue[prop]) {
+                    if (!app_data_BUILD.hydrateServerSide && prop.includes('-')) {
+                        elm.style.setProperty(prop, newValue[prop]);
+                    }
+                    else {
+                        elm.style[prop] = newValue[prop];
+                    }
+                }
+            }
+        }
+        else if (app_data_BUILD.vdomKey && memberName === 'key')
+            ;
+        else if (app_data_BUILD.vdomRef && memberName === 'ref') {
+            // minifier will clean this up
+            if (newValue) {
+                newValue(elm);
+            }
+        }
+        else if (app_data_BUILD.vdomListener && (app_data_BUILD.lazyLoad ? !isProp : !elm.__lookupSetter__(memberName)) && memberName[0] === 'o' && memberName[1] === 'n') {
+            // Event Handlers
+            // so if the member name starts with "on" and the 3rd characters is
+            // a capital letter, and it's not already a member on the element,
+            // then we're assuming it's an event listener
+            if (memberName[2] === '-') {
+                // on- prefixed events
+                // allows to be explicit about the dom event to listen without any magic
+                // under the hood:
+                // <my-cmp on-click> // listens for "click"
+                // <my-cmp on-Click> // listens for "Click"
+                // <my-cmp on-ionChange> // listens for "ionChange"
+                // <my-cmp on-EVENTS> // listens for "EVENTS"
+                memberName = memberName.slice(3);
+            }
+            else if (isMemberInElement(win, ln)) {
+                // standard event
+                // the JSX attribute could have been "onMouseOver" and the
+                // member name "onmouseover" is on the window's prototype
+                // so let's add the listener "mouseover", which is all lowercased
+                memberName = ln.slice(2);
+            }
+            else {
+                // custom event
+                // the JSX attribute could have been "onMyCustomEvent"
+                // so let's trim off the "on" prefix and lowercase the first character
+                // and add the listener "myCustomEvent"
+                // except for the first character, we keep the event name case
+                memberName = ln[2] + memberName.slice(3);
+            }
+            if (oldValue) {
+                plt.rel(elm, memberName, oldValue, false);
+            }
+            if (newValue) {
+                plt.ael(elm, memberName, newValue, false);
+            }
+        }
+        else if (app_data_BUILD.vdomPropOrAttr) {
+            // Set property if it exists and it's not a SVG
+            const isComplex = isComplexType(newValue);
+            if ((isProp || (isComplex && newValue !== null)) && !isSvg) {
+                try {
+                    if (!elm.tagName.includes('-')) {
+                        let n = newValue == null ? '' : newValue;
+                        // Workaround for Safari, moving the <input> caret when re-assigning the same valued
+                        if (memberName === 'list') {
+                            isProp = false;
+                            // tslint:disable-next-line: triple-equals
+                        }
+                        else if (oldValue == null || elm[memberName] != n) {
+                            elm[memberName] = n;
+                        }
+                    }
+                    else {
+                        elm[memberName] = newValue;
+                    }
+                }
+                catch (e) { }
+            }
+            /**
+             * Need to manually update attribute if:
+             * - memberName is not an attribute
+             * - if we are rendering the host element in order to reflect attribute
+             * - if it's a SVG, since properties might not work in <svg>
+             * - if the newValue is null/undefined or 'false'.
+             */
+            let xlink = false;
+            if (app_data_BUILD.vdomXlink) {
+                if (ln !== (ln = ln.replace(/^xlink\:?/, ''))) {
+                    memberName = ln;
+                    xlink = true;
+                }
+            }
+            if (newValue == null || newValue === false) {
+                if (newValue !== false || elm.getAttribute(memberName) === '') {
+                    if (app_data_BUILD.vdomXlink && xlink) {
+                        elm.removeAttributeNS(XLINK_NS, memberName);
+                    }
+                    else {
+                        elm.removeAttribute(memberName);
+                    }
+                }
+            }
+            else if ((!isProp || flags & 4 /* isHost */ || isSvg) && !isComplex) {
+                newValue = newValue === true ? '' : newValue;
+                if (app_data_BUILD.vdomXlink && xlink) {
+                    elm.setAttributeNS(XLINK_NS, memberName, newValue);
+                }
+                else {
+                    elm.setAttribute(memberName, newValue);
+                }
+            }
+        }
+    }
+};
+const parseClassListRegex = /\s/;
+const parseClassList = (value) => (!value ? [] : value.split(parseClassListRegex));
+const updateElement = (oldVnode, newVnode, isSvgMode, memberName) => {
+    // if the element passed in is a shadow root, which is a document fragment
+    // then we want to be adding attrs/props to the shadow root's "host" element
+    // if it's not a shadow root, then we add attrs/props to the same element
+    const elm = newVnode.$elm$.nodeType === 11 /* DocumentFragment */ && newVnode.$elm$.host ? newVnode.$elm$.host : newVnode.$elm$;
+    const oldVnodeAttrs = (oldVnode && oldVnode.$attrs$) || EMPTY_OBJ;
+    const newVnodeAttrs = newVnode.$attrs$ || EMPTY_OBJ;
+    if (app_data_BUILD.updatable) {
+        // remove attributes no longer present on the vnode by setting them to undefined
+        for (memberName in oldVnodeAttrs) {
+            if (!(memberName in newVnodeAttrs)) {
+                setAccessor(elm, memberName, oldVnodeAttrs[memberName], undefined, isSvgMode, newVnode.$flags$);
+            }
+        }
+    }
+    // add new & update changed attributes
+    for (memberName in newVnodeAttrs) {
+        setAccessor(elm, memberName, oldVnodeAttrs[memberName], newVnodeAttrs[memberName], isSvgMode, newVnode.$flags$);
+    }
+};
+const createElm = (oldParentVNode, newParentVNode, childIndex, parentElm) => {
+    // tslint:disable-next-line: prefer-const
+    let newVNode = newParentVNode.$children$[childIndex];
+    let i = 0;
+    let elm;
+    let childNode;
+    let oldVNode;
+    if (app_data_BUILD.slotRelocation && !useNativeShadowDom) {
+        // remember for later we need to check to relocate nodes
+        checkSlotRelocate = true;
+        if (newVNode.$tag$ === 'slot') {
+            if (scopeId) {
+                // scoped css needs to add its scoped id to the parent element
+                parentElm.classList.add(scopeId + '-s');
+            }
+            newVNode.$flags$ |= newVNode.$children$
+                ? // slot element has fallback content
+                    2 /* isSlotFallback */
+                : // slot element does not have fallback content
+                    1 /* isSlotReference */;
+        }
+    }
+    if (app_data_BUILD.isDev && newVNode.$elm$) {
+        consoleDevError(`The JSX ${newVNode.$text$ !== null ? `"${newVNode.$text$}" text` : `"${newVNode.$tag$}" element`} node should not be shared within the same renderer. The renderer caches element lookups in order to improve performance. However, a side effect from this is that the exact same JSX node should not be reused. For more information please see https://stenciljs.com/docs/templating-jsx#avoid-shared-jsx-nodes`);
+    }
+    if (app_data_BUILD.vdomText && newVNode.$text$ !== null) {
+        // create text node
+        elm = newVNode.$elm$ = doc.createTextNode(newVNode.$text$);
+    }
+    else if (app_data_BUILD.slotRelocation && newVNode.$flags$ & 1 /* isSlotReference */) {
+        // create a slot reference node
+        elm = newVNode.$elm$ = app_data_BUILD.isDebug || app_data_BUILD.hydrateServerSide ? slotReferenceDebugNode(newVNode) : doc.createTextNode('');
+    }
+    else {
+        if (app_data_BUILD.svg && !isSvgMode) {
+            isSvgMode = newVNode.$tag$ === 'svg';
+        }
+        // create element
+        elm = newVNode.$elm$ = (app_data_BUILD.svg
+            ? doc.createElementNS(isSvgMode ? SVG_NS : HTML_NS, app_data_BUILD.slotRelocation && newVNode.$flags$ & 2 /* isSlotFallback */ ? 'slot-fb' : newVNode.$tag$)
+            : doc.createElement(app_data_BUILD.slotRelocation && newVNode.$flags$ & 2 /* isSlotFallback */ ? 'slot-fb' : newVNode.$tag$));
+        if (app_data_BUILD.svg && isSvgMode && newVNode.$tag$ === 'foreignObject') {
+            isSvgMode = false;
+        }
+        // add css classes, attrs, props, listeners, etc.
+        if (app_data_BUILD.vdomAttribute) {
+            updateElement(null, newVNode, isSvgMode);
+        }
+        if ((app_data_BUILD.shadowDom || app_data_BUILD.scoped) && isDef(scopeId) && elm['s-si'] !== scopeId) {
+            // if there is a scopeId and this is the initial render
+            // then let's add the scopeId as a css class
+            elm.classList.add((elm['s-si'] = scopeId));
+        }
+        if (newVNode.$children$) {
+            for (i = 0; i < newVNode.$children$.length; ++i) {
+                // create the node
+                childNode = createElm(oldParentVNode, newVNode, i, elm);
+                // return node could have been null
+                if (childNode) {
+                    // append our new node
+                    elm.appendChild(childNode);
+                }
+            }
+        }
+        if (app_data_BUILD.svg) {
+            if (newVNode.$tag$ === 'svg') {
+                // Only reset the SVG context when we're exiting <svg> element
+                isSvgMode = false;
+            }
+            else if (elm.tagName === 'foreignObject') {
+                // Reenter SVG context when we're exiting <foreignObject> element
+                isSvgMode = true;
+            }
+        }
+    }
+    if (app_data_BUILD.slotRelocation) {
+        elm['s-hn'] = hostTagName;
+        if (newVNode.$flags$ & (2 /* isSlotFallback */ | 1 /* isSlotReference */)) {
+            // remember the content reference comment
+            elm['s-sr'] = true;
+            // remember the content reference comment
+            elm['s-cr'] = contentRef;
+            // remember the slot name, or empty string for default slot
+            elm['s-sn'] = newVNode.$name$ || '';
+            // check if we've got an old vnode for this slot
+            oldVNode = oldParentVNode && oldParentVNode.$children$ && oldParentVNode.$children$[childIndex];
+            if (oldVNode && oldVNode.$tag$ === newVNode.$tag$ && oldParentVNode.$elm$) {
+                // we've got an old slot vnode and the wrapper is being replaced
+                // so let's move the old slot content back to it's original location
+                putBackInOriginalLocation(oldParentVNode.$elm$, false);
+            }
+        }
+    }
+    return elm;
+};
+const putBackInOriginalLocation = (parentElm, recursive) => {
+    plt.$flags$ |= 1 /* isTmpDisconnected */;
+    const oldSlotChildNodes = parentElm.childNodes;
+    for (let i = oldSlotChildNodes.length - 1; i >= 0; i--) {
+        const childNode = oldSlotChildNodes[i];
+        if (childNode['s-hn'] !== hostTagName && childNode['s-ol']) {
+            // // this child node in the old element is from another component
+            // // remove this node from the old slot's parent
+            // childNode.remove();
+            // and relocate it back to it's original location
+            parentReferenceNode(childNode).insertBefore(childNode, referenceNode(childNode));
+            // remove the old original location comment entirely
+            // later on the patch function will know what to do
+            // and move this to the correct spot in need be
+            childNode['s-ol'].remove();
+            childNode['s-ol'] = undefined;
+            checkSlotRelocate = true;
+        }
+        if (recursive) {
+            putBackInOriginalLocation(childNode, recursive);
+        }
+    }
+    plt.$flags$ &= ~1 /* isTmpDisconnected */;
+};
+const addVnodes = (parentElm, before, parentVNode, vnodes, startIdx, endIdx) => {
+    let containerElm = ((app_data_BUILD.slotRelocation && parentElm['s-cr'] && parentElm['s-cr'].parentNode) || parentElm);
+    let childNode;
+    if (app_data_BUILD.shadowDom && containerElm.shadowRoot && containerElm.tagName === hostTagName) {
+        containerElm = containerElm.shadowRoot;
+    }
+    for (; startIdx <= endIdx; ++startIdx) {
+        if (vnodes[startIdx]) {
+            childNode = createElm(null, parentVNode, startIdx, parentElm);
+            if (childNode) {
+                vnodes[startIdx].$elm$ = childNode;
+                containerElm.insertBefore(childNode, app_data_BUILD.slotRelocation ? referenceNode(before) : before);
+            }
+        }
+    }
+};
+const removeVnodes = (vnodes, startIdx, endIdx, vnode, elm) => {
+    for (; startIdx <= endIdx; ++startIdx) {
+        if ((vnode = vnodes[startIdx])) {
+            elm = vnode.$elm$;
+            callNodeRefs(vnode);
+            if (app_data_BUILD.slotRelocation) {
+                // we're removing this element
+                // so it's possible we need to show slot fallback content now
+                checkSlotFallbackVisibility = true;
+                if (elm['s-ol']) {
+                    // remove the original location comment
+                    elm['s-ol'].remove();
+                }
+                else {
+                    // it's possible that child nodes of the node
+                    // that's being removed are slot nodes
+                    putBackInOriginalLocation(elm, true);
+                }
+            }
+            // remove the vnode's element from the dom
+            elm.remove();
+        }
+    }
+};
+const updateChildren = (parentElm, oldCh, newVNode, newCh) => {
+    let oldStartIdx = 0;
+    let newStartIdx = 0;
+    let idxInOld = 0;
+    let i = 0;
+    let oldEndIdx = oldCh.length - 1;
+    let oldStartVnode = oldCh[0];
+    let oldEndVnode = oldCh[oldEndIdx];
+    let newEndIdx = newCh.length - 1;
+    let newStartVnode = newCh[0];
+    let newEndVnode = newCh[newEndIdx];
+    let node;
+    let elmToMove;
+    while (oldStartIdx <= oldEndIdx && newStartIdx <= newEndIdx) {
+        if (oldStartVnode == null) {
+            // Vnode might have been moved left
+            oldStartVnode = oldCh[++oldStartIdx];
+        }
+        else if (oldEndVnode == null) {
+            oldEndVnode = oldCh[--oldEndIdx];
+        }
+        else if (newStartVnode == null) {
+            newStartVnode = newCh[++newStartIdx];
+        }
+        else if (newEndVnode == null) {
+            newEndVnode = newCh[--newEndIdx];
+        }
+        else if (isSameVnode(oldStartVnode, newStartVnode)) {
+            patch(oldStartVnode, newStartVnode);
+            oldStartVnode = oldCh[++oldStartIdx];
+            newStartVnode = newCh[++newStartIdx];
+        }
+        else if (isSameVnode(oldEndVnode, newEndVnode)) {
+            patch(oldEndVnode, newEndVnode);
+            oldEndVnode = oldCh[--oldEndIdx];
+            newEndVnode = newCh[--newEndIdx];
+        }
+        else if (isSameVnode(oldStartVnode, newEndVnode)) {
+            // Vnode moved right
+            if (app_data_BUILD.slotRelocation && (oldStartVnode.$tag$ === 'slot' || newEndVnode.$tag$ === 'slot')) {
+                putBackInOriginalLocation(oldStartVnode.$elm$.parentNode, false);
+            }
+            patch(oldStartVnode, newEndVnode);
+            parentElm.insertBefore(oldStartVnode.$elm$, oldEndVnode.$elm$.nextSibling);
+            oldStartVnode = oldCh[++oldStartIdx];
+            newEndVnode = newCh[--newEndIdx];
+        }
+        else if (isSameVnode(oldEndVnode, newStartVnode)) {
+            // Vnode moved left
+            if (app_data_BUILD.slotRelocation && (oldStartVnode.$tag$ === 'slot' || newEndVnode.$tag$ === 'slot')) {
+                putBackInOriginalLocation(oldEndVnode.$elm$.parentNode, false);
+            }
+            patch(oldEndVnode, newStartVnode);
+            parentElm.insertBefore(oldEndVnode.$elm$, oldStartVnode.$elm$);
+            oldEndVnode = oldCh[--oldEndIdx];
+            newStartVnode = newCh[++newStartIdx];
+        }
+        else {
+            // createKeyToOldIdx
+            idxInOld = -1;
+            if (app_data_BUILD.vdomKey) {
+                for (i = oldStartIdx; i <= oldEndIdx; ++i) {
+                    if (oldCh[i] && oldCh[i].$key$ !== null && oldCh[i].$key$ === newStartVnode.$key$) {
+                        idxInOld = i;
+                        break;
+                    }
+                }
+            }
+            if (app_data_BUILD.vdomKey && idxInOld >= 0) {
+                elmToMove = oldCh[idxInOld];
+                if (elmToMove.$tag$ !== newStartVnode.$tag$) {
+                    node = createElm(oldCh && oldCh[newStartIdx], newVNode, idxInOld, parentElm);
+                }
+                else {
+                    patch(elmToMove, newStartVnode);
+                    oldCh[idxInOld] = undefined;
+                    node = elmToMove.$elm$;
+                }
+                newStartVnode = newCh[++newStartIdx];
+            }
+            else {
+                // new element
+                node = createElm(oldCh && oldCh[newStartIdx], newVNode, newStartIdx, parentElm);
+                newStartVnode = newCh[++newStartIdx];
+            }
+            if (node) {
+                if (app_data_BUILD.slotRelocation) {
+                    parentReferenceNode(oldStartVnode.$elm$).insertBefore(node, referenceNode(oldStartVnode.$elm$));
+                }
+                else {
+                    oldStartVnode.$elm$.parentNode.insertBefore(node, oldStartVnode.$elm$);
+                }
+            }
+        }
+    }
+    if (oldStartIdx > oldEndIdx) {
+        addVnodes(parentElm, newCh[newEndIdx + 1] == null ? null : newCh[newEndIdx + 1].$elm$, newVNode, newCh, newStartIdx, newEndIdx);
+    }
+    else if (app_data_BUILD.updatable && newStartIdx > newEndIdx) {
+        removeVnodes(oldCh, oldStartIdx, oldEndIdx);
+    }
+};
+const isSameVnode = (vnode1, vnode2) => {
+    // compare if two vnode to see if they're "technically" the same
+    // need to have the same element tag, and same key to be the same
+    if (vnode1.$tag$ === vnode2.$tag$) {
+        if (app_data_BUILD.slotRelocation && vnode1.$tag$ === 'slot') {
+            return vnode1.$name$ === vnode2.$name$;
+        }
+        if (app_data_BUILD.vdomKey) {
+            return vnode1.$key$ === vnode2.$key$;
+        }
+        return true;
+    }
+    return false;
+};
+const referenceNode = (node) => {
+    // this node was relocated to a new location in the dom
+    // because of some other component's slot
+    // but we still have an html comment in place of where
+    // it's original location was according to it's original vdom
+    return (node && node['s-ol']) || node;
+};
+const parentReferenceNode = (node) => (node['s-ol'] ? node['s-ol'] : node).parentNode;
+const patch = (oldVNode, newVNode) => {
+    const elm = (newVNode.$elm$ = oldVNode.$elm$);
+    const oldChildren = oldVNode.$children$;
+    const newChildren = newVNode.$children$;
+    const tag = newVNode.$tag$;
+    const text = newVNode.$text$;
+    let defaultHolder;
+    if (!app_data_BUILD.vdomText || text === null) {
+        if (app_data_BUILD.svg) {
+            // test if we're rendering an svg element, or still rendering nodes inside of one
+            // only add this to the when the compiler sees we're using an svg somewhere
+            isSvgMode = tag === 'svg' ? true : tag === 'foreignObject' ? false : isSvgMode;
+        }
+        // element node
+        if (app_data_BUILD.vdomAttribute || app_data_BUILD.reflect) {
+            if (app_data_BUILD.slot && tag === 'slot')
+                ;
+            else {
+                // either this is the first render of an element OR it's an update
+                // AND we already know it's possible it could have changed
+                // this updates the element's css classes, attrs, props, listeners, etc.
+                updateElement(oldVNode, newVNode, isSvgMode);
+            }
+        }
+        if (app_data_BUILD.updatable && oldChildren !== null && newChildren !== null) {
+            // looks like there's child vnodes for both the old and new vnodes
+            updateChildren(elm, oldChildren, newVNode, newChildren);
+        }
+        else if (newChildren !== null) {
+            // no old child vnodes, but there are new child vnodes to add
+            if (app_data_BUILD.updatable && app_data_BUILD.vdomText && oldVNode.$text$ !== null) {
+                // the old vnode was text, so be sure to clear it out
+                elm.textContent = '';
+            }
+            // add the new vnode children
+            addVnodes(elm, null, newVNode, newChildren, 0, newChildren.length - 1);
+        }
+        else if (app_data_BUILD.updatable && oldChildren !== null) {
+            // no new child vnodes, but there are old child vnodes to remove
+            removeVnodes(oldChildren, 0, oldChildren.length - 1);
+        }
+        if (app_data_BUILD.svg && isSvgMode && tag === 'svg') {
+            isSvgMode = false;
+        }
+    }
+    else if (app_data_BUILD.vdomText && app_data_BUILD.slotRelocation && (defaultHolder = elm['s-cr'])) {
+        // this element has slotted content
+        defaultHolder.parentNode.textContent = text;
+    }
+    else if (app_data_BUILD.vdomText && oldVNode.$text$ !== text) {
+        // update the text content for the text only vnode
+        // and also only if the text is different than before
+        elm.data = text;
+    }
+};
+const updateFallbackSlotVisibility = (elm) => {
+    // tslint:disable-next-line: prefer-const
+    let childNodes = elm.childNodes;
+    let childNode;
+    let i;
+    let ilen;
+    let j;
+    let slotNameAttr;
+    let nodeType;
+    for (i = 0, ilen = childNodes.length; i < ilen; i++) {
+        childNode = childNodes[i];
+        if (childNode.nodeType === 1 /* ElementNode */) {
+            if (childNode['s-sr']) {
+                // this is a slot fallback node
+                // get the slot name for this slot reference node
+                slotNameAttr = childNode['s-sn'];
+                // by default always show a fallback slot node
+                // then hide it if there are other slots in the light dom
+                childNode.hidden = false;
+                for (j = 0; j < ilen; j++) {
+                    nodeType = childNodes[j].nodeType;
+                    if (childNodes[j]['s-hn'] !== childNode['s-hn'] || slotNameAttr !== '') {
+                        // this sibling node is from a different component OR is a named fallback slot node
+                        if (nodeType === 1 /* ElementNode */ && slotNameAttr === childNodes[j].getAttribute('slot')) {
+                            childNode.hidden = true;
+                            break;
+                        }
+                    }
+                    else {
+                        // this is a default fallback slot node
+                        // any element or text node (with content)
+                        // should hide the default fallback slot node
+                        if (nodeType === 1 /* ElementNode */ ||
+                            (nodeType === 3 /* TextNode */ && childNodes[j].textContent.trim() !== '')) {
+                            childNode.hidden = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            // keep drilling down
+            updateFallbackSlotVisibility(childNode);
+        }
+    }
+};
+const relocateNodes = [];
+const relocateSlotContent = (elm) => {
+    // tslint:disable-next-line: prefer-const
+    let childNode;
+    let node;
+    let hostContentNodes;
+    let slotNameAttr;
+    let relocateNodeData;
+    let j;
+    let i = 0;
+    let childNodes = elm.childNodes;
+    let ilen = childNodes.length;
+    for (; i < ilen; i++) {
+        childNode = childNodes[i];
+        if (childNode['s-sr'] && (node = childNode['s-cr']) && node.parentNode) {
+            // first got the content reference comment node
+            // then we got it's parent, which is where all the host content is in now
+            hostContentNodes = node.parentNode.childNodes;
+            slotNameAttr = childNode['s-sn'];
+            for (j = hostContentNodes.length - 1; j >= 0; j--) {
+                node = hostContentNodes[j];
+                if (!node['s-cn'] && !node['s-nr'] && node['s-hn'] !== childNode['s-hn']) {
+                    // let's do some relocating to its new home
+                    // but never relocate a content reference node
+                    // that is suppose to always represent the original content location
+                    if (isNodeLocatedInSlot(node, slotNameAttr)) {
+                        // it's possible we've already decided to relocate this node
+                        relocateNodeData = relocateNodes.find(r => r.$nodeToRelocate$ === node);
+                        // made some changes to slots
+                        // let's make sure we also double check
+                        // fallbacks are correctly hidden or shown
+                        checkSlotFallbackVisibility = true;
+                        node['s-sn'] = node['s-sn'] || slotNameAttr;
+                        if (relocateNodeData) {
+                            // previously we never found a slot home for this node
+                            // but turns out we did, so let's remember it now
+                            relocateNodeData.$slotRefNode$ = childNode;
+                        }
+                        else {
+                            // add to our list of nodes to relocate
+                            relocateNodes.push({
+                                $slotRefNode$: childNode,
+                                $nodeToRelocate$: node,
+                            });
+                        }
+                        if (node['s-sr']) {
+                            relocateNodes.map(relocateNode => {
+                                if (isNodeLocatedInSlot(relocateNode.$nodeToRelocate$, node['s-sn'])) {
+                                    relocateNodeData = relocateNodes.find(r => r.$nodeToRelocate$ === node);
+                                    if (relocateNodeData && !relocateNode.$slotRefNode$) {
+                                        relocateNode.$slotRefNode$ = relocateNodeData.$slotRefNode$;
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else if (!relocateNodes.some(r => r.$nodeToRelocate$ === node)) {
+                        // so far this element does not have a slot home, not setting slotRefNode on purpose
+                        // if we never find a home for this element then we'll need to hide it
+                        relocateNodes.push({
+                            $nodeToRelocate$: node,
+                        });
+                    }
+                }
+            }
+        }
+        if (childNode.nodeType === 1 /* ElementNode */) {
+            relocateSlotContent(childNode);
+        }
+    }
+};
+const isNodeLocatedInSlot = (nodeToRelocate, slotNameAttr) => {
+    if (nodeToRelocate.nodeType === 1 /* ElementNode */) {
+        if (nodeToRelocate.getAttribute('slot') === null && slotNameAttr === '') {
+            return true;
+        }
+        if (nodeToRelocate.getAttribute('slot') === slotNameAttr) {
+            return true;
+        }
+        return false;
+    }
+    if (nodeToRelocate['s-sn'] === slotNameAttr) {
+        return true;
+    }
+    return slotNameAttr === '';
+};
+const callNodeRefs = (vNode) => {
+    if (app_data_BUILD.vdomRef) {
+        vNode.$attrs$ && vNode.$attrs$.ref && vNode.$attrs$.ref(null);
+        vNode.$children$ && vNode.$children$.map(callNodeRefs);
+    }
+};
+const renderVdom = (hostRef, renderFnResults) => {
+    const hostElm = hostRef.$hostElement$;
+    const cmpMeta = hostRef.$cmpMeta$;
+    const oldVNode = hostRef.$vnode$ || newVNode(null, null);
+    const rootVnode = isHost(renderFnResults) ? renderFnResults : h(null, null, renderFnResults);
+    hostTagName = hostElm.tagName;
+    // <Host> runtime check
+    if (app_data_BUILD.isDev && Array.isArray(renderFnResults) && renderFnResults.some(isHost)) {
+        throw new Error(`The <Host> must be the single root component.
+Looks like the render() function of "${hostTagName.toLowerCase()}" is returning an array that contains the <Host>.
+
+The render() function should look like this instead:
+
+render() {
+  // Do not return an array
+  return (
+    <Host>{content}</Host>
+  );
+}
+  `);
+    }
+    if (app_data_BUILD.reflect && cmpMeta.$attrsToReflect$) {
+        rootVnode.$attrs$ = rootVnode.$attrs$ || {};
+        cmpMeta.$attrsToReflect$.map(([propName, attribute]) => (rootVnode.$attrs$[attribute] = hostElm[propName]));
+    }
+    rootVnode.$tag$ = null;
+    rootVnode.$flags$ |= 4 /* isHost */;
+    hostRef.$vnode$ = rootVnode;
+    rootVnode.$elm$ = oldVNode.$elm$ = (app_data_BUILD.shadowDom ? hostElm.shadowRoot || hostElm : hostElm);
+    if (app_data_BUILD.scoped || app_data_BUILD.shadowDom) {
+        scopeId = hostElm['s-sc'];
+    }
+    if (app_data_BUILD.slotRelocation) {
+        contentRef = hostElm['s-cr'];
+        useNativeShadowDom = supportsShadow && (cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */) !== 0;
+        // always reset
+        checkSlotFallbackVisibility = false;
+    }
+    // synchronous patch
+    patch(oldVNode, rootVnode);
+    if (app_data_BUILD.slotRelocation) {
+        // while we're moving nodes around existing nodes, temporarily disable
+        // the disconnectCallback from working
+        plt.$flags$ |= 1 /* isTmpDisconnected */;
+        if (checkSlotRelocate) {
+            relocateSlotContent(rootVnode.$elm$);
+            let relocateData;
+            let nodeToRelocate;
+            let orgLocationNode;
+            let parentNodeRef;
+            let insertBeforeNode;
+            let refNode;
+            let i = 0;
+            for (; i < relocateNodes.length; i++) {
+                relocateData = relocateNodes[i];
+                nodeToRelocate = relocateData.$nodeToRelocate$;
+                if (!nodeToRelocate['s-ol']) {
+                    // add a reference node marking this node's original location
+                    // keep a reference to this node for later lookups
+                    orgLocationNode = app_data_BUILD.isDebug || app_data_BUILD.hydrateServerSide ? originalLocationDebugNode(nodeToRelocate) : doc.createTextNode('');
+                    orgLocationNode['s-nr'] = nodeToRelocate;
+                    nodeToRelocate.parentNode.insertBefore((nodeToRelocate['s-ol'] = orgLocationNode), nodeToRelocate);
+                }
+            }
+            for (i = 0; i < relocateNodes.length; i++) {
+                relocateData = relocateNodes[i];
+                nodeToRelocate = relocateData.$nodeToRelocate$;
+                if (relocateData.$slotRefNode$) {
+                    // by default we're just going to insert it directly
+                    // after the slot reference node
+                    parentNodeRef = relocateData.$slotRefNode$.parentNode;
+                    insertBeforeNode = relocateData.$slotRefNode$.nextSibling;
+                    orgLocationNode = nodeToRelocate['s-ol'];
+                    while ((orgLocationNode = orgLocationNode.previousSibling)) {
+                        refNode = orgLocationNode['s-nr'];
+                        if (refNode && refNode['s-sn'] === nodeToRelocate['s-sn'] && parentNodeRef === refNode.parentNode) {
+                            refNode = refNode.nextSibling;
+                            if (!refNode || !refNode['s-nr']) {
+                                insertBeforeNode = refNode;
+                                break;
+                            }
+                        }
+                    }
+                    if ((!insertBeforeNode && parentNodeRef !== nodeToRelocate.parentNode) || nodeToRelocate.nextSibling !== insertBeforeNode) {
+                        // we've checked that it's worth while to relocate
+                        // since that the node to relocate
+                        // has a different next sibling or parent relocated
+                        if (nodeToRelocate !== insertBeforeNode) {
+                            if (!nodeToRelocate['s-hn'] && nodeToRelocate['s-ol']) {
+                                // probably a component in the index.html that doesn't have it's hostname set
+                                nodeToRelocate['s-hn'] = nodeToRelocate['s-ol'].parentNode.nodeName;
+                            }
+                            // add it back to the dom but in its new home
+                            parentNodeRef.insertBefore(nodeToRelocate, insertBeforeNode);
+                        }
+                    }
+                }
+                else {
+                    // this node doesn't have a slot home to go to, so let's hide it
+                    if (nodeToRelocate.nodeType === 1 /* ElementNode */) {
+                        nodeToRelocate.hidden = true;
+                    }
+                }
+            }
+        }
+        if (checkSlotFallbackVisibility) {
+            updateFallbackSlotVisibility(rootVnode.$elm$);
+        }
+        // done moving nodes around
+        // allow the disconnect callback to work again
+        plt.$flags$ &= ~1 /* isTmpDisconnected */;
+        // always reset
+        relocateNodes.length = 0;
+    }
+};
+// slot comment debug nodes only created with the `--debug` flag
+// otherwise these nodes are text nodes w/out content
+const slotReferenceDebugNode = (slotVNode) => doc.createComment(`<slot${slotVNode.$name$ ? ' name="' + slotVNode.$name$ + '"' : ''}> (host=${hostTagName.toLowerCase()})`);
+const originalLocationDebugNode = (nodeToRelocate) => doc.createComment(`org-location for ` + (nodeToRelocate.localName ? `<${nodeToRelocate.localName}> (host=${nodeToRelocate['s-hn']})` : `[${nodeToRelocate.textContent}]`));
+const getElement = (ref) => (app_data_BUILD.lazyLoad ? getHostRef(ref).$hostElement$ : ref);
+const createEvent = (ref, name, flags) => {
+    const elm = getElement(ref);
+    return {
+        emit: (detail) => {
+            if (app_data_BUILD.isDev && !elm.isConnected) {
+                consoleDevWarn(`The "${name}" event was emitted, but the dispatcher node is no longer connected to the dom.`);
+            }
+            return emitEvent(elm, name, {
+                bubbles: !!(flags & 4 /* Bubbles */),
+                composed: !!(flags & 2 /* Composed */),
+                cancelable: !!(flags & 1 /* Cancellable */),
+                detail,
+            });
+        },
+    };
+};
+const emitEvent = (elm, name, opts) => {
+    const ev = plt.ce(name, opts);
+    elm.dispatchEvent(ev);
+    return ev;
+};
+const attachToAncestor = (hostRef, ancestorComponent) => {
+    if (app_data_BUILD.asyncLoading && ancestorComponent && !hostRef.$onRenderResolve$ && ancestorComponent['s-p']) {
+        ancestorComponent['s-p'].push(new Promise(r => (hostRef.$onRenderResolve$ = r)));
+    }
+};
+const scheduleUpdate = (hostRef, isInitialLoad) => {
+    if (app_data_BUILD.taskQueue && app_data_BUILD.updatable) {
+        hostRef.$flags$ |= 16 /* isQueuedForUpdate */;
+    }
+    if (app_data_BUILD.asyncLoading && hostRef.$flags$ & 4 /* isWaitingForChildren */) {
+        hostRef.$flags$ |= 512 /* needsRerender */;
+        return;
+    }
+    attachToAncestor(hostRef, hostRef.$ancestorComponent$);
+    // there is no ancestor component or the ancestor component
+    // has already fired off its lifecycle update then
+    // fire off the initial update
+    const dispatch = () => dispatchHooks(hostRef, isInitialLoad);
+    return app_data_BUILD.taskQueue ? writeTask(dispatch) : dispatch();
+};
+const dispatchHooks = (hostRef, isInitialLoad) => {
+    const elm = hostRef.$hostElement$;
+    const endSchedule = createTime('scheduleUpdate', hostRef.$cmpMeta$.$tagName$);
+    const instance = app_data_BUILD.lazyLoad ? hostRef.$lazyInstance$ : elm;
+    let promise;
+    if (isInitialLoad) {
+        if (app_data_BUILD.lazyLoad && app_data_BUILD.hostListener) {
+            hostRef.$flags$ |= 256 /* isListenReady */;
+            if (hostRef.$queuedListeners$) {
+                hostRef.$queuedListeners$.map(([methodName, event]) => safeCall(instance, methodName, event));
+                hostRef.$queuedListeners$ = null;
+            }
+        }
+        emitLifecycleEvent(elm, 'componentWillLoad');
+        if (app_data_BUILD.cmpWillLoad) {
+            promise = safeCall(instance, 'componentWillLoad');
+        }
+    }
+    else {
+        emitLifecycleEvent(elm, 'componentWillUpdate');
+        if (app_data_BUILD.cmpWillUpdate) {
+            promise = safeCall(instance, 'componentWillUpdate');
+        }
+    }
+    emitLifecycleEvent(elm, 'componentWillRender');
+    if (app_data_BUILD.cmpWillRender) {
+        promise = then(promise, () => safeCall(instance, 'componentWillRender'));
+    }
+    endSchedule();
+    return then(promise, () => updateComponent(hostRef, instance, isInitialLoad));
+};
+const updateComponent = async (hostRef, instance, isInitialLoad) => {
+    // updateComponent
+    const elm = hostRef.$hostElement$;
+    const endUpdate = createTime('update', hostRef.$cmpMeta$.$tagName$);
+    const rc = elm['s-rc'];
+    if (app_data_BUILD.style && isInitialLoad) {
+        // DOM WRITE!
+        attachStyles(hostRef);
+    }
+    const endRender = createTime('render', hostRef.$cmpMeta$.$tagName$);
+    if (app_data_BUILD.isDev) {
+        hostRef.$flags$ |= 1024 /* devOnRender */;
+    }
+    if (app_data_BUILD.hydrateServerSide) {
+        await callRender(hostRef, instance, elm);
+    }
+    else {
+        callRender(hostRef, instance, elm);
+    }
+    if (app_data_BUILD.cssVarShim && plt.$cssShim$) {
+        plt.$cssShim$.updateHost(elm);
+    }
+    if (app_data_BUILD.isDev) {
+        hostRef.$renderCount$++;
+        hostRef.$flags$ &= ~1024 /* devOnRender */;
+    }
+    if (app_data_BUILD.hydrateServerSide) {
+        try {
+            // manually connected child components during server-side hydrate
+            serverSideConnected(elm);
+            if (isInitialLoad) {
+                // using only during server-side hydrate
+                if (hostRef.$cmpMeta$.$flags$ & 1 /* shadowDomEncapsulation */) {
+                    elm['s-en'] = '';
+                }
+                else if (hostRef.$cmpMeta$.$flags$ & 2 /* scopedCssEncapsulation */) {
+                    elm['s-en'] = 'c';
+                }
+            }
+        }
+        catch (e) {
+            consoleError(e, elm);
+        }
+    }
+    if (app_data_BUILD.asyncLoading && rc) {
+        // ok, so turns out there are some child host elements
+        // waiting on this parent element to load
+        // let's fire off all update callbacks waiting
+        rc.map(cb => cb());
+        elm['s-rc'] = undefined;
+    }
+    endRender();
+    endUpdate();
+    if (app_data_BUILD.asyncLoading) {
+        const childrenPromises = elm['s-p'];
+        const postUpdate = () => postUpdateComponent(hostRef);
+        if (childrenPromises.length === 0) {
+            postUpdate();
+        }
+        else {
+            Promise.all(childrenPromises).then(postUpdate);
+            hostRef.$flags$ |= 4 /* isWaitingForChildren */;
+            childrenPromises.length = 0;
+        }
+    }
+    else {
+        postUpdateComponent(hostRef);
+    }
+};
+const callRender = (hostRef, instance, elm) => {
+    // in order for bundlers to correctly treeshake the BUILD object
+    // we need to ensure BUILD is not deoptimized within a try/catch
+    // https://rollupjs.org/guide/en/#treeshake tryCatchDeoptimization
+    const allRenderFn = app_data_BUILD.allRenderFn ? true : false;
+    const lazyLoad = app_data_BUILD.lazyLoad ? true : false;
+    const taskQueue = app_data_BUILD.taskQueue ? true : false;
+    const updatable = app_data_BUILD.updatable ? true : false;
+    try {
+        renderingRef = instance;
+        instance = allRenderFn ? instance.render() : instance.render && instance.render();
+        if (updatable && taskQueue) {
+            hostRef.$flags$ &= ~16 /* isQueuedForUpdate */;
+        }
+        if (updatable || lazyLoad) {
+            hostRef.$flags$ |= 2 /* hasRendered */;
+        }
+        if (app_data_BUILD.hasRenderFn || app_data_BUILD.reflect) {
+            if (app_data_BUILD.vdomRender || app_data_BUILD.reflect) {
+                // looks like we've got child nodes to render into this host element
+                // or we need to update the css class/attrs on the host element
+                // DOM WRITE!
+                if (app_data_BUILD.hydrateServerSide) {
+                    return Promise.resolve(instance).then(value => renderVdom(hostRef, value));
+                }
+                else {
+                    renderVdom(hostRef, instance);
+                }
+            }
+            else {
+                elm.textContent = instance;
+            }
+        }
+    }
+    catch (e) {
+        consoleError(e, hostRef.$hostElement$);
+    }
+    renderingRef = null;
+    return null;
+};
+const getRenderingRef = () => renderingRef;
+const postUpdateComponent = (hostRef) => {
+    const tagName = hostRef.$cmpMeta$.$tagName$;
+    const elm = hostRef.$hostElement$;
+    const endPostUpdate = createTime('postUpdate', tagName);
+    const instance = app_data_BUILD.lazyLoad ? hostRef.$lazyInstance$ : elm;
+    const ancestorComponent = hostRef.$ancestorComponent$;
+    if (app_data_BUILD.cmpDidRender) {
+        if (app_data_BUILD.isDev) {
+            hostRef.$flags$ |= 1024 /* devOnRender */;
+        }
+        safeCall(instance, 'componentDidRender');
+        if (app_data_BUILD.isDev) {
+            hostRef.$flags$ &= ~1024 /* devOnRender */;
+        }
+    }
+    emitLifecycleEvent(elm, 'componentDidRender');
+    if (!(hostRef.$flags$ & 64 /* hasLoadedComponent */)) {
+        hostRef.$flags$ |= 64 /* hasLoadedComponent */;
+        if (app_data_BUILD.asyncLoading && app_data_BUILD.cssAnnotations) {
+            // DOM WRITE!
+            addHydratedFlag(elm);
+        }
+        if (app_data_BUILD.cmpDidLoad) {
+            if (app_data_BUILD.isDev) {
+                hostRef.$flags$ |= 2048 /* devOnDidLoad */;
+            }
+            safeCall(instance, 'componentDidLoad');
+            if (app_data_BUILD.isDev) {
+                hostRef.$flags$ &= ~2048 /* devOnDidLoad */;
+            }
+        }
+        emitLifecycleEvent(elm, 'componentDidLoad');
+        endPostUpdate();
+        if (app_data_BUILD.asyncLoading) {
+            hostRef.$onReadyResolve$(elm);
+            if (!ancestorComponent) {
+                appDidLoad(tagName);
+            }
+        }
+    }
+    else {
+        if (app_data_BUILD.cmpDidUpdate) {
+            // we've already loaded this component
+            // fire off the user's componentDidUpdate method (if one was provided)
+            // componentDidUpdate runs AFTER render() has been called
+            // and all child components have finished updating
+            if (app_data_BUILD.isDev) {
+                hostRef.$flags$ |= 1024 /* devOnRender */;
+            }
+            safeCall(instance, 'componentDidUpdate');
+            if (app_data_BUILD.isDev) {
+                hostRef.$flags$ &= ~1024 /* devOnRender */;
+            }
+        }
+        emitLifecycleEvent(elm, 'componentDidUpdate');
+        endPostUpdate();
+    }
+    if (app_data_BUILD.hotModuleReplacement) {
+        elm['s-hmr-load'] && elm['s-hmr-load']();
+    }
+    if (app_data_BUILD.method && app_data_BUILD.lazyLoad) {
+        hostRef.$onInstanceResolve$(elm);
+    }
+    // load events fire from bottom to top
+    // the deepest elements load first then bubbles up
+    if (app_data_BUILD.asyncLoading) {
+        if (hostRef.$onRenderResolve$) {
+            hostRef.$onRenderResolve$();
+            hostRef.$onRenderResolve$ = undefined;
+        }
+        if (hostRef.$flags$ & 512 /* needsRerender */) {
+            client_nextTick(() => scheduleUpdate(hostRef, false));
+        }
+        hostRef.$flags$ &= ~(4 /* isWaitingForChildren */ | 512 /* needsRerender */);
+    }
+    // ( •_•)
+    // ( •_•)>⌐■-■
+    // (⌐■_■)
+};
+const forceUpdate = (ref) => {
+    if (BUILD.updatable) {
+        const hostRef = getHostRef(ref);
+        const isConnected = hostRef.$hostElement$.isConnected;
+        if (isConnected && (hostRef.$flags$ & (2 /* hasRendered */ | 16 /* isQueuedForUpdate */)) === 2 /* hasRendered */) {
+            scheduleUpdate(hostRef, false);
+        }
+        // Returns "true" when the forced update was successfully scheduled
+        return isConnected;
+    }
+    return false;
+};
+const appDidLoad = (who) => {
+    // on appload
+    // we have finish the first big initial render
+    if (app_data_BUILD.cssAnnotations) {
+        addHydratedFlag(doc.documentElement);
+    }
+    if (app_data_BUILD.asyncQueue) {
+        plt.$flags$ |= 2 /* appLoaded */;
+    }
+    client_nextTick(() => emitEvent(win, 'appload', { detail: { namespace: NAMESPACE } }));
+    if (app_data_BUILD.profile && performance.measure) {
+        performance.measure(`[Stencil] ${NAMESPACE} initial load (by ${who})`, 'st:app:start');
+    }
+};
+const safeCall = (instance, method, arg) => {
+    if (instance && instance[method]) {
+        try {
+            return instance[method](arg);
+        }
+        catch (e) {
+            consoleError(e);
+        }
+    }
+    return undefined;
+};
+const then = (promise, thenFn) => {
+    return promise && promise.then ? promise.then(thenFn) : thenFn();
+};
+const emitLifecycleEvent = (elm, lifecycleName) => {
+    if (app_data_BUILD.lifecycleDOMEvents) {
+        emitEvent(elm, 'stencil_' + lifecycleName, {
+            bubbles: true,
+            composed: true,
+            detail: {
+                namespace: NAMESPACE,
+            },
+        });
+    }
+};
+const addHydratedFlag = (elm) => (app_data_BUILD.hydratedClass ? elm.classList.add('hydrated') : app_data_BUILD.hydratedAttribute ? elm.setAttribute('hydrated', '') : undefined);
+const serverSideConnected = (elm) => {
+    const children = elm.children;
+    if (children != null) {
+        for (let i = 0, ii = children.length; i < ii; i++) {
+            const childElm = children[i];
+            if (typeof childElm.connectedCallback === 'function') {
+                childElm.connectedCallback();
+            }
+            serverSideConnected(childElm);
+        }
+    }
+};
+const initializeClientHydrate = (hostElm, tagName, hostId, hostRef) => {
+    const endHydrate = createTime('hydrateClient', tagName);
+    const shadowRoot = hostElm.shadowRoot;
+    const childRenderNodes = [];
+    const slotNodes = [];
+    const shadowRootNodes = app_data_BUILD.shadowDom && shadowRoot ? [] : null;
+    const vnode = (hostRef.$vnode$ = newVNode(tagName, null));
+    if (!plt.$orgLocNodes$) {
+        initializeDocumentHydrate(doc.body, (plt.$orgLocNodes$ = new Map()));
+    }
+    hostElm[HYDRATE_ID] = hostId;
+    hostElm.removeAttribute(HYDRATE_ID);
+    clientHydrate(vnode, childRenderNodes, slotNodes, shadowRootNodes, hostElm, hostElm, hostId);
+    childRenderNodes.map(c => {
+        const orgLocationId = c.$hostId$ + '.' + c.$nodeId$;
+        const orgLocationNode = plt.$orgLocNodes$.get(orgLocationId);
+        const node = c.$elm$;
+        if (orgLocationNode && supportsShadow && orgLocationNode['s-en'] === '') {
+            orgLocationNode.parentNode.insertBefore(node, orgLocationNode.nextSibling);
+        }
+        if (!shadowRoot) {
+            node['s-hn'] = tagName;
+            if (orgLocationNode) {
+                node['s-ol'] = orgLocationNode;
+                node['s-ol']['s-nr'] = node;
+            }
+        }
+        plt.$orgLocNodes$.delete(orgLocationId);
+    });
+    if (app_data_BUILD.shadowDom && shadowRoot) {
+        shadowRootNodes.map(shadowRootNode => {
+            if (shadowRootNode) {
+                shadowRoot.appendChild(shadowRootNode);
+            }
+        });
+    }
+    endHydrate();
+};
+const clientHydrate = (parentVNode, childRenderNodes, slotNodes, shadowRootNodes, hostElm, node, hostId) => {
+    let childNodeType;
+    let childIdSplt;
+    let childVNode;
+    let i;
+    if (node.nodeType === 1 /* ElementNode */) {
+        childNodeType = node.getAttribute(HYDRATE_CHILD_ID);
+        if (childNodeType) {
+            // got the node data from the element's attribute
+            // `${hostId}.${nodeId}.${depth}.${index}`
+            childIdSplt = childNodeType.split('.');
+            if (childIdSplt[0] === hostId || childIdSplt[0] === '0') {
+                childVNode = {
+                    $flags$: 0,
+                    $hostId$: childIdSplt[0],
+                    $nodeId$: childIdSplt[1],
+                    $depth$: childIdSplt[2],
+                    $index$: childIdSplt[3],
+                    $tag$: node.tagName.toLowerCase(),
+                    $elm$: node,
+                    $attrs$: null,
+                    $children$: null,
+                    $key$: null,
+                    $name$: null,
+                    $text$: null,
+                };
+                childRenderNodes.push(childVNode);
+                node.removeAttribute(HYDRATE_CHILD_ID);
+                // this is a new child vnode
+                // so ensure its parent vnode has the vchildren array
+                if (!parentVNode.$children$) {
+                    parentVNode.$children$ = [];
+                }
+                // add our child vnode to a specific index of the vnode's children
+                parentVNode.$children$[childVNode.$index$] = childVNode;
+                // this is now the new parent vnode for all the next child checks
+                parentVNode = childVNode;
+                if (shadowRootNodes && childVNode.$depth$ === '0') {
+                    shadowRootNodes[childVNode.$index$] = childVNode.$elm$;
+                }
+            }
+        }
+        // recursively drill down, end to start so we can remove nodes
+        for (i = node.childNodes.length - 1; i >= 0; i--) {
+            clientHydrate(parentVNode, childRenderNodes, slotNodes, shadowRootNodes, hostElm, node.childNodes[i], hostId);
+        }
+        if (node.shadowRoot) {
+            // keep drilling down through the shadow root nodes
+            for (i = node.shadowRoot.childNodes.length - 1; i >= 0; i--) {
+                clientHydrate(parentVNode, childRenderNodes, slotNodes, shadowRootNodes, hostElm, node.shadowRoot.childNodes[i], hostId);
+            }
+        }
+    }
+    else if (node.nodeType === 8 /* CommentNode */) {
+        // `${COMMENT_TYPE}.${hostId}.${nodeId}.${depth}.${index}`
+        childIdSplt = node.nodeValue.split('.');
+        if (childIdSplt[1] === hostId || childIdSplt[1] === '0') {
+            // comment node for either the host id or a 0 host id
+            childNodeType = childIdSplt[0];
+            childVNode = {
+                $flags$: 0,
+                $hostId$: childIdSplt[1],
+                $nodeId$: childIdSplt[2],
+                $depth$: childIdSplt[3],
+                $index$: childIdSplt[4],
+                $elm$: node,
+                $attrs$: null,
+                $children$: null,
+                $key$: null,
+                $name$: null,
+                $tag$: null,
+                $text$: null,
+            };
+            if (childNodeType === TEXT_NODE_ID) {
+                childVNode.$elm$ = node.nextSibling;
+                if (childVNode.$elm$ && childVNode.$elm$.nodeType === 3 /* TextNode */) {
+                    childVNode.$text$ = childVNode.$elm$.textContent;
+                    childRenderNodes.push(childVNode);
+                    // remove the text comment since it's no longer needed
+                    node.remove();
+                    if (!parentVNode.$children$) {
+                        parentVNode.$children$ = [];
+                    }
+                    parentVNode.$children$[childVNode.$index$] = childVNode;
+                    if (shadowRootNodes && childVNode.$depth$ === '0') {
+                        shadowRootNodes[childVNode.$index$] = childVNode.$elm$;
+                    }
+                }
+            }
+            else if (childVNode.$hostId$ === hostId) {
+                // this comment node is specifcally for this host id
+                if (childNodeType === SLOT_NODE_ID) {
+                    // `${SLOT_NODE_ID}.${hostId}.${nodeId}.${depth}.${index}.${slotName}`;
+                    childVNode.$tag$ = 'slot';
+                    if (childIdSplt[5]) {
+                        node['s-sn'] = childVNode.$name$ = childIdSplt[5];
+                    }
+                    else {
+                        node['s-sn'] = '';
+                    }
+                    node['s-sr'] = true;
+                    if (app_data_BUILD.shadowDom && shadowRootNodes) {
+                        // browser support shadowRoot and this is a shadow dom component
+                        // create an actual slot element
+                        childVNode.$elm$ = doc.createElement(childVNode.$tag$);
+                        if (childVNode.$name$) {
+                            // add the slot name attribute
+                            childVNode.$elm$.setAttribute('name', childVNode.$name$);
+                        }
+                        // insert the new slot element before the slot comment
+                        node.parentNode.insertBefore(childVNode.$elm$, node);
+                        // remove the slot comment since it's not needed for shadow
+                        node.remove();
+                        if (childVNode.$depth$ === '0') {
+                            shadowRootNodes[childVNode.$index$] = childVNode.$elm$;
+                        }
+                    }
+                    slotNodes.push(childVNode);
+                    if (!parentVNode.$children$) {
+                        parentVNode.$children$ = [];
+                    }
+                    parentVNode.$children$[childVNode.$index$] = childVNode;
+                }
+                else if (childNodeType === CONTENT_REF_ID) {
+                    // `${CONTENT_REF_ID}.${hostId}`;
+                    if (app_data_BUILD.shadowDom && shadowRootNodes) {
+                        // remove the content ref comment since it's not needed for shadow
+                        node.remove();
+                    }
+                    else if (app_data_BUILD.slotRelocation) {
+                        hostElm['s-cr'] = node;
+                        node['s-cn'] = true;
+                    }
+                }
+            }
+        }
+    }
+    else if (parentVNode && parentVNode.$tag$ === 'style') {
+        const vnode = newVNode(null, node.textContent);
+        vnode.$elm$ = node;
+        vnode.$index$ = '0';
+        parentVNode.$children$ = [vnode];
+    }
+};
+const initializeDocumentHydrate = (node, orgLocNodes) => {
+    if (node.nodeType === 1 /* ElementNode */) {
+        let i = 0;
+        for (; i < node.childNodes.length; i++) {
+            initializeDocumentHydrate(node.childNodes[i], orgLocNodes);
+        }
+        if (node.shadowRoot) {
+            for (i = 0; i < node.shadowRoot.childNodes.length; i++) {
+                initializeDocumentHydrate(node.shadowRoot.childNodes[i], orgLocNodes);
+            }
+        }
+    }
+    else if (node.nodeType === 8 /* CommentNode */) {
+        const childIdSplt = node.nodeValue.split('.');
+        if (childIdSplt[0] === ORG_LOCATION_ID) {
+            orgLocNodes.set(childIdSplt[1] + '.' + childIdSplt[2], node);
+            node.nodeValue = '';
+            // useful to know if the original location is
+            // the root light-dom of a shadow dom component
+            node['s-en'] = childIdSplt[3];
+        }
+    }
+};
+const parsePropertyValue = (propValue, propType) => {
+    // ensure this value is of the correct prop type
+    if (propValue != null && !isComplexType(propValue)) {
+        if (app_data_BUILD.propBoolean && propType & 4 /* Boolean */) {
+            // per the HTML spec, any string value means it is a boolean true value
+            // but we'll cheat here and say that the string "false" is the boolean false
+            return propValue === 'false' ? false : propValue === '' || !!propValue;
+        }
+        if (app_data_BUILD.propNumber && propType & 2 /* Number */) {
+            // force it to be a number
+            return parseFloat(propValue);
+        }
+        if (app_data_BUILD.propString && propType & 1 /* String */) {
+            // could have been passed as a number or boolean
+            // but we still want it as a string
+            return String(propValue);
+        }
+        // redundant return here for better minification
+        return propValue;
+    }
+    // not sure exactly what type we want
+    // so no need to change to a different type
+    return propValue;
+};
+const getValue = (ref, propName) => getHostRef(ref).$instanceValues$.get(propName);
+const setValue = (ref, propName, newVal, cmpMeta) => {
+    // check our new property value against our internal value
+    const hostRef = getHostRef(ref);
+    const elm = app_data_BUILD.lazyLoad ? hostRef.$hostElement$ : ref;
+    const oldVal = hostRef.$instanceValues$.get(propName);
+    const flags = hostRef.$flags$;
+    const instance = app_data_BUILD.lazyLoad ? hostRef.$lazyInstance$ : elm;
+    newVal = parsePropertyValue(newVal, cmpMeta.$members$[propName][0]);
+    if ((!app_data_BUILD.lazyLoad || !(flags & 8 /* isConstructingInstance */) || oldVal === undefined) && newVal !== oldVal) {
+        // gadzooks! the property's value has changed!!
+        // set our new value!
+        hostRef.$instanceValues$.set(propName, newVal);
+        if (app_data_BUILD.isDev) {
+            if (hostRef.$flags$ & 1024 /* devOnRender */) {
+                consoleDevWarn(`The state/prop "${propName}" changed during rendering. This can potentially lead to infinite-loops and other bugs.`, '\nElement', elm, '\nNew value', newVal, '\nOld value', oldVal);
+            }
+            else if (hostRef.$flags$ & 2048 /* devOnDidLoad */) {
+                consoleDevWarn(`The state/prop "${propName}" changed during "componentDidLoad()", this triggers extra re-renders, try to setup on "componentWillLoad()"`, '\nElement', elm, '\nNew value', newVal, '\nOld value', oldVal);
+            }
+        }
+        if (!app_data_BUILD.lazyLoad || instance) {
+            // get an array of method names of watch functions to call
+            if (app_data_BUILD.watchCallback && cmpMeta.$watchers$ && flags & 128 /* isWatchReady */) {
+                const watchMethods = cmpMeta.$watchers$[propName];
+                if (watchMethods) {
+                    // this instance is watching for when this property changed
+                    watchMethods.map(watchMethodName => {
+                        try {
+                            // fire off each of the watch methods that are watching this property
+                            instance[watchMethodName](newVal, oldVal, propName);
+                        }
+                        catch (e) {
+                            consoleError(e, elm);
+                        }
+                    });
+                }
+            }
+            if (app_data_BUILD.updatable && (flags & (2 /* hasRendered */ | 16 /* isQueuedForUpdate */)) === 2 /* hasRendered */) {
+                if (app_data_BUILD.cmpShouldUpdate && instance.componentShouldUpdate) {
+                    if (instance.componentShouldUpdate(newVal, oldVal, propName) === false) {
+                        return;
+                    }
+                }
+                // looks like this value actually changed, so we've got work to do!
+                // but only if we've already rendered, otherwise just chill out
+                // queue that we need to do an update, but don't worry about queuing
+                // up millions cuz this function ensures it only runs once
+                scheduleUpdate(hostRef, false);
+            }
+        }
+    }
+};
+const proxyComponent = (Cstr, cmpMeta, flags) => {
+    if (app_data_BUILD.member && cmpMeta.$members$) {
+        if (app_data_BUILD.watchCallback && Cstr.watchers) {
+            cmpMeta.$watchers$ = Cstr.watchers;
+        }
+        // It's better to have a const than two Object.entries()
+        const members = Object.entries(cmpMeta.$members$);
+        const prototype = Cstr.prototype;
+        members.map(([memberName, [memberFlags]]) => {
+            if ((app_data_BUILD.prop || app_data_BUILD.state) && (memberFlags & 31 /* Prop */ || ((!app_data_BUILD.lazyLoad || flags & 2 /* proxyState */) && memberFlags & 32 /* State */))) {
+                // proxyComponent - prop
+                Object.defineProperty(prototype, memberName, {
+                    get() {
+                        // proxyComponent, get value
+                        return getValue(this, memberName);
+                    },
+                    set(newValue) {
+                        // only during dev time
+                        if (app_data_BUILD.isDev) {
+                            const ref = getHostRef(this);
+                            if (
+                            // we are proxying the instance (not element)
+                            (flags & 1 /* isElementConstructor */) === 0 &&
+                                // the element is not constructing
+                                (ref.$flags$ & 8 /* isConstructingInstance */) === 0 &&
+                                // the member is a prop
+                                (memberFlags & 31 /* Prop */) !== 0 &&
+                                // the member is not mutable
+                                (memberFlags & 1024 /* Mutable */) === 0) {
+                                consoleDevWarn(`@Prop() "${memberName}" on <${cmpMeta.$tagName$}> is immutable but was modified from within the component.\nMore information: https://stenciljs.com/docs/properties#prop-mutability`);
+                            }
+                        }
+                        // proxyComponent, set value
+                        setValue(this, memberName, newValue, cmpMeta);
+                    },
+                    configurable: true,
+                    enumerable: true,
+                });
+            }
+            else if (app_data_BUILD.lazyLoad && app_data_BUILD.method && flags & 1 /* isElementConstructor */ && memberFlags & 64 /* Method */) {
+                // proxyComponent - method
+                Object.defineProperty(prototype, memberName, {
+                    value(...args) {
+                        const ref = getHostRef(this);
+                        return ref.$onInstancePromise$.then(() => ref.$lazyInstance$[memberName](...args));
+                    },
+                });
+            }
+        });
+        if (app_data_BUILD.observeAttribute && (!app_data_BUILD.lazyLoad || flags & 1 /* isElementConstructor */)) {
+            const attrNameToPropName = new Map();
+            prototype.attributeChangedCallback = function (attrName, _oldValue, newValue) {
+                plt.jmp(() => {
+                    const propName = attrNameToPropName.get(attrName);
+                    this[propName] = newValue === null && typeof this[propName] === 'boolean' ? false : newValue;
+                });
+            };
+            // create an array of attributes to observe
+            // and also create a map of html attribute name to js property name
+            Cstr.observedAttributes = members
+                .filter(([_, m]) => m[0] & 15 /* HasAttribute */) // filter to only keep props that should match attributes
+                .map(([propName, m]) => {
+                const attrName = m[1] || propName;
+                attrNameToPropName.set(attrName, propName);
+                if (app_data_BUILD.reflect && m[0] & 512 /* ReflectAttr */) {
+                    cmpMeta.$attrsToReflect$.push([propName, attrName]);
+                }
+                return attrName;
+            });
+        }
+    }
+    return Cstr;
+};
+const initializeComponent = async (elm, hostRef, cmpMeta, hmrVersionId, Cstr) => {
+    // initializeComponent
+    if ((app_data_BUILD.lazyLoad || app_data_BUILD.hydrateServerSide || app_data_BUILD.style) && (hostRef.$flags$ & 32 /* hasInitializedComponent */) === 0) {
+        if (app_data_BUILD.lazyLoad || app_data_BUILD.hydrateClientSide) {
+            // we haven't initialized this element yet
+            hostRef.$flags$ |= 32 /* hasInitializedComponent */;
+            // lazy loaded components
+            // request the component's implementation to be
+            // wired up with the host element
+            Cstr = loadModule(cmpMeta, hostRef, hmrVersionId);
+            if (Cstr.then) {
+                // Await creates a micro-task avoid if possible
+                const endLoad = uniqueTime(`st:load:${cmpMeta.$tagName$}:${hostRef.$modeName$}`, `[Stencil] Load module for <${cmpMeta.$tagName$}>`);
+                Cstr = await Cstr;
+                endLoad();
+            }
+            if ((app_data_BUILD.isDev || app_data_BUILD.isDebug) && !Cstr) {
+                throw new Error(`Constructor for "${cmpMeta.$tagName$}#${hostRef.$modeName$}" was not found`);
+            }
+            if (app_data_BUILD.member && !Cstr.isProxied) {
+                // we'eve never proxied this Constructor before
+                // let's add the getters/setters to its prototype before
+                // the first time we create an instance of the implementation
+                if (app_data_BUILD.watchCallback) {
+                    cmpMeta.$watchers$ = Cstr.watchers;
+                }
+                proxyComponent(Cstr, cmpMeta, 2 /* proxyState */);
+                Cstr.isProxied = true;
+            }
+            const endNewInstance = createTime('createInstance', cmpMeta.$tagName$);
+            // ok, time to construct the instance
+            // but let's keep track of when we start and stop
+            // so that the getters/setters don't incorrectly step on data
+            if (app_data_BUILD.member) {
+                hostRef.$flags$ |= 8 /* isConstructingInstance */;
+            }
+            // construct the lazy-loaded component implementation
+            // passing the hostRef is very important during
+            // construction in order to directly wire together the
+            // host element and the lazy-loaded instance
+            try {
+                new Cstr(hostRef);
+            }
+            catch (e) {
+                consoleError(e);
+            }
+            if (app_data_BUILD.member) {
+                hostRef.$flags$ &= ~8 /* isConstructingInstance */;
+            }
+            if (app_data_BUILD.watchCallback) {
+                hostRef.$flags$ |= 128 /* isWatchReady */;
+            }
+            endNewInstance();
+            fireConnectedCallback(hostRef.$lazyInstance$);
+        }
+        else {
+            // sync constructor component
+            Cstr = elm.constructor;
+            hostRef.$flags$ |= 128 /* isWatchReady */ | 32 /* hasInitializedComponent */;
+        }
+        if (app_data_BUILD.style && Cstr.style) {
+            // this component has styles but we haven't registered them yet
+            let style = Cstr.style;
+            if (app_data_BUILD.mode && typeof style !== 'string') {
+                style = style[(hostRef.$modeName$ = computeMode(elm))];
+                if (app_data_BUILD.hydrateServerSide && hostRef.$modeName$) {
+                    elm.setAttribute('s-mode', hostRef.$modeName$);
+                }
+            }
+            const scopeId = getScopeId(cmpMeta, hostRef.$modeName$);
+            if (!client_styles.has(scopeId)) {
+                const endRegisterStyles = createTime('registerStyles', cmpMeta.$tagName$);
+                if (!app_data_BUILD.hydrateServerSide && app_data_BUILD.shadowDom && app_data_BUILD.shadowDomShim && cmpMeta.$flags$ & 8 /* needsShadowDomShim */) {
+                    style = await __webpack_require__.e(/* import() */ 977).then(__webpack_require__.bind(__webpack_require__, 4977)).then(m => m.scopeCss(style, scopeId, false));
+                }
+                registerStyle(scopeId, style, !!(cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */));
+                endRegisterStyles();
+            }
+        }
+    }
+    // we've successfully created a lazy instance
+    const ancestorComponent = hostRef.$ancestorComponent$;
+    const schedule = () => scheduleUpdate(hostRef, true);
+    if (app_data_BUILD.asyncLoading && ancestorComponent && ancestorComponent['s-rc']) {
+        // this is the intial load and this component it has an ancestor component
+        // but the ancestor component has NOT fired its will update lifecycle yet
+        // so let's just cool our jets and wait for the ancestor to continue first
+        // this will get fired off when the ancestor component
+        // finally gets around to rendering its lazy self
+        // fire off the initial update
+        ancestorComponent['s-rc'].push(schedule);
+    }
+    else {
+        schedule();
+    }
+};
+const fireConnectedCallback = (instance) => {
+    if (app_data_BUILD.lazyLoad && app_data_BUILD.connectedCallback) {
+        safeCall(instance, 'connectedCallback');
+    }
+};
+const connectedCallback = (elm) => {
+    if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
+        const hostRef = getHostRef(elm);
+        const cmpMeta = hostRef.$cmpMeta$;
+        const endConnected = createTime('connectedCallback', cmpMeta.$tagName$);
+        if (app_data_BUILD.hostListenerTargetParent) {
+            // only run if we have listeners being attached to a parent
+            addHostEventListeners(elm, hostRef, cmpMeta.$listeners$, true);
+        }
+        if (!(hostRef.$flags$ & 1 /* hasConnected */)) {
+            // first time this component has connected
+            hostRef.$flags$ |= 1 /* hasConnected */;
+            let hostId;
+            if (app_data_BUILD.hydrateClientSide) {
+                hostId = elm.getAttribute(HYDRATE_ID);
+                if (hostId) {
+                    if (app_data_BUILD.shadowDom && supportsShadow && cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */) {
+                        const scopeId = app_data_BUILD.mode ? addStyle(elm.shadowRoot, cmpMeta, elm.getAttribute('s-mode')) : addStyle(elm.shadowRoot, cmpMeta);
+                        elm.classList.remove(scopeId + '-h', scopeId + '-s');
+                    }
+                    initializeClientHydrate(elm, cmpMeta.$tagName$, hostId, hostRef);
+                }
+            }
+            if (app_data_BUILD.slotRelocation && !hostId) {
+                // initUpdate
+                // if the slot polyfill is required we'll need to put some nodes
+                // in here to act as original content anchors as we move nodes around
+                // host element has been connected to the DOM
+                if (app_data_BUILD.hydrateServerSide || ((app_data_BUILD.slot || app_data_BUILD.shadowDom) && cmpMeta.$flags$ & (4 /* hasSlotRelocation */ | 8 /* needsShadowDomShim */))) {
+                    setContentReference(elm);
+                }
+            }
+            if (app_data_BUILD.asyncLoading) {
+                // find the first ancestor component (if there is one) and register
+                // this component as one of the actively loading child components for its ancestor
+                let ancestorComponent = elm;
+                while ((ancestorComponent = ancestorComponent.parentNode || ancestorComponent.host)) {
+                    // climb up the ancestors looking for the first
+                    // component that hasn't finished its lifecycle update yet
+                    if ((app_data_BUILD.hydrateClientSide && ancestorComponent.nodeType === 1 /* ElementNode */ && ancestorComponent.hasAttribute('s-id') && ancestorComponent['s-p']) ||
+                        ancestorComponent['s-p']) {
+                        // we found this components first ancestor component
+                        // keep a reference to this component's ancestor component
+                        attachToAncestor(hostRef, (hostRef.$ancestorComponent$ = ancestorComponent));
+                        break;
+                    }
+                }
+            }
+            // Lazy properties
+            // https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
+            if (app_data_BUILD.prop && app_data_BUILD.lazyLoad && !app_data_BUILD.hydrateServerSide && cmpMeta.$members$) {
+                Object.entries(cmpMeta.$members$).map(([memberName, [memberFlags]]) => {
+                    if (memberFlags & 31 /* Prop */ && elm.hasOwnProperty(memberName)) {
+                        const value = elm[memberName];
+                        delete elm[memberName];
+                        elm[memberName] = value;
+                    }
+                });
+            }
+            if (app_data_BUILD.initializeNextTick) {
+                // connectedCallback, taskQueue, initialLoad
+                // angular sets attribute AFTER connectCallback
+                // https://github.com/angular/angular/issues/18909
+                // https://github.com/angular/angular/issues/19940
+                client_nextTick(() => initializeComponent(elm, hostRef, cmpMeta));
+            }
+            else {
+                initializeComponent(elm, hostRef, cmpMeta);
+            }
+        }
+        else {
+            // not the first time this has connected
+            // reattach any event listeners to the host
+            // since they would have been removed when disconnected
+            addHostEventListeners(elm, hostRef, cmpMeta.$listeners$, false);
+            // fire off connectedCallback() on component instance
+            fireConnectedCallback(hostRef.$lazyInstance$);
+        }
+        endConnected();
+    }
+};
+const setContentReference = (elm) => {
+    // only required when we're NOT using native shadow dom (slot)
+    // or this browser doesn't support native shadow dom
+    // and this host element was NOT created with SSR
+    // let's pick out the inner content for slot projection
+    // create a node to represent where the original
+    // content was first placed, which is useful later on
+    const contentRefElm = (elm['s-cr'] = doc.createComment(app_data_BUILD.isDebug ? `content-ref (host=${elm.localName})` : ''));
+    contentRefElm['s-cn'] = true;
+    elm.insertBefore(contentRefElm, elm.firstChild);
+};
+const disconnectedCallback = (elm) => {
+    if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0) {
+        const hostRef = getHostRef(elm);
+        const instance = app_data_BUILD.lazyLoad ? hostRef.$lazyInstance$ : elm;
+        if (app_data_BUILD.hostListener) {
+            if (hostRef.$rmListeners$) {
+                hostRef.$rmListeners$.map(rmListener => rmListener());
+                hostRef.$rmListeners$ = undefined;
+            }
+        }
+        // clear CSS var-shim tracking
+        if (app_data_BUILD.cssVarShim && plt.$cssShim$) {
+            plt.$cssShim$.removeHost(elm);
+        }
+        if (app_data_BUILD.lazyLoad && app_data_BUILD.disconnectedCallback) {
+            safeCall(instance, 'disconnectedCallback');
+        }
+        if (app_data_BUILD.cmpDidUnload) {
+            safeCall(instance, 'componentDidUnload');
+        }
+    }
+};
+const defineCustomElement = (Cstr, compactMeta) => {
+    customElements.define(compactMeta[1], proxyCustomElement(Cstr, compactMeta));
+};
+const proxyCustomElement = (Cstr, compactMeta) => {
+    const cmpMeta = {
+        $flags$: compactMeta[0],
+        $tagName$: compactMeta[1],
+    };
+    if (app_data_BUILD.member) {
+        cmpMeta.$members$ = compactMeta[2];
+    }
+    if (app_data_BUILD.hostListener) {
+        cmpMeta.$listeners$ = compactMeta[3];
+    }
+    if (app_data_BUILD.watchCallback) {
+        cmpMeta.$watchers$ = Cstr.$watchers$;
+    }
+    if (app_data_BUILD.reflect) {
+        cmpMeta.$attrsToReflect$ = [];
+    }
+    if (app_data_BUILD.shadowDom && !supportsShadow && cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */) {
+        cmpMeta.$flags$ |= 8 /* needsShadowDomShim */;
+    }
+    const originalConnectedCallback = Cstr.prototype.connectedCallback;
+    const originalDisconnectedCallback = Cstr.prototype.disconnectedCallback;
+    Object.assign(Cstr.prototype, {
+        __registerHost() {
+            registerHost(this, cmpMeta);
+        },
+        connectedCallback() {
+            connectedCallback(this);
+            if (app_data_BUILD.connectedCallback && originalConnectedCallback) {
+                originalConnectedCallback.call(this);
+            }
+        },
+        disconnectedCallback() {
+            disconnectedCallback(this);
+            if (app_data_BUILD.disconnectedCallback && originalDisconnectedCallback) {
+                originalDisconnectedCallback.call(this);
+            }
+        },
+    });
+    Cstr.is = cmpMeta.$tagName$;
+    return proxyComponent(Cstr, cmpMeta, 1 /* isElementConstructor */ | 2 /* proxyState */);
+};
+const forceModeUpdate = (elm) => {
+    if (BUILD.style && BUILD.mode && !BUILD.lazyLoad) {
+        const mode = computeMode(elm);
+        const hostRef = getHostRef(elm);
+        if (hostRef.$modeName$ !== mode) {
+            const cmpMeta = hostRef.$cmpMeta$;
+            const oldScopeId = elm['s-sc'];
+            const scopeId = getScopeId(cmpMeta, mode);
+            const style = elm.constructor.style[mode];
+            const flags = cmpMeta.$flags$;
+            if (style) {
+                if (!client_styles.has(scopeId)) {
+                    registerStyle(scopeId, style, !!(flags & 1 /* shadowDomEncapsulation */));
+                }
+                hostRef.$modeName$ = mode;
+                elm.classList.remove(oldScopeId + '-h', oldScopeId + '-s');
+                attachStyles(hostRef);
+                forceUpdate(elm);
+            }
+        }
+    }
+};
+const attachShadow = (el) => {
+    if (supportsShadow) {
+        el.attachShadow({ mode: 'open' });
+    }
+    else {
+        el.shadowRoot = el;
+    }
+};
+const hmrStart = (elm, cmpMeta, hmrVersionId) => {
+    // ¯\_(ツ)_/¯
+    const hostRef = getHostRef(elm);
+    // reset state flags to only have been connected
+    hostRef.$flags$ = 1 /* hasConnected */;
+    // TODO
+    // detatch any event listeners that may have been added
+    // because we're not passing an exact event name it'll
+    // remove all of this element's event, which is good
+    // create a callback for when this component finishes hmr
+    elm['s-hmr-load'] = () => {
+        // finished hmr for this element
+        delete elm['s-hmr-load'];
+    };
+    // re-initialize the component
+    initializeComponent(elm, hostRef, cmpMeta, hmrVersionId);
+};
+const patchCloneNode = (HostElementPrototype) => {
+    const orgCloneNode = HostElementPrototype.cloneNode;
+    HostElementPrototype.cloneNode = function (deep) {
+        const srcNode = this;
+        const isShadowDom = BUILD.shadowDom ? srcNode.shadowRoot && supportsShadow : false;
+        const clonedNode = orgCloneNode.call(srcNode, isShadowDom ? deep : false);
+        if (BUILD.slot && !isShadowDom && deep) {
+            let i = 0;
+            let slotted, nonStencilNode;
+            let stencilPrivates = ['s-id', 's-cr', 's-lr', 's-rc', 's-sc', 's-p', 's-cn', 's-sr', 's-sn', 's-hn', 's-ol', 's-nr', 's-si'];
+            for (; i < srcNode.childNodes.length; i++) {
+                slotted = srcNode.childNodes[i]['s-nr'];
+                nonStencilNode = stencilPrivates.every((privateField) => !srcNode.childNodes[i][privateField]);
+                if (slotted) {
+                    if (BUILD.appendChildSlotFix && clonedNode.__appendChild) {
+                        clonedNode.__appendChild(slotted.cloneNode(true));
+                    }
+                    else {
+                        clonedNode.appendChild(slotted.cloneNode(true));
+                    }
+                }
+                if (nonStencilNode) {
+                    clonedNode.appendChild(srcNode.childNodes[i].cloneNode(true));
+                }
+            }
+        }
+        return clonedNode;
+    };
+};
+const patchSlotAppendChild = (HostElementPrototype) => {
+    HostElementPrototype.__appendChild = HostElementPrototype.appendChild;
+    HostElementPrototype.appendChild = function (newChild) {
+        const slotName = (newChild['s-sn'] = getSlotName(newChild));
+        const slotNode = getHostSlotNode(this.childNodes, slotName);
+        if (slotNode) {
+            const slotChildNodes = getHostSlotChildNodes(slotNode, slotName);
+            const appendAfter = slotChildNodes[slotChildNodes.length - 1];
+            return appendAfter.parentNode.insertBefore(newChild, appendAfter.nextSibling);
+        }
+        return this.__appendChild(newChild);
+    };
+};
+const patchChildSlotNodes = (elm, cmpMeta) => {
+    class FakeNodeList extends Array {
+        item(n) {
+            return this[n];
+        }
+    }
+    if (cmpMeta.$flags$ & 8 /* needsShadowDomShim */) {
+        const childNodesFn = elm.__lookupGetter__('childNodes');
+        Object.defineProperty(elm, 'children', {
+            get() {
+                return this.childNodes.map((n) => n.nodeType === 1);
+            },
+        });
+        Object.defineProperty(elm, 'childElementCount', {
+            get() {
+                return elm.children.length;
+            },
+        });
+        Object.defineProperty(elm, 'childNodes', {
+            get() {
+                const childNodes = childNodesFn.call(this);
+                if ((plt.$flags$ & 1 /* isTmpDisconnected */) === 0 && getHostRef(this).$flags$ & 2 /* hasRendered */) {
+                    const result = new FakeNodeList();
+                    for (let i = 0; i < childNodes.length; i++) {
+                        const slot = childNodes[i]['s-nr'];
+                        if (slot) {
+                            result.push(slot);
+                        }
+                    }
+                    return result;
+                }
+                return FakeNodeList.from(childNodes);
+            },
+        });
+    }
+};
+const getSlotName = (node) => node['s-sn'] || (node.nodeType === 1 && node.getAttribute('slot')) || '';
+const getHostSlotNode = (childNodes, slotName) => {
+    let i = 0;
+    let childNode;
+    for (; i < childNodes.length; i++) {
+        childNode = childNodes[i];
+        if (childNode['s-sr'] && childNode['s-sn'] === slotName) {
+            return childNode;
+        }
+        childNode = getHostSlotNode(childNode.childNodes, slotName);
+        if (childNode) {
+            return childNode;
+        }
+    }
+    return null;
+};
+const getHostSlotChildNodes = (n, slotName) => {
+    const childNodes = [n];
+    while ((n = n.nextSibling) && n['s-sn'] === slotName) {
+        childNodes.push(n);
+    }
+    return childNodes;
+};
+const bootstrapLazy = (lazyBundles, options = {}) => {
+    if (BUILD.profile && performance.mark) {
+        performance.mark('st:app:start');
+    }
+    installDevTools();
+    const endBootstrap = createTime('bootstrapLazy');
+    const cmpTags = [];
+    const exclude = options.exclude || [];
+    const customElements = win.customElements;
+    const head = doc.head;
+    const metaCharset = /*@__PURE__*/ head.querySelector('meta[charset]');
+    const visibilityStyle = /*@__PURE__*/ doc.createElement('style');
+    const deferredConnectedCallbacks = [];
+    const styles = /*@__PURE__*/ doc.querySelectorAll(`[${HYDRATED_STYLE_ID}]`);
+    let appLoadFallback;
+    let isBootstrapping = true;
+    let i = 0;
+    Object.assign(plt, options);
+    plt.$resourcesUrl$ = new URL(options.resourcesUrl || './', doc.baseURI).href;
+    if (BUILD.asyncQueue) {
+        if (options.syncQueue) {
+            plt.$flags$ |= 4 /* queueSync */;
+        }
+    }
+    if (BUILD.hydrateClientSide) {
+        // If the app is already hydrated there is not point to disable the
+        // async queue. This will improve the first input delay
+        plt.$flags$ |= 2 /* appLoaded */;
+    }
+    if (BUILD.hydrateClientSide && BUILD.shadowDom) {
+        for (; i < styles.length; i++) {
+            registerStyle(styles[i].getAttribute(HYDRATED_STYLE_ID), convertScopedToShadow(styles[i].innerHTML), true);
+        }
+    }
+    lazyBundles.map(lazyBundle => lazyBundle[1].map(compactMeta => {
+        const cmpMeta = {
+            $flags$: compactMeta[0],
+            $tagName$: compactMeta[1],
+            $members$: compactMeta[2],
+            $listeners$: compactMeta[3],
+        };
+        if (BUILD.member) {
+            cmpMeta.$members$ = compactMeta[2];
+        }
+        if (BUILD.hostListener) {
+            cmpMeta.$listeners$ = compactMeta[3];
+        }
+        if (BUILD.reflect) {
+            cmpMeta.$attrsToReflect$ = [];
+        }
+        if (BUILD.watchCallback) {
+            cmpMeta.$watchers$ = {};
+        }
+        if (BUILD.shadowDom && !supportsShadow && cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */) {
+            cmpMeta.$flags$ |= 8 /* needsShadowDomShim */;
+        }
+        const tagName = BUILD.transformTagName && options.transformTagName ? options.transformTagName(cmpMeta.$tagName$) : cmpMeta.$tagName$;
+        const HostElement = class extends HTMLElement {
+            // StencilLazyHost
+            constructor(self) {
+                // @ts-ignore
+                super(self);
+                self = this;
+                registerHost(self, cmpMeta);
+                if (BUILD.shadowDom && cmpMeta.$flags$ & 1 /* shadowDomEncapsulation */) {
+                    // this component is using shadow dom
+                    // and this browser supports shadow dom
+                    // add the read-only property "shadowRoot" to the host element
+                    // adding the shadow root build conditionals to minimize runtime
+                    if (supportsShadow) {
+                        if (BUILD.shadowDelegatesFocus) {
+                            self.attachShadow({
+                                mode: 'open',
+                                delegatesFocus: !!(cmpMeta.$flags$ & 16 /* shadowDelegatesFocus */),
+                            });
+                        }
+                        else {
+                            self.attachShadow({ mode: 'open' });
+                        }
+                    }
+                    else if (!BUILD.hydrateServerSide && !('shadowRoot' in self)) {
+                        self.shadowRoot = self;
+                    }
+                }
+                if (BUILD.slotChildNodesFix) {
+                    patchChildSlotNodes(self, cmpMeta);
+                }
+            }
+            connectedCallback() {
+                if (appLoadFallback) {
+                    clearTimeout(appLoadFallback);
+                    appLoadFallback = null;
+                }
+                if (isBootstrapping) {
+                    // connectedCallback will be processed once all components have been registered
+                    deferredConnectedCallbacks.push(this);
+                }
+                else {
+                    plt.jmp(() => connectedCallback(this));
+                }
+            }
+            disconnectedCallback() {
+                plt.jmp(() => disconnectedCallback(this));
+            }
+            componentOnReady() {
+                return getHostRef(this).$onReadyPromise$;
+            }
+        };
+        if (BUILD.cloneNodeFix) {
+            patchCloneNode(HostElement.prototype);
+        }
+        if (BUILD.appendChildSlotFix) {
+            patchSlotAppendChild(HostElement.prototype);
+        }
+        if (BUILD.hotModuleReplacement) {
+            HostElement.prototype['s-hmr'] = function (hmrVersionId) {
+                hmrStart(this, cmpMeta, hmrVersionId);
+            };
+        }
+        cmpMeta.$lazyBundleId$ = lazyBundle[0];
+        if (!exclude.includes(tagName) && !customElements.get(tagName)) {
+            cmpTags.push(tagName);
+            customElements.define(tagName, proxyComponent(HostElement, cmpMeta, 1 /* isElementConstructor */));
+        }
+    }));
+    if (BUILD.hydratedClass || BUILD.hydratedAttribute) {
+        visibilityStyle.innerHTML = cmpTags + HYDRATED_CSS;
+        visibilityStyle.setAttribute('data-styles', '');
+        head.insertBefore(visibilityStyle, metaCharset ? metaCharset.nextSibling : head.firstChild);
+    }
+    // Process deferred connectedCallbacks now all components have been registered
+    isBootstrapping = false;
+    if (deferredConnectedCallbacks.length) {
+        deferredConnectedCallbacks.map(host => host.connectedCallback());
+    }
+    else {
+        if (BUILD.profile) {
+            plt.jmp(() => (appLoadFallback = setTimeout(appDidLoad, 30, 'timeout')));
+        }
+        else {
+            plt.jmp(() => (appLoadFallback = setTimeout(appDidLoad, 30)));
+        }
+    }
+    // Fallback appLoad event
+    endBootstrap();
+};
+const getAssetPath = (path) => {
+    const assetUrl = new URL(path, plt.$resourcesUrl$);
+    return assetUrl.origin !== win.location.origin ? assetUrl.href : assetUrl.pathname;
+};
+const setAssetPath = (path) => (plt.$resourcesUrl$ = path);
+const getConnect = (_ref, tagName) => {
+    const componentOnReady = () => {
+        let elm = doc.querySelector(tagName);
+        if (!elm) {
+            elm = doc.createElement(tagName);
+            doc.body.appendChild(elm);
+        }
+        return typeof elm.componentOnReady === 'function' ? elm.componentOnReady() : Promise.resolve(elm);
+    };
+    const create = (...args) => {
+        return componentOnReady().then(el => el.create(...args));
+    };
+    return {
+        create,
+        componentOnReady,
+    };
+};
+const getContext = (_elm, context) => {
+    if (context in Context) {
+        return Context[context];
+    }
+    else if (context === 'window') {
+        return win;
+    }
+    else if (context === 'document') {
+        return doc;
+    }
+    else if (context === 'isServer' || context === 'isPrerender') {
+        return BUILD.hydrateServerSide ? true : false;
+    }
+    else if (context === 'isClient') {
+        return BUILD.hydrateServerSide ? false : true;
+    }
+    else if (context === 'resourcesUrl' || context === 'publicPath') {
+        return getAssetPath('.');
+    }
+    else if (context === 'queue') {
+        return {
+            write: writeTask,
+            read: readTask,
+            tick: {
+                then(cb) {
+                    return client_nextTick(cb);
+                },
+            },
+        };
+    }
+    return undefined;
+};
+const insertVdomAnnotations = (doc, staticComponents) => {
+    if (doc != null) {
+        const docData = {
+            hostIds: 0,
+            rootLevelIds: 0,
+            staticComponents: new Set(staticComponents),
+        };
+        const orgLocationNodes = [];
+        parseVNodeAnnotations(doc, doc.body, docData, orgLocationNodes);
+        orgLocationNodes.forEach(orgLocationNode => {
+            if (orgLocationNode != null) {
+                const nodeRef = orgLocationNode['s-nr'];
+                let hostId = nodeRef['s-host-id'];
+                let nodeId = nodeRef['s-node-id'];
+                let childId = `${hostId}.${nodeId}`;
+                if (hostId == null) {
+                    hostId = 0;
+                    docData.rootLevelIds++;
+                    nodeId = docData.rootLevelIds;
+                    childId = `${hostId}.${nodeId}`;
+                    if (nodeRef.nodeType === 1 /* ElementNode */) {
+                        nodeRef.setAttribute(HYDRATE_CHILD_ID, childId);
+                    }
+                    else if (nodeRef.nodeType === 3 /* TextNode */) {
+                        if (hostId === 0) {
+                            const textContent = nodeRef.nodeValue.trim();
+                            if (textContent === '') {
+                                // useless whitespace node at the document root
+                                orgLocationNode.remove();
+                                return;
+                            }
+                        }
+                        const commentBeforeTextNode = doc.createComment(childId);
+                        commentBeforeTextNode.nodeValue = `${TEXT_NODE_ID}.${childId}`;
+                        nodeRef.parentNode.insertBefore(commentBeforeTextNode, nodeRef);
+                    }
+                }
+                let orgLocationNodeId = `${ORG_LOCATION_ID}.${childId}`;
+                const orgLocationParentNode = orgLocationNode.parentElement;
+                if (orgLocationParentNode) {
+                    if (orgLocationParentNode['s-en'] === '') {
+                        // ending with a "." means that the parent element
+                        // of this node's original location is a SHADOW dom element
+                        // and this node is apart of the root level light dom
+                        orgLocationNodeId += `.`;
+                    }
+                    else if (orgLocationParentNode['s-en'] === 'c') {
+                        // ending with a ".c" means that the parent element
+                        // of this node's original location is a SCOPED element
+                        // and this node is apart of the root level light dom
+                        orgLocationNodeId += `.c`;
+                    }
+                }
+                orgLocationNode.nodeValue = orgLocationNodeId;
+            }
+        });
+    }
+};
+const parseVNodeAnnotations = (doc, node, docData, orgLocationNodes) => {
+    if (node == null) {
+        return;
+    }
+    if (node['s-nr'] != null) {
+        orgLocationNodes.push(node);
+    }
+    if (node.nodeType === 1 /* ElementNode */) {
+        node.childNodes.forEach(childNode => {
+            const hostRef = getHostRef(childNode);
+            if (hostRef != null && !docData.staticComponents.has(childNode.nodeName.toLowerCase())) {
+                const cmpData = {
+                    nodeIds: 0,
+                };
+                insertVNodeAnnotations(doc, childNode, hostRef.$vnode$, docData, cmpData);
+            }
+            parseVNodeAnnotations(doc, childNode, docData, orgLocationNodes);
+        });
+    }
+};
+const insertVNodeAnnotations = (doc, hostElm, vnode, docData, cmpData) => {
+    if (vnode != null) {
+        const hostId = ++docData.hostIds;
+        hostElm.setAttribute(HYDRATE_ID, hostId);
+        if (hostElm['s-cr'] != null) {
+            hostElm['s-cr'].nodeValue = `${CONTENT_REF_ID}.${hostId}`;
+        }
+        if (vnode.$children$ != null) {
+            const depth = 0;
+            vnode.$children$.forEach((vnodeChild, index) => {
+                insertChildVNodeAnnotations(doc, vnodeChild, cmpData, hostId, depth, index);
+            });
+        }
+        if (hostElm && vnode && vnode.$elm$ && !hostElm.hasAttribute('c-id')) {
+            const parent = hostElm.parentElement;
+            if (parent && parent.childNodes) {
+                const parentChildNodes = Array.from(parent.childNodes);
+                const comment = parentChildNodes.find(node => node.nodeType === 8 /* CommentNode */ && node['s-sr']);
+                if (comment) {
+                    const index = parentChildNodes.indexOf(hostElm) - 1;
+                    vnode.$elm$.setAttribute(HYDRATE_CHILD_ID, `${comment['s-host-id']}.${comment['s-node-id']}.0.${index}`);
+                }
+            }
+        }
+    }
+};
+const insertChildVNodeAnnotations = (doc, vnodeChild, cmpData, hostId, depth, index) => {
+    const childElm = vnodeChild.$elm$;
+    if (childElm == null) {
+        return;
+    }
+    const nodeId = cmpData.nodeIds++;
+    const childId = `${hostId}.${nodeId}.${depth}.${index}`;
+    childElm['s-host-id'] = hostId;
+    childElm['s-node-id'] = nodeId;
+    if (childElm.nodeType === 1 /* ElementNode */) {
+        childElm.setAttribute(HYDRATE_CHILD_ID, childId);
+    }
+    else if (childElm.nodeType === 3 /* TextNode */) {
+        const parentNode = childElm.parentNode;
+        const nodeName = parentNode.nodeName;
+        if (nodeName !== 'STYLE' && nodeName !== 'SCRIPT') {
+            const textNodeId = `${TEXT_NODE_ID}.${childId}`;
+            const commentBeforeTextNode = doc.createComment(textNodeId);
+            parentNode.insertBefore(commentBeforeTextNode, childElm);
+        }
+    }
+    else if (childElm.nodeType === 8 /* CommentNode */) {
+        if (childElm['s-sr']) {
+            const slotName = childElm['s-sn'] || '';
+            const slotNodeId = `${SLOT_NODE_ID}.${childId}.${slotName}`;
+            childElm.nodeValue = slotNodeId;
+        }
+    }
+    if (vnodeChild.$children$ != null) {
+        const childDepth = depth + 1;
+        vnodeChild.$children$.forEach((vnode, index) => {
+            insertChildVNodeAnnotations(doc, vnode, cmpData, hostId, childDepth, index);
+        });
+    }
+};
+const setPlatformOptions = (opts) => Object.assign(plt, opts);
+const Fragment = (_, children) => children;
+const hostRefs = new WeakMap();
+const getHostRef = (ref) => hostRefs.get(ref);
+const registerInstance = (lazyInstance, hostRef) => hostRefs.set((hostRef.$lazyInstance$ = lazyInstance), hostRef);
+const registerHost = (elm, cmpMeta) => {
+    const hostRef = {
+        $flags$: 0,
+        $hostElement$: elm,
+        $cmpMeta$: cmpMeta,
+        $instanceValues$: new Map(),
+    };
+    if (app_data_BUILD.isDev) {
+        hostRef.$renderCount$ = 0;
+    }
+    if (app_data_BUILD.method && app_data_BUILD.lazyLoad) {
+        hostRef.$onInstancePromise$ = new Promise(r => (hostRef.$onInstanceResolve$ = r));
+    }
+    if (app_data_BUILD.asyncLoading) {
+        hostRef.$onReadyPromise$ = new Promise(r => (hostRef.$onReadyResolve$ = r));
+        elm['s-p'] = [];
+        elm['s-rc'] = [];
+    }
+    addHostEventListeners(elm, hostRef, cmpMeta.$listeners$, false);
+    return hostRefs.set(elm, hostRef);
+};
+const isMemberInElement = (elm, memberName) => memberName in elm;
+const consoleError = (e, el) => (customError || console.error)(e, el);
+const STENCIL_DEV_MODE = app_data_BUILD.isTesting
+    ? ['STENCIL:'] // E2E testing
+    : ['%cstencil', 'color: white;background:#4c47ff;font-weight: bold; font-size:10px; padding:2px 6px; border-radius: 5px'];
+const consoleDevError = (...m) => console.error(...STENCIL_DEV_MODE, ...m);
+const consoleDevWarn = (...m) => console.warn(...STENCIL_DEV_MODE, ...m);
+const consoleDevInfo = (...m) => console.info(...STENCIL_DEV_MODE, ...m);
+const setErrorHandler = (handler) => customError = handler;
+const cmpModules = /*@__PURE__*/ new Map();
+const loadModule = (cmpMeta, hostRef, hmrVersionId) => {
+    // loadModuleImport
+    const exportName = cmpMeta.$tagName$.replace(/-/g, '_');
+    const bundleId = cmpMeta.$lazyBundleId$;
+    if (app_data_BUILD.isDev && typeof bundleId !== 'string') {
+        consoleDevError(`Trying to lazily load component <${cmpMeta.$tagName$}> with style mode "${hostRef.$modeName$}", but it does not exist.`);
+        return undefined;
+    }
+    const module = !app_data_BUILD.hotModuleReplacement ? cmpModules.get(bundleId) : false;
+    if (module) {
+        return module[exportName];
+    }
+    return __webpack_require__(9027)(`./${bundleId}.entry.js${app_data_BUILD.hotModuleReplacement && hmrVersionId ? '?s-hmr=' + hmrVersionId : ''}`).then(importedModule => {
+        if (!app_data_BUILD.hotModuleReplacement) {
+            cmpModules.set(bundleId, importedModule);
+        }
+        return importedModule[exportName];
+    }, consoleError);
+};
+const client_styles = new Map();
+const modeResolutionChain = [];
+const queueDomReads = [];
+const queueDomWrites = [];
+const queueDomWritesLow = [];
+const queueTask = (queue, write) => (cb) => {
+    queue.push(cb);
+    if (!queuePending) {
+        queuePending = true;
+        if (write && plt.$flags$ & 4 /* queueSync */) {
+            client_nextTick(flush);
+        }
+        else {
+            plt.raf(flush);
+        }
+    }
+};
+const consume = (queue) => {
+    for (let i = 0; i < queue.length; i++) {
+        try {
+            queue[i](performance.now());
+        }
+        catch (e) {
+            consoleError(e);
+        }
+    }
+    queue.length = 0;
+};
+const consumeTimeout = (queue, timeout) => {
+    let i = 0;
+    let ts = 0;
+    while (i < queue.length && (ts = performance.now()) < timeout) {
+        try {
+            queue[i++](ts);
+        }
+        catch (e) {
+            consoleError(e);
+        }
+    }
+    if (i === queue.length) {
+        queue.length = 0;
+    }
+    else if (i !== 0) {
+        queue.splice(0, i);
+    }
+};
+const flush = () => {
+    if (app_data_BUILD.asyncQueue) {
+        queueCongestion++;
+    }
+    // always force a bunch of medium callbacks to run, but still have
+    // a throttle on how many can run in a certain time
+    // DOM READS!!!
+    consume(queueDomReads);
+    // DOM WRITES!!!
+    if (app_data_BUILD.asyncQueue) {
+        const timeout = (plt.$flags$ & 6 /* queueMask */) === 2 /* appLoaded */ ? performance.now() + 14 * Math.ceil(queueCongestion * (1.0 / 10.0)) : Infinity;
+        consumeTimeout(queueDomWrites, timeout);
+        consumeTimeout(queueDomWritesLow, timeout);
+        if (queueDomWrites.length > 0) {
+            queueDomWritesLow.push(...queueDomWrites);
+            queueDomWrites.length = 0;
+        }
+        if ((queuePending = queueDomReads.length + queueDomWrites.length + queueDomWritesLow.length > 0)) {
+            // still more to do yet, but we've run out of time
+            // let's let this thing cool off and try again in the next tick
+            plt.raf(flush);
+        }
+        else {
+            queueCongestion = 0;
+        }
+    }
+    else {
+        consume(queueDomWrites);
+        if ((queuePending = queueDomReads.length > 0)) {
+            // still more to do yet, but we've run out of time
+            // let's let this thing cool off and try again in the next tick
+            plt.raf(flush);
+        }
+    }
+};
+const client_nextTick = /*@__PURE__*/ (cb) => promiseResolve().then(cb);
+const readTask = /*@__PURE__*/ (/* unused pure expression or super */ null && (queueTask(queueDomReads, false)));
+const writeTask = /*@__PURE__*/ queueTask(queueDomWrites, true);
+const Build = {
+    isDev: app_data_BUILD.isDev ? true : false,
+    isBrowser: true,
+    isServer: false,
+    isTesting: app_data_BUILD.isTesting ? true : false,
+};
+
+
+
+;// CONCATENATED MODULE: ../../node_modules/@vime/core/dist/custom-elements/index.js
+
+
+
+/**
+ * Listen to an event on the given DOM node. Returns a callback to remove the event listener.
+ */
+function listen(node, event, handler, options) {
+  node.addEventListener(event, handler, options);
+  return () => node.removeEventListener(event, handler, options);
+}
+function fireEventAndRetry(el, event, onFail, interval = 300, maxRetries = 10) {
+  let timeout;
+  let attempt = 0;
+  let found = false;
+  function retry() {
+    if (found)
+      return;
+    timeout = setTimeout(() => {
+      if (attempt === maxRetries) {
+        onFail === null || onFail === void 0 ? void 0 : onFail();
+        return;
+      }
+      el.dispatchEvent(event);
+      attempt += 1;
+      retry();
+    }, interval);
+  }
+  retry();
+  return () => {
+    window.clearTimeout(timeout);
+    found = true;
+  };
+}
+const isColliding = (a, b, translateAx = 0, translateAy = 0, translateBx = 0, translateBy = 0) => {
+  const aRect = a.getBoundingClientRect();
+  const bRect = b.getBoundingClientRect();
+  return (aRect.left + translateAx < bRect.right + translateBx &&
+    aRect.right + translateAx > bRect.left + translateBx &&
+    aRect.top + translateAy < bRect.bottom + translateBy &&
+    aRect.bottom + translateAy > bRect.top + translateBy);
+};
+
+/**
+ * No-operation (noop).
+ */
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const noop = (..._) => {
+  // ...
+};
+/**
+ * Checks if `value` is `null`.
+ *
+ * @param value - The value to check.
+ */
+const isNull = (value) => value === null;
+/**
+ * Checks if `value` is `undefined`.
+ *
+ * @param value - The value to check.
+ */
+const isUndefined = (value) => typeof value === 'undefined';
+/**
+ * Checks if `value` is `null` or `undefined`.
+ *
+ * @param value - The value to check.
+ */
+const isNil = (value) => isNull(value) || isUndefined(value);
+/**
+ * Returns the constructor of the given `value`.
+ *
+ * @param value - The value to return the constructor of.
+ */
+const getConstructor = (value) => 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+!isNil(value) ? value.constructor : undefined;
+/**
+ * Checks if `value` is classified as a `Object` object.
+ *
+ * @param value - The value to check.
+ */
+const custom_elements_isObject = (value) => getConstructor(value) === Object;
+/**
+ * Checks if `value` is classified as a `Number` object.
+ *
+ * @param value - The value to check.
+ */
+const isNumber = (value) => getConstructor(value) === Number && !Number.isNaN(value);
+/**
+ * Checks if `value` is classified as a `String` object.
+ *
+ * @param value - The value to check.
+ */
+const isString = (value) => getConstructor(value) === String;
+/**
+ * Checks if `value` is classified as a `Boolean` object.
+ *
+ * @param value - The value to check.
+ */
+const isBoolean = (value) => getConstructor(value) === Boolean;
+/**
+ * Checks if `value` is classified as a `Function` object.
+ *
+ * @param value - The value to check.
+ */
+// eslint-disable-next-line @typescript-eslint/ban-types
+const isFunction = (value) => getConstructor(value) === Function;
+/**
+ * Checks if `value` is classified as an `Array` object.
+ *
+ * @param value - The value to check.
+ */
+const isArray = (value) => Array.isArray(value);
+/**
+ * Checks if `value` is an instanceof the given `constructor`.
+ *
+ * @param value - The value to check.
+ * @param constructor - The constructor to check against.
+ */
+const isInstanceOf = (value, constructor) => Boolean(value && constructor && value instanceof constructor);
+
+/**
+ * Creates an empty Promise and defers resolving/rejecting it.
+ */
+const deferredPromise = () => {
+  let resolve = noop;
+  let reject = noop;
+  const promise = new Promise((res, rej) => {
+    resolve = res;
+    reject = rej;
+  });
+  return { promise, resolve, reject };
+};
+
+function wrapStencilHook(component, lifecycle, hook) {
+  const prevHook = component[lifecycle];
+  component[lifecycle] = function () {
+    hook();
+    return prevHook ? prevHook.call(component) : undefined;
+  };
+}
+function createStencilHook(component, onConnect, onDisconnect) {
+  let hasLoaded = false;
+  if (!isUndefined(onConnect)) {
+    wrapStencilHook(component, 'componentWillLoad', () => {
+      onConnect();
+      hasLoaded = true;
+    });
+    wrapStencilHook(component, 'connectedCallback', () => {
+      if (hasLoaded)
+        onConnect();
+    });
+  }
+  if (!isUndefined(onDisconnect)) {
+    wrapStencilHook(component, 'disconnectedCallback', () => {
+      onDisconnect();
+    });
+  }
+}
+
+const FIND_PLAYER_EVENT = 'vmFindPlayer';
+function withFindPlayer(player) {
+  const el = getElement(player);
+  let off;
+  createStencilHook(player, () => {
+    off = listen(el, FIND_PLAYER_EVENT, (event) => {
+      event.stopPropagation();
+      event.detail(el);
+    });
+  }, () => {
+    off === null || off === void 0 ? void 0 : off();
+  });
+}
+/**
+ * Finds the closest ancestor player element by firing the `vmFindPlayer` event, and waiting
+ * for the player to catch it. This function retries finding the player (`maxRetries`) until it
+ * gives up and fails.
+ *
+ * @param ref - A HTMLElement that is within the player's subtree.
+ * @param interval - The length of the timeout before trying again in milliseconds.
+ * @param maxRetries - The number of times to retry firing the event.
+ */
+const custom_elements_findPlayer = (ref, interval = 300, maxRetries = 10) => {
+  const el = (isInstanceOf(ref, HTMLElement)
+    ? ref
+    : getElement(ref));
+  const search = deferredPromise();
+  // eslint-disable-next-line prefer-const
+  let stopFiring;
+  const event = new CustomEvent(FIND_PLAYER_EVENT, {
+    bubbles: true,
+    composed: true,
+    detail: player => {
+      search.resolve(player);
+      stopFiring();
+    },
+  });
+  stopFiring = fireEventAndRetry(el, event, () => {
+    search.reject(`Could not find player for ${el.nodeName}`);
+  }, interval, maxRetries);
+  return search.promise;
+};
+
+var MediaType;
+(function (MediaType) {
+  MediaType["Audio"] = "audio";
+  MediaType["Video"] = "video";
+})(MediaType || (MediaType = {}));
+
+const STATE_CHANGE_EVENT = 'vmStateChange';
+/**
+ * Creates a dispatcher on the given `ref`, to send updates to the closest ancestor player via
+ * the custom `vmStateChange` event.
+ *
+ * @param ref An element to dispatch the state change events from.
+ */
+const custom_elements_createDispatcher = (ref) => (prop, value) => {
+  const el = isInstanceOf(ref, HTMLElement) ? ref : getElement(ref);
+  const event = new CustomEvent(STATE_CHANGE_EVENT, {
+    bubbles: true,
+    composed: true,
+    detail: { by: el, prop, value },
+  });
+  el.dispatchEvent(event);
+};
+
+const en = {
+  play: 'Play',
+  pause: 'Pause',
+  playback: 'Playback',
+  scrubber: 'Scrubber',
+  scrubberLabel: '{currentTime} of {duration}',
+  played: 'Played',
+  duration: 'Duration',
+  buffered: 'Buffered',
+  close: 'Close',
+  currentTime: 'Current time',
+  live: 'LIVE',
+  volume: 'Volume',
+  mute: 'Mute',
+  unmute: 'Unmute',
+  audio: 'Audio',
+  default: 'Default',
+  captions: 'Captions',
+  subtitlesOrCc: 'Subtitles/CC',
+  enableCaptions: 'Enable subtitles/captions',
+  disableCaptions: 'Disable subtitles/captions',
+  auto: 'Auto',
+  fullscreen: 'Fullscreen',
+  enterFullscreen: 'Enter fullscreen',
+  exitFullscreen: 'Exit fullscreen',
+  settings: 'Settings',
+  seekForward: 'Seek forward',
+  seekBackward: 'Seek backward',
+  seekTotal: 'Seek total',
+  normal: 'Normal',
+  none: 'None',
+  playbackRate: 'Playback Rate',
+  playbackQuality: 'Playback Quality',
+  loop: 'Loop',
+  disabled: 'Disabled',
+  off: 'Off',
+  enabled: 'Enabled',
+  pip: 'Picture-in-Picture',
+  enterPiP: 'Miniplayer',
+  exitPiP: 'Expand',
+};
+
+const initialState = {
+  theme: undefined,
+  paused: true,
+  playing: false,
+  duration: -1,
+  currentProvider: undefined,
+  mediaTitle: undefined,
+  currentSrc: undefined,
+  currentPoster: undefined,
+  textTracks: [],
+  currentTextTrack: -1,
+  audioTracks: [],
+  currentAudioTrack: -1,
+  isTextTrackVisible: true,
+  shouldRenderNativeTextTracks: true,
+  icons: 'vime',
+  currentTime: 0,
+  autoplay: false,
+  ready: false,
+  playbackReady: false,
+  loop: false,
+  muted: false,
+  buffered: 0,
+  playbackRate: 1,
+  playbackRates: [1],
+  playbackQuality: undefined,
+  playbackQualities: [],
+  seeking: false,
+  debug: false,
+  playbackStarted: false,
+  playbackEnded: false,
+  buffering: false,
+  controls: false,
+  isControlsActive: false,
+  volume: 50,
+  isFullscreenActive: false,
+  aspectRatio: '16:9',
+  viewType: undefined,
+  isAudioView: false,
+  isVideoView: false,
+  mediaType: undefined,
+  isAudio: false,
+  isVideo: false,
+  isMobile: false,
+  isTouch: false,
+  isSettingsActive: false,
+  isLive: false,
+  isPiPActive: false,
+  autopause: true,
+  playsinline: false,
+  language: 'en',
+  languages: ['en'],
+  translations: { en },
+  i18n: en,
+};
+const writableProps = new Set([
+  'autoplay',
+  'autopause',
+  'aspectRatio',
+  'controls',
+  'theme',
+  'debug',
+  'paused',
+  'currentTime',
+  'language',
+  'loop',
+  'translations',
+  'playbackQuality',
+  'muted',
+  'playbackRate',
+  'playsinline',
+  'volume',
+  'isSettingsActive',
+  'isControlsActive',
+  'shouldRenderNativeTextTracks',
+]);
+const isWritableProp = (prop) => writableProps.has(prop);
+/**
+ * Player properties that should be reset when the media is changed.
+ */
+const resetableProps = new Set([
+  'paused',
+  'currentTime',
+  'duration',
+  'buffered',
+  'seeking',
+  'playing',
+  'buffering',
+  'playbackReady',
+  'textTracks',
+  'currentTextTrack',
+  'audioTracks',
+  'currentAudioTrack',
+  'mediaTitle',
+  'currentSrc',
+  'currentPoster',
+  'playbackRate',
+  'playbackRates',
+  'playbackStarted',
+  'playbackEnded',
+  'playbackQuality',
+  'playbackQualities',
+  'mediaType',
+]);
+const shouldPropResetOnMediaChange = (prop) => resetableProps.has(prop);
+
+var ViewType;
+(function (ViewType) {
+  ViewType["Audio"] = "audio";
+  ViewType["Video"] = "video";
+})(ViewType || (ViewType = {}));
+
+class Disposal {
+  constructor(dispose = []) {
+    this.dispose = dispose;
+  }
+  add(callback) {
+    this.dispose.push(callback);
+  }
+  empty() {
+    this.dispose.forEach(fn => fn());
+    this.dispose = [];
+  }
+}
+
+var __awaiter$y = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const PLAYER_KEY = Symbol('vmPlayerKey');
+const COMPONENT_NAME_KEY = Symbol('vmNameKey');
+const REGISTRY_KEY = Symbol('vmRegistryKey');
+const REGISTRATION_KEY = Symbol('vmRegistrationKey');
+const REGISTER_COMPONENT_EVENT = 'vmComponentRegister';
+const COMPONENT_REGISTERED_EVENT = 'vmComponentRegistered';
+const COMPONENT_DEREGISTERED_EVENT = 'vmComponentDeregistered';
+const getRegistrant = (ref) => isInstanceOf(ref, HTMLElement)
+  ? ref
+  : getElement(ref);
+/**
+ * Handles registering/deregistering the given `component` in the player registry. All registries
+ * are bound per player subtree.
+ *
+ * @param ref - A Stencil component instance or HTMLElement.
+ */
+function withComponentRegistry(ref, name) {
+  const registryId = Symbol('vmRegistryId');
+  const registrant = getRegistrant(ref);
+  registrant[COMPONENT_NAME_KEY] = name !== null && name !== void 0 ? name : registrant.nodeName.toLowerCase();
+  registrant[REGISTRATION_KEY] = registryId;
+  const buildEvent = (eventName) => new CustomEvent(eventName, {
+    bubbles: true,
+    composed: true,
+    detail: registrant,
+  });
+  const registerEvent = buildEvent(REGISTER_COMPONENT_EVENT);
+  createStencilHook(ref, () => {
+    registrant.dispatchEvent(registerEvent);
+  });
+}
+function withComponentRegistrar(player) {
+  const el = getElement(player);
+  const registry = new Map();
+  const disposal = new Disposal();
+  // TODO properly type this later.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  el[REGISTRY_KEY] = registry;
+  function onDeregister(registrant) {
+    delete registrant[PLAYER_KEY];
+    delete registrant[REGISTRY_KEY];
+    registry.delete(registrant[REGISTRATION_KEY]);
+    el.dispatchEvent(new CustomEvent(COMPONENT_DEREGISTERED_EVENT, { detail: registrant }));
+  }
+  function onRegister(e) {
+    const ref = e.detail;
+    const registrant = getRegistrant(ref);
+    registrant[PLAYER_KEY] = el;
+    registrant[REGISTRY_KEY] = registry;
+    registry.set(registrant[REGISTRATION_KEY], registrant);
+    el.dispatchEvent(new CustomEvent(COMPONENT_REGISTERED_EVENT, { detail: registrant }));
+    createStencilHook(ref, undefined, () => onDeregister(registrant));
+  }
+  createStencilHook(player, () => {
+    disposal.add(listen(el, REGISTER_COMPONENT_EVENT, onRegister));
+  }, () => {
+    registry.clear();
+    disposal.empty();
+    delete player[REGISTRY_KEY];
+  });
+}
+/**
+ * Checks whether any component with the given `name` exists in the registry. All registries
+ * are bound per player subtree.
+ *
+ * @param ref - A Stencil component instance or HTMLElement.
+ * @param name - The name of the component to search for.
+ */
+function isComponentRegistered(ref, name) {
+  var _a;
+  const registrant = getRegistrant(ref);
+  const registry = registrant[REGISTRY_KEY];
+  return Array.from((_a = registry === null || registry === void 0 ? void 0 : registry.values()) !== null && _a !== void 0 ? _a : []).some(r => r[COMPONENT_NAME_KEY] === name);
+}
+/**
+ * Returns the player for the given `ref`. This will only work after the component has been
+ * registered, prefer using `findPlayer`.
+ *
+ * @param ref - A Stencil component instance or HTMLElement.
+ */
+function getPlayerFromRegistry(ref) {
+  const registrant = getRegistrant(ref);
+  return registrant[PLAYER_KEY];
+}
+/**
+ * Returns a collection of components from the registry for the given `ref`. All registries
+ * are bound per player subtree.
+ *
+ * @param ref - A Stencil component instance or HTMLElement.
+ * @param name - The name of the components to search for in the registry.
+ */
+function getComponentFromRegistry(ref, name) {
+  var _a, _b;
+  const registrant = getRegistrant(ref);
+  return Array.from((_b = (_a = registrant[REGISTRY_KEY]) === null || _a === void 0 ? void 0 : _a.values()) !== null && _b !== void 0 ? _b : []).filter(r => r[COMPONENT_NAME_KEY] === name);
+}
+/**
+ * Watches the current registry on the given `ref` for changes. All registries are bound per
+ * player subtree.
+ *
+ * @param ref - A Stencil component instance or HTMLElement.
+ * @param name - The name of the component to watch for.
+ * @param onChange - A callback that is called when a component is registered/deregistered.
+ */
+function watchComponentRegistry(ref, name, onChange) {
+  var _a;
+  return __awaiter$y(this, void 0, void 0, function* () {
+    const player = yield custom_elements_findPlayer(ref);
+    const disposal = new Disposal();
+    const registry = getRegistrant(ref)[REGISTRY_KEY];
+    function listener(e) {
+      if (e.detail[COMPONENT_NAME_KEY] === name)
+        onChange === null || onChange === void 0 ? void 0 : onChange(getComponentFromRegistry(player, name));
+    }
+    // Hydrate.
+    Array.from((_a = registry === null || registry === void 0 ? void 0 : registry.values()) !== null && _a !== void 0 ? _a : []).forEach(reg => listener(new CustomEvent('', { detail: reg })));
+    if (!isUndefined(player)) {
+      disposal.add(listen(player, COMPONENT_REGISTERED_EVENT, listener));
+      disposal.add(listen(player, COMPONENT_DEREGISTERED_EVENT, listener));
+    }
+    createStencilHook(ref, () => {
+      // no-op
+    }, () => {
+      disposal.empty();
+    });
+    return () => {
+      disposal.empty();
+    };
+  });
+}
+
+var createDeferredPromise = function () {
+    var resolve;
+    var promise = new Promise(function (res) { resolve = res; });
+    return { promise: promise, resolve: resolve };
+};
+
+var openWormhole = function (Component, props, isBlocking) {
+    if (isBlocking === void 0) { isBlocking = true; }
+    var isConstructor = (Component.constructor.name === 'Function');
+    var Proto = isConstructor ? Component.prototype : Component;
+    var componentWillLoad = Proto.componentWillLoad;
+    Proto.componentWillLoad = function () {
+        var _this = this;
+        var el = getElement(this);
+        var onOpen = createDeferredPromise();
+        var event = new CustomEvent('openWormhole', {
+            bubbles: true,
+            composed: true,
+            detail: {
+                consumer: this,
+                fields: props,
+                updater: function (prop, value) {
+                    var target = (prop in el) ? el : _this;
+                    target[prop] = value;
+                },
+                onOpen: onOpen,
+            },
+        });
+        el.dispatchEvent(event);
+        var willLoad = function () {
+            if (componentWillLoad) {
+                return componentWillLoad.call(_this);
+            }
+        };
+        return isBlocking ? onOpen.promise.then(function () { return willLoad(); }) : (willLoad());
+    };
+};
+
+var multiverse = new Map();
+var updateConsumer = function (_a, state) {
+    var fields = _a.fields, updater = _a.updater;
+    fields.forEach(function (field) { updater(field, state[field]); });
+};
+var Universe = {
+    create: function (creator, initialState) {
+        var el = getElement(creator);
+        var wormholes = new Map();
+        var universe = { wormholes: wormholes, state: initialState };
+        multiverse.set(creator, universe);
+        var connectedCallback = creator.connectedCallback;
+        creator.connectedCallback = function () {
+            multiverse.set(creator, universe);
+            if (connectedCallback) {
+                connectedCallback.call(creator);
+            }
+        };
+        var disconnectedCallback = creator.disconnectedCallback;
+        creator.disconnectedCallback = function () {
+            multiverse.delete(creator);
+            if (disconnectedCallback) {
+                disconnectedCallback.call(creator);
+            }
+        };
+        el.addEventListener('openWormhole', function (event) {
+            event.stopPropagation();
+            var _a = event.detail, consumer = _a.consumer, onOpen = _a.onOpen;
+            if (wormholes.has(consumer))
+                return;
+            if (typeof consumer !== 'symbol') {
+                var connectedCallback_1 = consumer.connectedCallback, disconnectedCallback_1 = consumer.disconnectedCallback;
+                consumer.connectedCallback = function () {
+                    wormholes.set(consumer, event.detail);
+                    if (connectedCallback_1) {
+                        connectedCallback_1.call(consumer);
+                    }
+                };
+                consumer.disconnectedCallback = function () {
+                    wormholes.delete(consumer);
+                    if (disconnectedCallback_1) {
+                        disconnectedCallback_1.call(consumer);
+                    }
+                };
+            }
+            wormholes.set(consumer, event.detail);
+            updateConsumer(event.detail, universe.state);
+            onOpen === null || onOpen === void 0 ? void 0 : onOpen.resolve(function () { wormholes.delete(consumer); });
+        });
+        el.addEventListener('closeWormhole', function (event) {
+            var consumer = event.detail;
+            wormholes.delete(consumer);
+        });
+    },
+    Provider: function (_a, children) {
+        var state = _a.state;
+        var creator = getRenderingRef();
+        if (multiverse.has(creator)) {
+            var universe = multiverse.get(creator);
+            universe.state = state;
+            universe.wormholes.forEach(function (opening) { updateConsumer(opening, state); });
+        }
+        return children;
+    }
+};
+
+const LOAD_START_EVENT = 'vmLoadStart';
+// Events that toggle state and the prop is named `is{PropName}...`.
+const isToggleStateEvent = new Set([
+  'isFullscreenActive',
+  'isControlsActive',
+  'isTextTrackVisible',
+  'isPiPActive',
+  'isLive',
+  'isTouch',
+  'isAudio',
+  'isVideo',
+  'isAudioView',
+  'isVideoView',
+]);
+// Events that are emitted without the 'Change' postfix.
+const hasShortenedEventName = new Set([
+  'ready',
+  'playbackStarted',
+  'playbackEnded',
+  'playbackReady',
+]);
+const getEventName = (prop) => {
+  // Example: isFullscreenActive -> vmFullscreenChange
+  if (isToggleStateEvent.has(prop)) {
+    return `vm${prop.replace('is', '').replace('Active', '')}Change`;
+  }
+  // Example: playbackStarted -> vmPlaybackStarted
+  if (hasShortenedEventName.has(prop)) {
+    return `vm${prop.charAt(0).toUpperCase()}${prop.slice(1)}`;
+  }
+  // Example: currentTime -> vmCurrentTimeChange
+  return `vm${prop.charAt(0).toUpperCase()}${prop.slice(1)}Change`;
+};
+function firePlayerEvent(el, prop, newValue, oldValue) {
+  const events = [];
+  events.push(new CustomEvent(getEventName(prop), { detail: newValue }));
+  if (prop === 'paused' && !newValue)
+    events.push(new CustomEvent('vmPlay'));
+  if (prop === 'seeking' && oldValue && !newValue)
+    events.push(new CustomEvent('vmSeeked'));
+  events.forEach(event => {
+    el.dispatchEvent(event);
+  });
+}
+
+var __awaiter$x = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+/**
+ * Binds props between an instance of a given component class and it's closest ancestor player.
+ *
+ * @param component A Stencil component instance.
+ * @param props A set of props to watch and update on the given component instance.
+ */
+const withPlayerContext = (component, props) => openWormhole(component, props);
+/**
+ * Finds the closest ancestor player to the given `ref` and watches the given props for changes. On
+ * a prop change the given `updater` fn is called.
+ *
+ * @param ref A element within any player's subtree.
+ * @param props A set of props to watch and call the `updater` fn with.
+ * @param updater This function is called with the prop/value of any watched properties.
+ */
+const usePlayerContext = (ref, props, updater, playerRef) => __awaiter$x(void 0, void 0, void 0, function* () {
+  const player = playerRef !== null && playerRef !== void 0 ? playerRef : (yield custom_elements_findPlayer(ref));
+  const listeners = !isUndefined(player)
+    ? props.map(prop => {
+      const event = getEventName(prop);
+      return listen(player, event, () => {
+        updater(prop, player[prop]);
+      });
+    })
+    : [];
+  return () => {
+    listeners.forEach(off => off());
+  };
+});
+
+var Provider;
+(function (Provider) {
+  Provider["Audio"] = "audio";
+  Provider["Video"] = "video";
+  Provider["HLS"] = "hls";
+  Provider["Dash"] = "dash";
+  Provider["YouTube"] = "youtube";
+  Provider["Vimeo"] = "vimeo";
+  Provider["Dailymotion"] = "dailymotion";
+})(Provider || (Provider = {}));
+
+const audioRegex = /\.(m4a|mp4a|mpga|mp2|mp2a|mp3|m2a|m3a|wav|weba|aac|oga|spx)($|\?)/i;
+const videoRegex = /\.(mp4|og[gv]|webm|mov|m4v)($|\?)/i;
+const hlsRegex = /\.(m3u8)($|\?)/i;
+const hlsTypeRegex = /^application\/(x-mpegURL|vnd\.apple\.mpegURL)$/i;
+const dashRegex = /\.(mpd)($|\?)/i;
+
+const PROVIDER_CHANGE_EVENT = 'vmProviderChange';
+/**
+ * Creates a dispatcher on the given `ref`, to send updates to the closest ancestor player via
+ * the custom `vmProviderChange` event.
+ *
+ * @param ref A component reference to dispatch the state change events from.
+ */
+const createProviderDispatcher = (ref) => (prop, value) => {
+  const el = isInstanceOf(ref, HTMLElement) ? ref : getElement(ref);
+  const event = new CustomEvent(PROVIDER_CHANGE_EVENT, {
+    bubbles: true,
+    composed: true,
+    detail: { by: el, prop, value },
+  });
+  el.dispatchEvent(event);
+};
+
+const providerWritableProps = new Set([
+  'ready',
+  'playing',
+  'playbackReady',
+  'playbackStarted',
+  'playbackEnded',
+  'seeking',
+  'buffered',
+  'buffering',
+  'duration',
+  'viewType',
+  'mediaTitle',
+  'mediaType',
+  'currentSrc',
+  'currentPoster',
+  'playbackRates',
+  'playbackQualities',
+  'textTracks',
+  'currentTextTrack',
+  'isTextTrackVisible',
+  'audioTracks',
+  'currentAudioTrack',
+  'isPiPActive',
+  'isFullscreenActive',
+]);
+const isProviderWritableProp = (prop) => isWritableProp(prop) || providerWritableProps.has(prop);
+
+var __awaiter$w = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const PROVIDER_CACHE_KEY = Symbol('vmProviderCache');
+const PROVIDER_CONNECT_EVENT = 'vmMediaProviderConnect';
+const PROVIDER_DISCONNECT_EVENT = 'vmMediaProviderDisconnect';
+function buildProviderConnectEvent(name, host) {
+  return new CustomEvent(name, {
+    bubbles: true,
+    composed: true,
+    detail: host,
+  });
+}
+function withProviderHost(connector) {
+  const el = getElement(connector);
+  const disposal = new Disposal();
+  const cache = new Map();
+  connector[PROVIDER_CACHE_KEY] = cache;
+  function initCache() {
+    Object.keys(connector).forEach(prop => {
+      cache.set(prop, connector[prop]);
+    });
+  }
+  function onDisconnect() {
+    writeTask(() => __awaiter$w(this, void 0, void 0, function* () {
+      var _a;
+      connector.ready = false;
+      connector.provider = undefined;
+      cache.clear();
+      (_a = connector.onProviderDisconnect) === null || _a === void 0 ? void 0 : _a.call(connector);
+      el.dispatchEvent(buildProviderConnectEvent(PROVIDER_DISCONNECT_EVENT));
+    }));
+  }
+  function onConnect(event) {
+    event.stopImmediatePropagation();
+    initCache();
+    const hostRef = event.detail;
+    const host = getElement(event.detail);
+    if (connector.provider === host)
+      return;
+    const name = host === null || host === void 0 ? void 0 : host.nodeName.toLowerCase().replace('vm-', '');
+    writeTask(() => __awaiter$w(this, void 0, void 0, function* () {
+      connector.provider = host;
+      connector.currentProvider = Object.values(Provider).find(provider => name === provider);
+      createStencilHook(hostRef, undefined, () => onDisconnect());
+    }));
+  }
+  function onChange(event) {
+    var _a;
+    event.stopImmediatePropagation();
+    const { by, prop, value } = event.detail;
+    if (!isProviderWritableProp(prop)) {
+      (_a = connector.logger) === null || _a === void 0 ? void 0 : _a.warn(`${by.nodeName} tried to change \`${prop}\` but it is readonly.`);
+      return;
+    }
+    writeTask(() => {
+      cache.set(prop, value);
+      connector[prop] = value;
+    });
+  }
+  createStencilHook(connector, () => {
+    disposal.add(listen(el, PROVIDER_CONNECT_EVENT, onConnect));
+    disposal.add(listen(el, PROVIDER_CHANGE_EVENT, onChange));
+  }, () => {
+    disposal.empty();
+    cache.clear();
+  });
+}
+function withProviderConnect(ref) {
+  const connectEvent = buildProviderConnectEvent(PROVIDER_CONNECT_EVENT, ref);
+  createStencilHook(ref, () => {
+    getElement(ref).dispatchEvent(connectEvent);
+  });
+}
+
+var __awaiter$v = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const Audio = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    /**
+     * @internal Whether an external SDK will attach itself to the media player and control it.
+     */
+    this.willAttach = false;
+    /** @inheritdoc */
+    this.preload = 'metadata';
+    withComponentRegistry(this);
+    if (!this.willAttach)
+      withProviderConnect(this);
+  }
+  /** @internal */
+  getAdapter() {
+    var _a, _b;
+    return __awaiter$v(this, void 0, void 0, function* () {
+      const adapter = (_b = (yield ((_a = this.fileProvider) === null || _a === void 0 ? void 0 : _a.getAdapter()))) !== null && _b !== void 0 ? _b : {};
+      adapter.canPlay = (type) => __awaiter$v(this, void 0, void 0, function* () { return isString(type) && audioRegex.test(type); });
+      return adapter;
+    });
+  }
+  render() {
+    return (
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    h("vm-file", { noConnect: true, willAttach: this.willAttach, crossOrigin: this.crossOrigin, preload: this.preload, disableRemotePlayback: this.disableRemotePlayback, mediaTitle: this.mediaTitle, viewType: ViewType.Audio, ref: (el) => {
+        this.fileProvider = el;
+      } }, h("slot", null)));
+  }
+};
+
+const captionControlCss = ":host([hidden]){display:none}";
+
+var __awaiter$u = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const CaptionControl = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.canToggleCaptionVisibility = false;
+    /**
+     * The URL to an SVG element or fragment to load.
+     */
+    this.showIcon = 'captions-on';
+    /**
+     * The URL to an SVG element or fragment to load.
+     */
+    this.hideIcon = 'captions-off';
+    /**
+     * Whether the tooltip is positioned above/below the control.
+     */
+    this.tooltipPosition = 'top';
+    /**
+     * Whether the tooltip should not be displayed.
+     */
+    this.hideTooltip = false;
+    /** @inheritdoc */
+    this.keys = 'c';
+    /** @internal */
+    this.i18n = {};
+    /** @internal */
+    this.playbackReady = false;
+    /** @internal */
+    this.textTracks = [];
+    /** @internal */
+    this.isTextTrackVisible = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, [
+      'i18n',
+      'textTracks',
+      'isTextTrackVisible',
+      'playbackReady',
+    ]);
+  }
+  onTextTracksChange() {
+    var _a;
+    return __awaiter$u(this, void 0, void 0, function* () {
+      const player = getPlayerFromRegistry(this);
+      this.canToggleCaptionVisibility =
+        this.textTracks.length > 0 &&
+          ((_a = (yield (player === null || player === void 0 ? void 0 : player.canSetTextTrackVisibility()))) !== null && _a !== void 0 ? _a : false);
+    });
+  }
+  componentDidLoad() {
+    this.onTextTracksChange();
+  }
+  onClick() {
+    var _a;
+    const player = getPlayerFromRegistry(this);
+    (_a = player === null || player === void 0 ? void 0 : player.setTextTrackVisibility) === null || _a === void 0 ? void 0 : _a.call(player, !this.isTextTrackVisible);
+  }
+  render() {
+    const tooltip = this.isTextTrackVisible
+      ? this.i18n.disableCaptions
+      : this.i18n.enableCaptions;
+    const tooltipWithHint = !isUndefined(this.keys)
+      ? `${tooltip} (${this.keys})`
+      : tooltip;
+    return (h(Host, { hidden: !this.canToggleCaptionVisibility }, h("vm-control", { label: this.i18n.captions, keys: this.keys, hidden: !this.canToggleCaptionVisibility, pressed: this.isTextTrackVisible, onClick: this.onClick.bind(this) }, h("vm-icon", { name: this.isTextTrackVisible ? this.showIcon : this.hideIcon, library: this.icons }), h("vm-tooltip", { hidden: this.hideTooltip, position: this.tooltipPosition, direction: this.tooltipDirection }, tooltipWithHint))));
+  }
+  static get watchers() { return {
+    "textTracks": ["onTextTracksChange"],
+    "playbackReady": ["onTextTracksChange"]
+  }; }
+  static get style() { return captionControlCss; }
+};
+
+/* eslint-disable func-names */
+const watch$1 = new Set();
+const controls = new Set();
+// watchedEl -> (controlsEl -> controlsHeight) saved on collision. Basically keeps track of
+// every collision with all controls for each watched element.
+const collisions = new Map();
+function custom_elements_update() {
+  writeTask(() => {
+    controls.forEach(controlsEl => {
+      const controlsHeight = parseFloat(window.getComputedStyle(controlsEl).height);
+      watch$1.forEach(watchedEl => {
+        const watchedElCollisions = collisions.get(watchedEl);
+        const hasCollided = isColliding(watchedEl, controlsEl);
+        const willCollide = isColliding(watchedEl, controlsEl, 0, controlsHeight) ||
+          isColliding(watchedEl, controlsEl, 0, -controlsHeight);
+        watchedElCollisions.set(controlsEl, hasCollided || willCollide ? controlsHeight : 0);
+      });
+    });
+    // Update after assessing all collisions so there are no glitchy movements.
+    watch$1.forEach(watchedEl => {
+      const watchedElCollisions = collisions.get(watchedEl);
+      watchedEl.style.setProperty('--vm-controls-height', `${Math.max(0, Math.max(...watchedElCollisions.values()))}px`);
+    });
+  });
+}
+function registerControlsForCollisionDetection(component) {
+  const el = getElement(component);
+  function getInnerEl() {
+    return el.shadowRoot.querySelector('.controls');
+  }
+  createStencilHook(component, () => {
+    const innerEl = getInnerEl();
+    if (!isNull(innerEl)) {
+      controls.add(innerEl);
+      custom_elements_update();
+    }
+  }, () => {
+    controls.delete(getInnerEl());
+    custom_elements_update();
+  });
+  wrapStencilHook(component, 'componentDidLoad', () => {
+    controls.add(getInnerEl());
+    custom_elements_update();
+  });
+  wrapStencilHook(component, 'componentDidRender', custom_elements_update);
+}
+function withControlsCollisionDetection(component) {
+  const el = getElement(component);
+  createStencilHook(component, () => {
+    watch$1.add(el);
+    collisions.set(el, new Map());
+    custom_elements_update();
+  }, () => {
+    watch$1.delete(el);
+    collisions.delete(el);
+  });
+}
+
+const captionsCss = ":host{position:absolute;left:0;bottom:0;width:100%;pointer-events:none;z-index:var(--vm-captions-z-index)}.captions{width:100%;text-align:center;color:var(--vm-captions-text-color);font-size:var(--vm-captions-font-size);padding:$control-spacing;display:none;pointer-events:none;transition:transform 0.4s ease-in-out, opacity 0.3s ease-in-out}.captions.enabled{display:inline-block}.captions.hidden{display:none !important}.captions.inactive{opacity:0;visibility:hidden}.captions.fontMd{font-size:var(--vm-captions-font-size-medium)}.captions.fontLg{font-size:var(--vm-captions-font-size-large)}.captions.fontXl{font-size:var(--vm-captions-font-size-xlarge)}.cue{display:inline-block;background:var(--vm-captions-cue-bg-color);border-radius:var(--vm-captions-cue-border-radius);box-decoration-break:clone;line-height:185%;padding:var(--vm-captions-cue-padding);white-space:pre-wrap;pointer-events:none}.cue>div{display:inline}.cue:empty{display:none}";
+
+var __awaiter$t = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const Captions = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.sizeDisposal = new Disposal();
+    this.textDisposal = new Disposal();
+    this.isEnabled = false;
+    this.fontSize = 'sm';
+    /**
+     * Whether the captions should be visible or not.
+     */
+    this.hidden = false;
+    /** @internal */
+    this.isControlsActive = false;
+    /** @internal */
+    this.isVideoView = false;
+    /** @internal */
+    this.playbackStarted = false;
+    /** @internal */
+    this.textTracks = [];
+    /** @internal */
+    this.currentTextTrack = -1;
+    /** @internal */
+    this.isTextTrackVisible = true;
+    withComponentRegistry(this);
+    withControlsCollisionDetection(this);
+    withPlayerContext(this, [
+      'isVideoView',
+      'playbackStarted',
+      'isControlsActive',
+      'textTracks',
+      'currentTextTrack',
+      'isTextTrackVisible',
+    ]);
+  }
+  onEnabledChange() {
+    this.isEnabled = this.playbackStarted && this.isVideoView;
+  }
+  onTextTracksChange() {
+    const textTrack = this.textTracks[this.currentTextTrack];
+    const renderCues = () => {
+      var _a;
+      const activeCues = Array.from((_a = textTrack.activeCues) !== null && _a !== void 0 ? _a : []);
+      this.renderCurrentCue(activeCues[0]);
+    };
+    this.textDisposal.empty();
+    if (!isNil(textTrack)) {
+      renderCues();
+      this.textDisposal.add(listen(textTrack, 'cuechange', renderCues));
+    }
+  }
+  connectedCallback() {
+    this.dispatch = custom_elements_createDispatcher(this);
+    this.dispatch('shouldRenderNativeTextTracks', false);
+    this.onTextTracksChange();
+    this.onPlayerResize();
+  }
+  disconnectedCallback() {
+    this.textDisposal.empty();
+    this.sizeDisposal.empty();
+    this.dispatch('shouldRenderNativeTextTracks', true);
+  }
+  onPlayerResize() {
+    return __awaiter$t(this, void 0, void 0, function* () {
+      const player = yield custom_elements_findPlayer(this);
+      if (isUndefined(player))
+        return;
+      const container = (yield player.getContainer());
+      const resizeObs = new ResizeObserver(entries => {
+        const entry = entries[0];
+        const { width } = entry.contentRect;
+        if (width >= 1360) {
+          this.fontSize = 'xl';
+        }
+        else if (width >= 1024) {
+          this.fontSize = 'lg';
+        }
+        else if (width >= 768) {
+          this.fontSize = 'md';
+        }
+        else {
+          this.fontSize = 'sm';
+        }
+      });
+      resizeObs.observe(container);
+    });
+  }
+  renderCurrentCue(cue) {
+    if (isNil(cue)) {
+      this.cue = '';
+      return;
+    }
+    const div = document.createElement('div');
+    div.append(cue.getCueAsHTML());
+    this.cue = div.innerHTML.trim();
+  }
+  render() {
+    return (h("div", { style: {
+        transform: `translateY(calc(${this.isControlsActive ? 'var(--vm-controls-height)' : '24px'} * -1))`,
+      }, class: {
+        captions: true,
+        enabled: this.isEnabled,
+        hidden: this.hidden,
+        fontMd: this.fontSize === 'md',
+        fontLg: this.fontSize === 'lg',
+        fontXl: this.fontSize === 'xl',
+        inactive: !this.isTextTrackVisible,
+      } }, h("span", { class: "cue" }, this.cue)));
+  }
+  static get watchers() { return {
+    "isVideoView": ["onEnabledChange"],
+    "playbackStarted": ["onEnabledChange"],
+    "textTracks": ["onTextTracksChange"],
+    "currentTextTrack": ["onTextTracksChange"]
+  }; }
+  static get style() { return captionsCss; }
+};
+
+const clickToPlayCss = ":host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:var(--vm-click-to-play-z-index)}.clickToPlay{display:none;width:100%;height:100%;pointer-events:none}.clickToPlay.enabled{display:inline-block;pointer-events:auto}";
+
+var __awaiter$s = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const ClickToPlay = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /**
+     * By default this is disabled on mobile to not interfere with playback, set this to `true` to
+     * enable it.
+     */
+    this.useOnMobile = false;
+    /** @internal */
+    this.paused = true;
+    /** @internal */
+    this.isVideoView = false;
+    /** @internal */
+    this.isMobile = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['paused', 'isVideoView', 'isMobile']);
+  }
+  connectedCallback() {
+    this.dispatch = custom_elements_createDispatcher(this);
+  }
+  /** @internal */
+  forceClick() {
+    return __awaiter$s(this, void 0, void 0, function* () {
+      this.onClick();
+    });
+  }
+  onClick() {
+    this.dispatch('paused', !this.paused);
+  }
+  render() {
+    return (h("div", { class: {
+        clickToPlay: true,
+        enabled: this.isVideoView && (!this.isMobile || this.useOnMobile),
+      }, onClick: this.onClick.bind(this) }));
+  }
+  static get style() { return clickToPlayCss; }
+};
+
+const controlCss = "button{display:flex;align-items:center;flex-direction:row;border:var(--vm-control-border);cursor:pointer;flex-shrink:0;font-size:var(--vm-control-icon-size);color:var(--vm-control-color);background:var(--vm-control-bg, transparent);border-radius:var(--vm-control-border-radius);padding:var(--vm-control-padding);position:relative;pointer-events:auto;transition:all 0.3s ease;transform:scale(var(--vm-control-scale, 1));touch-action:manipulation;box-sizing:border-box}button.hidden{display:none}button:focus{outline:0}button.tapHighlight{background:var(--vm-control-tap-highlight)}button.notTouch:focus,button.notTouch:hover,button.notTouch[aria-expanded='true']{background:var(--vm-control-focus-bg);color:var(--vm-control-focus-color);transform:scale(calc(var(--vm-control-scale, 1) + 0.06))}";
+
+var __awaiter$r = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const Control = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmInteractionChange = createEvent(this, "vmInteractionChange", 7);
+    this.vmFocus = createEvent(this, "vmFocus", 7);
+    this.vmBlur = createEvent(this, "vmBlur", 7);
+    this.keyboardDisposal = new Disposal();
+    this.showTapHighlight = false;
+    /**
+     * Whether the control should be displayed or not.
+     */
+    this.hidden = false;
+    /** @internal */
+    this.isTouch = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['isTouch']);
+  }
+  onKeysChange() {
+    return __awaiter$r(this, void 0, void 0, function* () {
+      this.keyboardDisposal.empty();
+      if (isUndefined(this.keys))
+        return;
+      const player = yield custom_elements_findPlayer(this);
+      const codes = this.keys.split('/');
+      if (isUndefined(player))
+        return;
+      this.keyboardDisposal.add(listen(player, 'keydown', (event) => {
+        if (codes.includes(event.key)) {
+          this.button.click();
+        }
+      }));
+    });
+  }
+  connectedCallback() {
+    this.findTooltip();
+    this.onKeysChange();
+  }
+  componentWillLoad() {
+    this.findTooltip();
+  }
+  disconnectedCallback() {
+    this.keyboardDisposal.empty();
+  }
+  /**
+   * Focuses the control.
+   */
+  focusControl() {
+    var _a;
+    return __awaiter$r(this, void 0, void 0, function* () {
+      (_a = this.button) === null || _a === void 0 ? void 0 : _a.focus();
+    });
+  }
+  /**
+   * Removes focus from the control.
+   */
+  blurControl() {
+    var _a;
+    return __awaiter$r(this, void 0, void 0, function* () {
+      (_a = this.button) === null || _a === void 0 ? void 0 : _a.blur();
+    });
+  }
+  onTouchStart() {
+    this.showTapHighlight = true;
+  }
+  onTouchEnd() {
+    setTimeout(() => {
+      this.showTapHighlight = false;
+    }, 100);
+  }
+  findTooltip() {
+    const tooltip = this.host.querySelector('vm-tooltip');
+    if (!isNull(tooltip))
+      this.describedBy = tooltip.id;
+    return tooltip;
+  }
+  onShowTooltip() {
+    const tooltip = this.findTooltip();
+    if (!isNull(tooltip))
+      tooltip.active = true;
+    this.vmInteractionChange.emit(true);
+  }
+  onHideTooltip() {
+    const tooltip = this.findTooltip();
+    if (!isNull(tooltip))
+      tooltip.active = false;
+    this.button.blur();
+    this.vmInteractionChange.emit(false);
+  }
+  onFocus() {
+    this.vmFocus.emit();
+    this.onShowTooltip();
+  }
+  onBlur() {
+    this.vmBlur.emit();
+    this.onHideTooltip();
+  }
+  onMouseEnter() {
+    this.onShowTooltip();
+  }
+  onMouseLeave() {
+    this.onHideTooltip();
+  }
+  render() {
+    const isMenuExpanded = this.expanded ? 'true' : 'false';
+    const isPressed = this.pressed ? 'true' : 'false';
+    return (h("button", { class: {
+        hidden: this.hidden,
+        notTouch: !this.isTouch,
+        tapHighlight: this.showTapHighlight,
+      }, id: this.identifier, type: "button", "aria-label": this.label, "aria-haspopup": !isUndefined(this.menu) ? 'true' : undefined, "aria-controls": this.menu, "aria-expanded": !isUndefined(this.menu) ? isMenuExpanded : undefined, "aria-pressed": !isUndefined(this.pressed) ? isPressed : undefined, "aria-hidden": this.hidden ? 'true' : 'false', "aria-describedby": this.describedBy, onTouchStart: this.onTouchStart.bind(this), onTouchEnd: this.onTouchEnd.bind(this), onFocus: this.onFocus.bind(this), onBlur: this.onBlur.bind(this), onMouseEnter: this.onMouseEnter.bind(this), onMouseLeave: this.onMouseLeave.bind(this), ref: (el) => {
+        this.button = el;
+      } }, h("slot", null)));
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "keys": ["onKeysChange"]
+  }; }
+  static get style() { return controlCss; }
+};
+
+const controlGroupCss = ":host{width:100%}.controlGroup{position:relative;width:100%;display:flex;flex-wrap:wrap;flex-direction:inherit;align-items:inherit;justify-content:inherit;box-sizing:border-box}.controlGroup.spaceTop{margin-top:var(--vm-control-group-spacing)}.controlGroup.spaceBottom{margin-bottom:var(--vm-control-group-spacing)}::slotted(*){margin-left:var(--vm-controls-spacing)}::slotted(*:first-child){margin-left:0}";
+
+const ControlNewLine = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /**
+     * Determines where to add spacing/margin. The amount of spacing is determined by the CSS variable
+     * `--control-group-spacing`.
+     */
+    this.space = 'none';
+    withComponentRegistry(this);
+  }
+  render() {
+    return (h("div", { class: {
+        controlGroup: true,
+        spaceTop: this.space !== 'none' && this.space !== 'bottom',
+        spaceBottom: this.space !== 'none' && this.space !== 'top',
+      } }, h("slot", null)));
+  }
+  get host() { return this; }
+  static get style() { return controlGroupCss; }
+};
+
+const controlSpacerCss = ":host{flex:1}";
+
+const ControlSpacer = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    withComponentRegistry(this);
+  }
+  static get style() { return controlSpacerCss; }
+};
+
+const debounce = (func, wait = 1000, immediate = false) => {
+  let timeout;
+  return function executedFunction(...args) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    const context = this;
+    const later = function delayedFunctionCall() {
+      timeout = undefined;
+      if (!immediate)
+        func.apply(context, args);
+    };
+    const callNow = immediate && isUndefined(timeout);
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+    if (callNow)
+      func.apply(context, args);
+  };
+};
+
+const controlsCss = ":host{position:relative;width:100%;z-index:var(--vm-controls-z-index)}:host([video]){position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}.controls{display:flex;width:100%;position:absolute;flex-wrap:wrap;pointer-events:auto;box-sizing:border-box;background:var(--vm-controls-bg);padding:var(--vm-controls-padding);border-radius:var(--vm-controls-border-radius);opacity:0;visibility:hidden;transition:var(--vm-fade-transition)}.controls.audio{position:relative}.controls.hidden{display:none}.controls.active{opacity:1;visibility:visible}.controls.fullWidth{width:100%}.controls.fullHeight{height:100%}::slotted(*:not(vm-control-group)){margin-left:var(--vm-controls-spacing)}::slotted(*:not(vm-control-group):first-child){margin-left:0}";
+
+var __awaiter$q = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+/**
+ * We want to keep the controls active state in-sync per player.
+ */
+const playerRef = {};
+const hideControlsTimeout = {};
+const Controls = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.disposal = new Disposal();
+    this.isInteracting = false;
+    /**
+     * Whether the controls are visible or not.
+     */
+    this.hidden = false;
+    /**
+     * Whether the controls container should be 100% width. This has no effect if the view is of
+     * type `audio`.
+     */
+    this.fullWidth = false;
+    /**
+     * Whether the controls container should be 100% height. This has no effect if the view is of
+     * type `audio`.
+     */
+    this.fullHeight = false;
+    /**
+     * Sets the `flex-direction` property that manages the direction in which the controls are layed
+     * out.
+     */
+    this.direction = 'row';
+    /**
+     * Sets the `align-items` flex property that aligns the individual controls on the cross-axis.
+     */
+    this.align = 'center';
+    /**
+     * Sets the `justify-content` flex property that aligns the individual controls on the main-axis.
+     */
+    this.justify = 'start';
+    /**
+     * Pins the controls to the defined position inside the video player. This has no effect when
+     * the view is of type `audio`.
+     */
+    this.pin = 'bottomLeft';
+    /**
+     * The length in milliseconds that the controls are active for before fading out. Audio players
+     * are not effected by this prop.
+     */
+    this.activeDuration = 2750;
+    /**
+     * Whether the controls should wait for playback to start before being shown. Audio players
+     * are not effected by this prop.
+     */
+    this.waitForPlaybackStart = false;
+    /**
+     * Whether the controls should show/hide when paused. Audio players are not effected by this prop.
+     */
+    this.hideWhenPaused = false;
+    /**
+     * Whether the controls should hide when the mouse leaves the player. Audio players are not
+     * effected by this prop.
+     */
+    this.hideOnMouseLeave = false;
+    /** @internal */
+    this.isAudioView = false;
+    /** @internal */
+    this.isSettingsActive = false;
+    /** @internal */
+    this.playbackReady = false;
+    /** @internal */
+    this.isControlsActive = false;
+    /** @internal */
+    this.paused = true;
+    /** @internal */
+    this.playbackStarted = false;
+    withComponentRegistry(this);
+    registerControlsForCollisionDetection(this);
+    withPlayerContext(this, [
+      'playbackReady',
+      'isAudioView',
+      'isControlsActive',
+      'isSettingsActive',
+      'paused',
+      'playbackStarted',
+    ]);
+  }
+  connectedCallback() {
+    this.dispatch = custom_elements_createDispatcher(this);
+    this.onControlsChange();
+    this.setupPlayerListeners();
+  }
+  componentWillLoad() {
+    this.onControlsChange();
+  }
+  disconnectedCallback() {
+    this.disposal.empty();
+    delete hideControlsTimeout[playerRef[this]];
+    delete playerRef[this];
+  }
+  setupPlayerListeners() {
+    return __awaiter$q(this, void 0, void 0, function* () {
+      const player = yield custom_elements_findPlayer(this);
+      if (isUndefined(player))
+        return;
+      const events = ['focus', 'keydown', 'click', 'touchstart', 'mouseleave'];
+      events.forEach(event => {
+        this.disposal.add(listen(player, event, this.onControlsChange.bind(this)));
+      });
+      this.disposal.add(listen(player, 'mousemove', debounce(this.onControlsChange, 50, true).bind(this)));
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      playerRef[this] = player;
+    });
+  }
+  show() {
+    this.dispatch('isControlsActive', true);
+  }
+  hide() {
+    this.dispatch('isControlsActive', false);
+  }
+  hideWithDelay() {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    clearTimeout(hideControlsTimeout[playerRef[this]]);
+    hideControlsTimeout[playerRef[this]] = setTimeout(() => {
+      this.hide();
+    }, this.activeDuration);
+  }
+  onControlsChange(event) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    clearTimeout(hideControlsTimeout[playerRef[this]]);
+    if (this.hidden || !this.playbackReady) {
+      this.hide();
+      return;
+    }
+    if (this.isAudioView) {
+      this.show();
+      return;
+    }
+    if (this.waitForPlaybackStart && !this.playbackStarted) {
+      this.hide();
+      return;
+    }
+    if (this.isInteracting || this.isSettingsActive) {
+      this.show();
+      return;
+    }
+    if (this.hideWhenPaused && this.paused) {
+      this.hideWithDelay();
+      return;
+    }
+    if (this.hideOnMouseLeave && !this.paused && (event === null || event === void 0 ? void 0 : event.type) === 'mouseleave') {
+      this.hide();
+      return;
+    }
+    if (!this.paused) {
+      this.show();
+      this.hideWithDelay();
+      return;
+    }
+    this.show();
+  }
+  getPosition() {
+    if (this.isAudioView)
+      return {};
+    if (this.pin === 'center') {
+      return {
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+      };
+    }
+    // topLeft => { top: 0, left: 0 }
+    const pos = this.pin.split(/(?=[L|R])/).map(s => s.toLowerCase());
+    return { [pos[0]]: 0, [pos[1]]: 0 };
+  }
+  onStartInteraction() {
+    this.isInteracting = true;
+  }
+  onEndInteraction() {
+    this.isInteracting = false;
+  }
+  render() {
+    return (h(Host, { video: !this.isAudioView }, h("div", { style: Object.assign(Object.assign({}, this.getPosition()), { flexDirection: this.direction, alignItems: this.align === 'center' ? 'center' : `flex-${this.align}`, justifyContent: this.justify }), class: {
+        controls: true,
+        audio: this.isAudioView,
+        hidden: this.hidden,
+        active: this.playbackReady && this.isControlsActive,
+        fullWidth: this.isAudioView || this.fullWidth,
+        fullHeight: !this.isAudioView && this.fullHeight,
+      }, onMouseEnter: this.onStartInteraction.bind(this), onMouseLeave: this.onEndInteraction.bind(this), onTouchStart: this.onStartInteraction.bind(this), onTouchEnd: this.onEndInteraction.bind(this) }, h("slot", null))));
+  }
+  static get watchers() { return {
+    "paused": ["onControlsChange"],
+    "hidden": ["onControlsChange"],
+    "isAudioView": ["onControlsChange"],
+    "isInteracting": ["onControlsChange"],
+    "isSettingsActive": ["onControlsChange"],
+    "hideWhenPaused": ["onControlsChange"],
+    "hideOnMouseLeave": ["onControlsChange"],
+    "playbackStarted": ["onControlsChange"],
+    "waitForPlaybackStart": ["onControlsChange"],
+    "playbackReady": ["onControlsChange"]
+  }; }
+  static get style() { return controlsCss; }
+};
+
+const currentTimeCss = ":host{display:flex;align-items:center;justify-content:center}";
+
+const CurrentTime = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /** @internal */
+    this.currentTime = 0;
+    /** @internal */
+    this.i18n = {};
+    /**
+     * Whether the time should always show the hours unit, even if the time is less than
+     * 1 hour (eg: `20:35` -> `00:20:35`).
+     */
+    this.alwaysShowHours = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['currentTime', 'i18n']);
+  }
+  render() {
+    return (h("vm-time", { label: this.i18n.currentTime, seconds: this.currentTime, alwaysShowHours: this.alwaysShowHours }));
+  }
+  static get style() { return currentTimeCss; }
+};
+
+var _a, _b;
+const IS_CLIENT = typeof window !== 'undefined';
+const UA = IS_CLIENT ? (_a = window.navigator) === null || _a === void 0 ? void 0 : _a.userAgent.toLowerCase() : '';
+const IS_IOS = /iphone|ipad|ipod|ios|CriOS|FxiOS/.test(UA);
+const IS_ANDROID = /android/.test(UA);
+const IS_MOBILE = IS_CLIENT && (IS_IOS || IS_ANDROID);
+const IS_IPHONE = IS_CLIENT && /(iPhone|iPod)/gi.test((_b = window.navigator) === null || _b === void 0 ? void 0 : _b.platform);
+/firefox/.test(UA);
+const IS_CHROME = IS_CLIENT && window.chrome;
+IS_CLIENT &&
+  !IS_CHROME &&
+  (window.safari || IS_IOS || /(apple|safari)/.test(UA));
+const onMobileChange = (callback) => {
+  if (!IS_CLIENT || isUndefined(window.ResizeObserver)) {
+    callback(IS_MOBILE);
+    return noop;
+  }
+  function onResize() {
+    callback(window.innerWidth <= 480 || IS_MOBILE);
+  }
+  callback(window.innerWidth <= 480 || IS_MOBILE);
+  return listen(window, 'resize', onResize);
+};
+const onTouchInputChange = (callback) => {
+  if (!IS_CLIENT)
+    return noop;
+  let lastTouchTime = 0;
+  const offTouchListener = listen(document, 'touchstart', () => {
+    lastTouchTime = new Date().getTime();
+    callback(true);
+  }, true);
+  const offMouseListener = listen(document, 'mousemove', () => {
+    // Filter emulated events coming from touch events
+    if (new Date().getTime() - lastTouchTime < 500)
+      return;
+    callback(false);
+  }, true);
+  return () => {
+    offTouchListener();
+    offMouseListener();
+  };
+};
+/**
+ * Checks if the screen orientation can be changed.
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Screen/orientation
+ */
+const canRotateScreen = () => IS_CLIENT && window.screen.orientation && !!window.screen.orientation.lock;
+/**
+ * Checks if the native HTML5 video player can enter picture-in-picture (PIP) mode when using
+ * the Chrome browser.
+ *
+ * @see  https://developers.google.com/web/updates/2018/10/watch-video-using-picture-in-picture
+ */
+const canUsePiPInChrome = () => {
+  if (!IS_CLIENT)
+    return false;
+  const video = document.createElement('video');
+  return !!document.pictureInPictureEnabled && !video.disablePictureInPicture;
+};
+/**
+ * Checks if the native HTML5 video player can enter picture-in-picture (PIP) mode when using
+ * the desktop Safari browser, iOS Safari appears to "support" PiP through the check, however PiP
+ * does not function.
+ *
+ * @see https://developer.apple.com/documentation/webkitjs/adding_picture_in_picture_to_your_safari_media_controls
+ */
+const canUsePiPInSafari = () => {
+  if (!IS_CLIENT)
+    return false;
+  const video = document.createElement('video');
+  return (isFunction(video.webkitSupportsPresentationMode) &&
+    isFunction(video.webkitSetPresentationMode) &&
+    !IS_IPHONE);
+};
+// Checks if the native HTML5 video player can enter PIP.
+const canUsePiP = () => canUsePiPInChrome() || canUsePiPInSafari();
+/**
+ * To detect autoplay, we create a video element and call play on it, if it is `paused` after
+ * a `play()` call, autoplay is supported. Although this unintuitive, it works across browsers
+ * and is currently the lightest way to detect autoplay without using a data source.
+ *
+ * @see https://github.com/ampproject/amphtml/blob/9bc8756536956780e249d895f3e1001acdee0bc0/src/utils/video.js#L25
+ */
+const canAutoplay = (muted = true, playsinline = true) => {
+  if (!IS_CLIENT)
+    return Promise.resolve(false);
+  const video = document.createElement('video');
+  if (muted) {
+    video.setAttribute('muted', '');
+    video.muted = true;
+  }
+  if (playsinline) {
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+  }
+  video.setAttribute('height', '0');
+  video.setAttribute('width', '0');
+  video.style.position = 'fixed';
+  video.style.top = '0';
+  video.style.width = '0';
+  video.style.height = '0';
+  video.style.opacity = '0';
+  // Promise wrapped this way to catch both sync throws and async rejections.
+  // More info: https://github.com/tc39/proposal-promise-try
+  new Promise(resolve => resolve(video.play())).catch(noop);
+  return Promise.resolve(!video.paused);
+};
+
+/**
+ * Attempt to parse json into a POJO.
+ */
+function tryParseJSON(json) {
+  if (!isString(json))
+    return undefined;
+  try {
+    return JSON.parse(json);
+  }
+  catch (e) {
+    return undefined;
+  }
+}
+/**
+ * Check if the given input is json or a plain object.
+ */
+const isObjOrJSON = (input) => !isNil(input) &&
+  (custom_elements_isObject(input) || (isString(input) && input.startsWith('{')));
+/**
+ * If an object return otherwise try to parse it as json.
+ */
+const objOrParseJSON = (input) => custom_elements_isObject(input) ? input : tryParseJSON(input);
+/**
+ * Load image avoiding xhr/fetch CORS issues. Server status can't be obtained this way
+ * unfortunately, so this uses "naturalWidth" to determine if the image has been loaded. By
+ * default it checks if it is at least 1px.
+ */
+const custom_elements_loadImage = (src, minWidth = 1) => new Promise((resolve, reject) => {
+  const image = new Image();
+  const handler = () => {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    delete image.onload;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    delete image.onerror;
+    image.naturalWidth >= minWidth ? resolve(image) : reject(image);
+  };
+  Object.assign(image, { onload: handler, onerror: handler, src });
+});
+const loadScript = (src, onLoad, onError = noop) => {
+  var _a;
+  const script = document.createElement('script');
+  script.src = src;
+  script.onload = onLoad;
+  script.onerror = onError;
+  const firstScriptTag = document.getElementsByTagName('script')[0];
+  (_a = firstScriptTag.parentNode) === null || _a === void 0 ? void 0 : _a.insertBefore(script, firstScriptTag);
+};
+/**
+ * Tries to parse json and return a object.
+ */
+const decodeJSON = (data) => {
+  if (!isObjOrJSON(data))
+    return undefined;
+  return objOrParseJSON(data);
+};
+/**
+ * Attempts to safely decode a URI component, on failure it returns the given fallback.
+ */
+const tryDecodeURIComponent = (component, fallback = '') => {
+  if (!IS_CLIENT)
+    return fallback;
+  try {
+    return window.decodeURIComponent(component);
+  }
+  catch (e) {
+    return fallback;
+  }
+};
+/**
+ * Returns a simple key/value map and duplicate keys are merged into an array.
+ *
+ * @see https://github.com/ampproject/amphtml/blob/c7c46cec71bac92f5c5da31dcc6366c18577f566/src/url-parse-query-string.js#L31
+ */
+const QUERY_STRING_REGEX = /(?:^[#?]?|&)([^=&]+)(?:=([^&]*))?/g;
+const parseQueryString = (qs) => {
+  const params = Object.create(null);
+  if (isUndefined(qs))
+    return params;
+  let match;
+  // eslint-disable-next-line no-cond-assign
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  while ((match = QUERY_STRING_REGEX.exec(qs))) {
+    const name = tryDecodeURIComponent(match[1], match[1]).replace('[]', '');
+    const value = isString(match[2])
+      ? tryDecodeURIComponent(match[2].replace(/\+/g, ' '), match[2])
+      : '';
+    const currValue = params[name];
+    if (currValue && !isArray(currValue))
+      params[name] = [currValue];
+    currValue ? params[name].push(value) : (params[name] = value);
+  }
+  return params;
+};
+/**
+ * Serializes the given params into a query string.
+ */
+const serializeQueryString = (params) => {
+  const qs = [];
+  const appendQueryParam = (param, v) => {
+    qs.push(`${encodeURIComponent(param)}=${encodeURIComponent(v)}`);
+  };
+  Object.keys(params).forEach(param => {
+    const value = params[param];
+    if (isNil(value))
+      return;
+    if (isArray(value)) {
+      value.forEach((v) => appendQueryParam(param, v));
+    }
+    else {
+      appendQueryParam(param, value);
+    }
+  });
+  return qs.join('&');
+};
+/**
+ * Notifies the browser to start establishing a connection with the given URL.
+ */
+const preconnect = (url, rel = 'preconnect', as) => {
+  if (!IS_CLIENT)
+    return false;
+  const link = document.createElement('link');
+  link.rel = rel;
+  link.href = url;
+  if (!isUndefined(as))
+    link.as = as;
+  link.crossOrigin = 'true';
+  document.head.append(link);
+  return true;
+};
+/**
+ * Safely appends the given query string to the given URL.
+ */
+const appendQueryStringToURL = (url, qs) => {
+  if (isUndefined(qs) || qs.length === 0)
+    return url;
+  const mainAndQuery = url.split('?', 2);
+  return (mainAndQuery[0] +
+    (!isUndefined(mainAndQuery[1]) ? `?${mainAndQuery[1]}&${qs}` : `?${qs}`));
+};
+/**
+ * Serializes the given params into a query string and appends them to the given URL.
+ */
+const appendParamsToURL = (url, params) => appendQueryStringToURL(url, custom_elements_isObject(params)
+  ? serializeQueryString(params)
+  : params);
+/**
+ * Tries to convert a query string into a object.
+ */
+const decodeQueryString = (qs) => {
+  if (!isString(qs))
+    return undefined;
+  return parseQueryString(qs);
+};
+const pendingSDKRequests = {};
+/**
+ * Loads an SDK into the global window namespace.
+ *
+ * @see https://github.com/CookPete/react-player/blob/master/src/utils.js#L77
+ */
+const loadSDK = (url, sdkGlobalVar, sdkReadyVar, isLoaded = () => true, loadScriptFn = loadScript) => {
+  const getGlobal = (key) => {
+    if (!isUndefined(window[key]))
+      return window[key];
+    if (window.exports && window.exports[key])
+      return window.exports[key];
+    if (window.module && window.module.exports && window.module.exports[key]) {
+      return window.module.exports[key];
+    }
+    return undefined;
+  };
+  const existingGlobal = getGlobal(sdkGlobalVar);
+  if (existingGlobal && isLoaded(existingGlobal)) {
+    return Promise.resolve(existingGlobal);
+  }
+  return new Promise((resolve, reject) => {
+    if (!isUndefined(pendingSDKRequests[url])) {
+      pendingSDKRequests[url].push({ resolve, reject });
+      return;
+    }
+    pendingSDKRequests[url] = [{ resolve, reject }];
+    const onLoaded = (sdk) => {
+      pendingSDKRequests[url].forEach(request => request.resolve(sdk));
+    };
+    if (!isUndefined(sdkReadyVar)) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const previousOnReady = window[sdkReadyVar];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      window[sdkReadyVar] = function () {
+        if (!isUndefined(previousOnReady))
+          previousOnReady();
+        onLoaded(getGlobal(sdkGlobalVar));
+      };
+    }
+    loadScriptFn(url, () => {
+      if (isUndefined(sdkReadyVar))
+        onLoaded(getGlobal(sdkGlobalVar));
+    }, e => {
+      pendingSDKRequests[url].forEach(request => {
+        request.reject(e);
+      });
+      delete pendingSDKRequests[url];
+    });
+  });
+};
+
+const withProviderContext = (provider, additionalProps = []) => withPlayerContext(provider, [
+  'autoplay',
+  'controls',
+  'language',
+  'muted',
+  'logger',
+  'loop',
+  'aspectRatio',
+  'playsinline',
+  ...additionalProps,
+]);
+
+const dailymotionCss = ":host{z-index:var(--vm-media-z-index)}";
+
+var __awaiter$p = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const videoInfoCache$1 = new Map();
+const Dailymotion = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmLoadStart = createEvent(this, "vmLoadStart", 7);
+    this.vmError = createEvent(this, "vmError", 7);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this.defaultInternalState = {};
+    this.internalState = {
+      currentTime: 0,
+      volume: 0,
+      muted: false,
+      isAdsPlaying: false,
+      playbackReady: false,
+    };
+    this.embedSrc = '';
+    this.mediaTitle = '';
+    /**
+     * Whether to automatically play the next video in the queue.
+     */
+    this.shouldAutoplayQueue = false;
+    /**
+     * Whether to show the 'Up Next' queue.
+     */
+    this.showUpNextQueue = false;
+    /**
+     * Whether to show buttons for sharing the video.
+     */
+    this.showShareButtons = false;
+    /**
+     * Whether to display the Dailymotion logo.
+     */
+    this.showDailymotionLogo = false;
+    /**
+     * Whether to show video information (title and owner) on the start screen.
+     */
+    this.showVideoInfo = true;
+    /** @internal */
+    this.language = 'en';
+    /** @internal */
+    this.autoplay = false;
+    /** @internal */
+    this.controls = false;
+    /** @internal */
+    this.loop = false;
+    /** @internal */
+    this.muted = false;
+    /** @internal */
+    this.playsinline = false;
+    withComponentRegistry(this);
+    withProviderConnect(this);
+    withProviderContext(this);
+  }
+  onVideoIdChange() {
+    this.internalState = Object.assign({}, this.defaultInternalState);
+    if (!this.videoId) {
+      this.embedSrc = '';
+      return;
+    }
+    this.embedSrc = `${this.getOrigin()}/embed/video/${this.videoId}?api=1`;
+    this.fetchVideoInfo = this.getVideoInfo();
+    this.pendingMediaTitleCall = deferredPromise();
+  }
+  onControlsChange() {
+    if (this.internalState.playbackReady) {
+      this.remoteControl("controls" /* Controls */, this.controls);
+    }
+  }
+  onCustomPosterChange() {
+    this.dispatch('currentPoster', this.poster);
+  }
+  connectedCallback() {
+    this.dispatch = createProviderDispatcher(this);
+    this.dispatch('viewType', ViewType.Video);
+    this.onVideoIdChange();
+    this.initialMuted = this.muted;
+    this.internalState.muted = this.muted;
+    this.defaultInternalState = Object.assign({}, this.internalState);
+  }
+  getOrigin() {
+    return 'https://www.dailymotion.com';
+  }
+  getPreconnections() {
+    return [this.getOrigin(), 'https://static1.dmcdn.net'];
+  }
+  remoteControl(command, arg) {
+    return this.embed.postMessage({
+      command,
+      parameters: arg ? [arg] : [],
+    });
+  }
+  buildParams() {
+    return {
+      autoplay: this.autoplay,
+      mute: this.initialMuted,
+      'queue-autoplay-next': this.shouldAutoplayQueue,
+      'queue-enable': this.showUpNextQueue,
+      'sharing-enable': this.showShareButtons,
+      syndication: this.syndication,
+      'ui-highlight': this.color,
+      'ui-logo': this.showDailymotionLogo,
+      'ui-start-screen-info': this.showVideoInfo,
+    };
+  }
+  getVideoInfo() {
+    return __awaiter$p(this, void 0, void 0, function* () {
+      if (videoInfoCache$1.has(this.videoId))
+        return videoInfoCache$1.get(this.videoId);
+      const apiEndpoint = 'https://api.dailymotion.com';
+      return window
+        .fetch(`${apiEndpoint}/video/${this.videoId}?fields=duration,thumbnail_1080_url`)
+        .then(response => response.json())
+        .then(data => {
+        const poster = data.thumbnail_1080_url;
+        const duration = parseFloat(data.duration);
+        videoInfoCache$1.set(this.videoId, { poster, duration });
+        return { poster, duration };
+      });
+    });
+  }
+  onEmbedSrcChange() {
+    this.vmLoadStart.emit();
+    this.dispatch('viewType', ViewType.Video);
+  }
+  onEmbedMessage(event) {
+    var _a, _b;
+    const msg = event.detail;
+    switch (msg.event) {
+      case "playback_ready" /* PlaybackReady */:
+        this.onControlsChange();
+        this.dispatch('currentSrc', this.embedSrc);
+        this.dispatch('mediaType', MediaType.Video);
+        Promise.all([
+          this.fetchVideoInfo,
+          (_a = this.pendingMediaTitleCall) === null || _a === void 0 ? void 0 : _a.promise,
+        ]).then(([info, mediaTitle]) => {
+          var _a, _b;
+          this.dispatch('duration', (_a = info === null || info === void 0 ? void 0 : info.duration) !== null && _a !== void 0 ? _a : -1);
+          this.dispatch('currentPoster', (_b = this.poster) !== null && _b !== void 0 ? _b : info === null || info === void 0 ? void 0 : info.poster);
+          this.dispatch('mediaTitle', mediaTitle);
+          this.dispatch('playbackReady', true);
+        });
+        break;
+      case "videochange" /* VideoChange */:
+        (_b = this.pendingMediaTitleCall) === null || _b === void 0 ? void 0 : _b.resolve(msg.title);
+        break;
+      case "start" /* Start */:
+        this.dispatch('paused', false);
+        this.dispatch('playbackStarted', true);
+        this.dispatch('buffering', true);
+        break;
+      case "video_start" /* VideoStart */:
+        // Commands don't go through until ads have finished, so we store them and then replay them
+        // once the video starts.
+        this.remoteControl("muted" /* Muted */, this.internalState.muted);
+        this.remoteControl("volume" /* Volume */, this.internalState.volume);
+        if (this.internalState.currentTime > 0) {
+          this.remoteControl("seek" /* Seek */, this.internalState.currentTime);
+        }
+        break;
+      case "play" /* Play */:
+        this.dispatch('paused', false);
+        break;
+      case "pause" /* Pause */:
+        this.dispatch('paused', true);
+        this.dispatch('playing', false);
+        this.dispatch('buffering', false);
+        break;
+      case "playing" /* Playing */:
+        this.dispatch('playing', true);
+        this.dispatch('buffering', false);
+        break;
+      case "video_end" /* VideoEnd */:
+        if (this.loop) {
+          setTimeout(() => {
+            this.remoteControl("play" /* Play */);
+          }, 300);
+        }
+        else {
+          this.dispatch('playbackEnded', true);
+        }
+        break;
+      case "timeupdate" /* TimeUpdate */:
+        this.dispatch('currentTime', parseFloat(msg.time));
+        break;
+      case "volumechange" /* VolumeChange */:
+        this.dispatch('muted', msg.muted === 'true');
+        this.dispatch('volume', Math.floor(parseFloat(msg.volume) * 100));
+        break;
+      case "seeking" /* Seeking */:
+        this.dispatch('currentTime', parseFloat(msg.time));
+        this.dispatch('seeking', true);
+        break;
+      case "seeked" /* Seeked */:
+        this.dispatch('currentTime', parseFloat(msg.time));
+        this.dispatch('seeking', false);
+        break;
+      case "waiting" /* Waiting */:
+        this.dispatch('buffering', true);
+        break;
+      case "progress" /* Progress */:
+        this.dispatch('buffered', parseFloat(msg.time));
+        break;
+      case "durationchange" /* DurationChange */:
+        this.dispatch('duration', parseFloat(msg.duration));
+        break;
+      case "qualitiesavailable" /* QualitiesAvailable */:
+        this.dispatch('playbackQualities', msg.qualities.map((q) => `${q}p`));
+        break;
+      case "qualitychange" /* QualityChange */:
+        this.dispatch('playbackQuality', `${msg.quality}p`);
+        break;
+      case "fullscreenchange" /* FullscreenChange */:
+        this.dispatch('isFullscreenActive', msg.fullscreen === 'true');
+        break;
+      case "error" /* Error */:
+        this.vmError.emit(msg.error);
+        break;
+    }
+  }
+  /** @internal */
+  getAdapter() {
+    return __awaiter$p(this, void 0, void 0, function* () {
+      const canPlayRegex = /(?:dai\.ly|dailymotion|dailymotion\.com)\/(?:video\/|embed\/|)(?:video\/|)((?:\w)+)/;
+      return {
+        getInternalPlayer: () => __awaiter$p(this, void 0, void 0, function* () { return this.embed; }),
+        play: () => __awaiter$p(this, void 0, void 0, function* () {
+          this.remoteControl("play" /* Play */);
+        }),
+        pause: () => __awaiter$p(this, void 0, void 0, function* () {
+          this.remoteControl("pause" /* Pause */);
+        }),
+        canPlay: (type) => __awaiter$p(this, void 0, void 0, function* () { return isString(type) && canPlayRegex.test(type); }),
+        setCurrentTime: (time) => __awaiter$p(this, void 0, void 0, function* () {
+          this.internalState.currentTime = time;
+          this.remoteControl("seek" /* Seek */, time);
+        }),
+        setMuted: (muted) => __awaiter$p(this, void 0, void 0, function* () {
+          this.internalState.muted = muted;
+          this.remoteControl("muted" /* Muted */, muted);
+        }),
+        setVolume: (volume) => __awaiter$p(this, void 0, void 0, function* () {
+          this.internalState.volume = volume / 100;
+          this.dispatch('volume', volume);
+          this.remoteControl("volume" /* Volume */, volume / 100);
+        }),
+        canSetPlaybackQuality: () => __awaiter$p(this, void 0, void 0, function* () { return true; }),
+        setPlaybackQuality: (quality) => __awaiter$p(this, void 0, void 0, function* () {
+          this.remoteControl("quality" /* Quality */, quality.slice(0, -1));
+        }),
+        canSetFullscreen: () => __awaiter$p(this, void 0, void 0, function* () { return true; }),
+        enterFullscreen: () => __awaiter$p(this, void 0, void 0, function* () {
+          this.remoteControl("fullscreen" /* Fullscreen */, true);
+        }),
+        exitFullscreen: () => __awaiter$p(this, void 0, void 0, function* () {
+          this.remoteControl("fullscreen" /* Fullscreen */, false);
+        }),
+      };
+    });
+  }
+  render() {
+    return (h("vm-embed", { embedSrc: this.embedSrc, mediaTitle: this.mediaTitle, origin: this.getOrigin(), params: this.buildParams(), decoder: decodeQueryString, preconnections: this.getPreconnections(), onVmEmbedMessage: this.onEmbedMessage.bind(this), onVmEmbedSrcChange: this.onEmbedSrcChange.bind(this), ref: (el) => {
+        this.embed = el;
+      } }));
+  }
+  static get watchers() { return {
+    "videoId": ["onVideoIdChange"],
+    "controls": ["onControlsChange"],
+    "poster": ["onCustomPosterChange"]
+  }; }
+  static get style() { return dailymotionCss; }
+};
+
+const dashCss = ":host{z-index:var(--vm-media-z-index)}";
+
+var __awaiter$o = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const Dash = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmLoadStart = createEvent(this, "vmLoadStart", 7);
+    this.vmError = createEvent(this, "vmError", 7);
+    this.textTracksDisposal = new Disposal();
+    this.hasAttached = false;
+    /**
+     * The NPM package version of the `dashjs` library to download and use.
+     */
+    this.version = 'latest';
+    /**
+     * The `dashjs` configuration.
+     */
+    this.config = {};
+    /** @internal */
+    this.autoplay = false;
+    /** @inheritdoc */
+    this.preload = 'metadata';
+    /**
+     * Are text tracks enabled by default.
+     */
+    this.enableTextTracksByDefault = true;
+    /** @internal */
+    this.shouldRenderNativeTextTracks = true;
+    /** @internal */
+    this.isTextTrackVisible = true;
+    /** @internal */
+    this.currentTextTrack = -1;
+    withComponentRegistry(this);
+    withProviderConnect(this);
+    withPlayerContext(this, [
+      'autoplay',
+      'shouldRenderNativeTextTracks',
+      'isTextTrackVisible',
+      'currentTextTrack',
+    ]);
+  }
+  onSrcChange() {
+    var _a;
+    if (!this.hasAttached)
+      return;
+    this.vmLoadStart.emit();
+    (_a = this.dash) === null || _a === void 0 ? void 0 : _a.attachSource(this.src);
+  }
+  onShouldRenderNativeTextTracks() {
+    var _a;
+    if (this.shouldRenderNativeTextTracks) {
+      this.textTracksDisposal.empty();
+    }
+    else {
+      this.hideCurrentTextTrack();
+    }
+    (_a = this.dash) === null || _a === void 0 ? void 0 : _a.enableForcedTextStreaming(!this.shouldRenderNativeTextTracks);
+  }
+  onTextTrackChange() {
+    var _a, _b;
+    if (!this.shouldRenderNativeTextTracks || isUndefined(this.dash))
+      return;
+    this.dash.setTextTrack(!this.isTextTrackVisible ? -1 : this.currentTextTrack);
+    if (!this.isTextTrackVisible) {
+      const track = Array.from((_b = (_a = this.mediaEl) === null || _a === void 0 ? void 0 : _a.textTracks) !== null && _b !== void 0 ? _b : [])[this.currentTextTrack];
+      if ((track === null || track === void 0 ? void 0 : track.mode) === 'hidden')
+        this.dispatch('currentTextTrack', -1);
+    }
+  }
+  connectedCallback() {
+    this.dispatch = createProviderDispatcher(this);
+    if (this.mediaEl)
+      this.setupDash();
+  }
+  disconnectedCallback() {
+    this.textTracksDisposal.empty();
+    this.destroyDash();
+  }
+  setupDash() {
+    return __awaiter$o(this, void 0, void 0, function* () {
+      try {
+        const url = this.libSrc ||
+          `https://cdn.jsdelivr.net/npm/dashjs@${this.version}/dist/dash.all.min.js`;
+        const DashSDK = (yield loadSDK(url, 'dashjs'));
+        this.dash = DashSDK.MediaPlayer(this.config).create();
+        this.dash.initialize(this.mediaEl, null, this.autoplay);
+        this.dash.setTextDefaultEnabled(this.enableTextTracksByDefault);
+        this.dash.enableForcedTextStreaming(!this.shouldRenderNativeTextTracks);
+        this.dash.on(DashSDK.MediaPlayer.events.PLAYBACK_METADATA_LOADED, () => {
+          this.dispatch('mediaType', MediaType.Video);
+          this.dispatch('currentSrc', this.src);
+          this.dispatchLevels();
+          this.listenToTextTracksForChanges();
+          this.dispatch('playbackReady', true);
+        });
+        this.dash.on(DashSDK.MediaPlayer.events.TRACK_CHANGE_RENDERED, () => {
+          if (!this.shouldRenderNativeTextTracks)
+            this.hideCurrentTextTrack();
+        });
+        this.dash.on(DashSDK.MediaPlayer.events.ERROR, (e) => {
+          this.vmError.emit(e);
+        });
+        this.hasAttached = true;
+      }
+      catch (e) {
+        this.vmError.emit(e);
+      }
+    });
+  }
+  destroyDash() {
+    var _a;
+    return __awaiter$o(this, void 0, void 0, function* () {
+      (_a = this.dash) === null || _a === void 0 ? void 0 : _a.reset();
+      this.hasAttached = false;
+    });
+  }
+  onMediaElChange(event) {
+    return __awaiter$o(this, void 0, void 0, function* () {
+      this.destroyDash();
+      if (isUndefined(event.detail))
+        return;
+      this.mediaEl = event.detail;
+      yield this.setupDash();
+    });
+  }
+  levelToPlaybackQuality(level) {
+    return level === -1 ? 'Auto' : `${level.height}p`;
+  }
+  findLevelIndexFromQuality(quality) {
+    return this.dash
+      .getBitrateInfoListFor('video')
+      .findIndex((level) => this.levelToPlaybackQuality(level) === quality);
+  }
+  dispatchLevels() {
+    try {
+      const levels = this.dash.getBitrateInfoListFor('video');
+      if ((levels === null || levels === void 0 ? void 0 : levels.length) > 0) {
+        this.dispatch('playbackQualities', [
+          'Auto',
+          ...levels.map(this.levelToPlaybackQuality),
+        ]);
+        this.dispatch('playbackQuality', 'Auto');
+      }
+    }
+    catch (e) {
+      this.vmError.emit(e);
+    }
+  }
+  listenToTextTracksForChanges() {
+    var _a, _b, _c;
+    this.textTracksDisposal.empty();
+    if (isUndefined(this.mediaEl) || this.shouldRenderNativeTextTracks)
+      return;
+    // Init current track.
+    const currentTrack = (_c = ((_b = (_a = this.dash) === null || _a === void 0 ? void 0 : _a.getCurrentTrackFor('text')) === null || _b === void 0 ? void 0 : _b.index) - 1) !== null && _c !== void 0 ? _c : -1;
+    this.currentTextTrack = currentTrack;
+    this.dispatch('currentTextTrack', currentTrack);
+    this.textTracksDisposal.add(listen(this.mediaEl.textTracks, 'change', this.onTextTracksChange.bind(this)));
+  }
+  getTextTracks() {
+    var _a, _b;
+    return Array.from((_b = (_a = this.mediaEl) === null || _a === void 0 ? void 0 : _a.textTracks) !== null && _b !== void 0 ? _b : []);
+  }
+  hideCurrentTextTrack() {
+    const textTracks = this.getTextTracks();
+    if (textTracks[this.currentTextTrack] && this.isTextTrackVisible) {
+      textTracks[this.currentTextTrack].mode = 'hidden';
+    }
+  }
+  onTextTracksChange() {
+    this.hideCurrentTextTrack();
+    this.dispatch('textTracks', this.getTextTracks());
+    this.dispatch('isTextTrackVisible', this.isTextTrackVisible);
+    this.dispatch('currentTextTrack', this.currentTextTrack);
+  }
+  /** @internal */
+  getAdapter() {
+    var _a, _b;
+    return __awaiter$o(this, void 0, void 0, function* () {
+      const adapter = (_b = (yield ((_a = this.videoProvider) === null || _a === void 0 ? void 0 : _a.getAdapter()))) !== null && _b !== void 0 ? _b : {};
+      const canVideoProviderPlay = adapter.canPlay;
+      return Object.assign(Object.assign({}, adapter), { getInternalPlayer: () => __awaiter$o(this, void 0, void 0, function* () { return this.dash; }), canPlay: (type) => __awaiter$o(this, void 0, void 0, function* () {
+          var _c;
+          return (isString(type) && dashRegex.test(type)) ||
+            ((_c = canVideoProviderPlay === null || canVideoProviderPlay === void 0 ? void 0 : canVideoProviderPlay(type)) !== null && _c !== void 0 ? _c : false);
+        }), canSetPlaybackQuality: () => __awaiter$o(this, void 0, void 0, function* () {
+          var _d, _e;
+          try {
+            return ((_e = (_d = this.dash) === null || _d === void 0 ? void 0 : _d.getBitrateInfoListFor('video')) === null || _e === void 0 ? void 0 : _e.length) > 0;
+          }
+          catch (e) {
+            this.vmError.emit(e);
+            return false;
+          }
+        }), setPlaybackQuality: (quality) => __awaiter$o(this, void 0, void 0, function* () {
+          if (!isUndefined(this.dash)) {
+            const index = this.findLevelIndexFromQuality(quality);
+            this.dash.updateSettings({
+              streaming: {
+                abr: {
+                  autoSwitchBitrate: {
+                    video: index === -1,
+                  },
+                },
+              },
+            });
+            if (index >= 0)
+              this.dash.setQualityFor('video', index);
+            // Update the provider cache.
+            this.dispatch('playbackQuality', quality);
+          }
+        }), setCurrentTextTrack: (trackId) => __awaiter$o(this, void 0, void 0, function* () {
+          var _f;
+          if (this.shouldRenderNativeTextTracks) {
+            adapter.setCurrentTextTrack(trackId);
+          }
+          else {
+            this.currentTextTrack = trackId;
+            (_f = this.dash) === null || _f === void 0 ? void 0 : _f.setTextTrack(trackId);
+            this.onTextTracksChange();
+          }
+        }), setTextTrackVisibility: (isVisible) => __awaiter$o(this, void 0, void 0, function* () {
+          var _g;
+          if (this.shouldRenderNativeTextTracks) {
+            adapter.setTextTrackVisibility(isVisible);
+          }
+          else {
+            this.isTextTrackVisible = isVisible;
+            (_g = this.dash) === null || _g === void 0 ? void 0 : _g.enableText(isVisible);
+            this.onTextTracksChange();
+          }
+        }) });
+    });
+  }
+  render() {
+    return (h("vm-video", { willAttach: true, crossOrigin: this.crossOrigin, preload: this.preload, poster: this.poster, controlsList: this.controlsList, autoPiP: this.autoPiP, disablePiP: this.disablePiP, hasCustomTextManager: !this.shouldRenderNativeTextTracks, disableRemotePlayback: this.disableRemotePlayback, mediaTitle: this.mediaTitle, ref: (el) => {
+        this.videoProvider = el;
+      } }));
+  }
+  static get watchers() { return {
+    "src": ["onSrcChange"],
+    "hasAttached": ["onSrcChange"],
+    "shouldRenderNativeTextTracks": ["onShouldRenderNativeTextTracks"],
+    "isTextTrackVisible": ["onTextTrackChange"],
+    "currentTextTrack": ["onTextTrackChange"]
+  }; }
+  static get style() { return dashCss; }
+};
+
+const dblClickFullscreenCss = ":host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:var(--vm-dbl-click-fullscreen-z-index)}.dblClickFullscreen{display:none;width:100%;height:100%;pointer-events:none}.dblClickFullscreen.enabled{display:inline-block;pointer-events:auto}";
+
+var __awaiter$n = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const DblClickFullscreen = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.canSetFullscreen = false;
+    /**
+     * By default this is disabled on mobile to not interfere with playback, set this to `true` to
+     * enable it.
+     */
+    this.useOnMobile = false;
+    /** @internal */
+    this.isFullscreenActive = true;
+    /** @internal */
+    this.isVideoView = false;
+    /** @internal */
+    this.playbackReady = false;
+    /** @internal */
+    this.isMobile = false;
+    this.clicks = 0;
+    withComponentRegistry(this);
+    withPlayerContext(this, [
+      'playbackReady',
+      'isFullscreenActive',
+      'isVideoView',
+      'isMobile',
+    ]);
+  }
+  onPlaybackReadyChange() {
+    return __awaiter$n(this, void 0, void 0, function* () {
+      const player = yield custom_elements_findPlayer(this);
+      if (isUndefined(player))
+        return;
+      this.canSetFullscreen = yield player.canSetFullscreen();
+    });
+  }
+  onTriggerClickToPlay() {
+    return __awaiter$n(this, void 0, void 0, function* () {
+      const [clickToPlay] = getComponentFromRegistry(this, 'vm-click-to-play');
+      yield (clickToPlay === null || clickToPlay === void 0 ? void 0 : clickToPlay.forceClick());
+    });
+  }
+  onToggleFullscreen() {
+    return __awaiter$n(this, void 0, void 0, function* () {
+      const player = yield custom_elements_findPlayer(this);
+      if (isUndefined(player))
+        return;
+      this.isFullscreenActive
+        ? player.exitFullscreen()
+        : player.enterFullscreen();
+    });
+  }
+  onClick() {
+    this.clicks += 1;
+    if (this.clicks === 1) {
+      setTimeout(() => {
+        if (this.clicks === 1) {
+          this.onTriggerClickToPlay();
+        }
+        else {
+          this.onToggleFullscreen();
+        }
+        this.clicks = 0;
+      }, 300);
+    }
+  }
+  render() {
+    return (h("div", { class: {
+        dblClickFullscreen: true,
+        enabled: this.playbackReady &&
+          this.canSetFullscreen &&
+          this.isVideoView &&
+          (!this.isMobile || this.useOnMobile),
+      }, onClick: this.onClick.bind(this) }));
+  }
+  static get watchers() { return {
+    "playbackReady": ["onPlaybackReadyChange"]
+  }; }
+  static get style() { return dblClickFullscreenCss; }
+};
+
+const defaultControlsCss = ":host{display:contents;pointer-events:none;z-index:var(--vm-controls-z-index)}";
+
+const DefaultControls = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /**
+     * The length in milliseconds that the controls are active for before fading out. Audio players
+     * are not effected by this prop.
+     */
+    this.activeDuration = 2750;
+    /**
+     * Whether the controls should wait for playback to start before being shown. Audio players
+     * are not effected by this prop.
+     */
+    this.waitForPlaybackStart = false;
+    /**
+     * Whether the controls should show/hide when paused. Audio players are not effected by this prop.
+     */
+    this.hideWhenPaused = false;
+    /**
+     * Whether the controls should hide when the mouse leaves the player. Audio players are not
+     * effected by this prop.
+     */
+    this.hideOnMouseLeave = false;
+    /** @internal */
+    this.isMobile = false;
+    /** @internal */
+    this.isLive = false;
+    /** @internal */
+    this.isAudioView = false;
+    /** @internal */
+    this.isVideoView = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, [
+      'theme',
+      'isMobile',
+      'isAudioView',
+      'isVideoView',
+      'isLive',
+    ]);
+  }
+  buildAudioControls() {
+    return (h("vm-controls", { fullWidth: true }, h("vm-playback-control", { tooltipDirection: "right" }), h("vm-volume-control", null), !this.isLive && h("vm-current-time", null), this.isLive && h("vm-control-spacer", null), !this.isLive && h("vm-scrubber-control", null), this.isLive && h("vm-live-indicator", null), !this.isLive && h("vm-end-time", null), !this.isLive && h("vm-settings-control", { tooltipDirection: "left" }), h("div", { style: { marginLeft: '0', paddingRight: '2px' } })));
+  }
+  buildMobileVideoControls() {
+    return (h(Fragment, null, h("vm-scrim", { gradient: "up" }), h("vm-controls", { pin: "topLeft", fullWidth: true, activeDuration: this.activeDuration, waitForPlaybackStart: this.waitForPlaybackStart, hideWhenPaused: this.hideWhenPaused }, h("vm-control-spacer", null), h("vm-volume-control", null), !this.isLive && h("vm-caption-control", null), !this.isLive && h("vm-settings-control", null), this.isLive && h("vm-fullscreen-control", null)), h("vm-controls", { pin: "center", justify: "center", activeDuration: this.activeDuration, waitForPlaybackStart: this.waitForPlaybackStart, hideWhenPaused: this.hideWhenPaused }, h("vm-playback-control", { style: { '--vm-control-scale': '1.3' } })), !this.isLive && (h("vm-controls", { pin: "bottomLeft", fullWidth: true, activeDuration: this.activeDuration, waitForPlaybackStart: this.waitForPlaybackStart, hideWhenPaused: this.hideWhenPaused }, h("vm-control-group", null, h("vm-current-time", null), h("vm-control-spacer", null), h("vm-end-time", null), h("vm-fullscreen-control", null)), h("vm-control-group", { space: "top" }, h("vm-scrubber-control", null))))));
+  }
+  buildDesktopVideoControls() {
+    return (h(Fragment, null, this.theme !== 'light' && h("vm-scrim", { gradient: "up" }), h("vm-controls", { fullWidth: true, pin: "bottomRight", activeDuration: this.activeDuration, waitForPlaybackStart: this.waitForPlaybackStart, hideWhenPaused: this.hideWhenPaused, hideOnMouseLeave: this.hideOnMouseLeave }, !this.isLive && (h("vm-control-group", null, h("vm-scrubber-control", null))), h("vm-control-group", { space: this.isLive ? 'none' : 'top' }, h("vm-playback-control", { tooltipDirection: "right" }), h("vm-volume-control", null), !this.isLive && h("vm-time-progress", null), h("vm-control-spacer", null), !this.isLive && h("vm-caption-control", null), this.isLive && h("vm-live-indicator", null), h("vm-pip-control", null), !this.isLive && h("vm-settings-control", null), h("vm-fullscreen-control", { tooltipDirection: "left" })))));
+  }
+  render() {
+    if (this.isAudioView)
+      return this.buildAudioControls();
+    if (this.isVideoView && this.isMobile)
+      return this.buildMobileVideoControls();
+    if (this.isVideoView)
+      return this.buildDesktopVideoControls();
+    return null;
+  }
+  static get style() { return defaultControlsCss; }
+};
+
+const defaultSettingsCss = ":host{z-index:var(--vm-menu-z-index)}";
+
+var __awaiter$m = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const DefaultSettings = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.textTracksDisposal = new Disposal();
+    this.canSetPlaybackRate = false;
+    this.canSetPlaybackQuality = false;
+    this.canSetTextTrack = false;
+    this.canSetAudioTrack = false;
+    /**
+     * Pins the settings to the defined position inside the video player. This has no effect when
+     * the view is of type `audio`, it will always be `bottomRight`.
+     */
+    this.pin = 'bottomRight';
+    /** @internal */
+    this.i18n = {};
+    /** @internal */
+    this.playbackReady = false;
+    /** @internal */
+    this.playbackRate = 1;
+    /** @internal */
+    this.playbackRates = [1];
+    /** @internal */
+    this.isVideoView = false;
+    /** @internal */
+    this.playbackQualities = [];
+    /** @internal */
+    this.textTracks = [];
+    /** @internal */
+    this.currentTextTrack = -1;
+    /** @internal */
+    this.audioTracks = [];
+    /** @internal */
+    this.currentAudioTrack = -1;
+    /** @internal */
+    this.isTextTrackVisible = true;
+    withComponentRegistry(this);
+    withPlayerContext(this, [
+      'i18n',
+      'playbackReady',
+      'playbackRate',
+      'playbackRates',
+      'playbackQuality',
+      'playbackQualities',
+      'isVideoView',
+      'textTracks',
+      'currentTextTrack',
+      'isTextTrackVisible',
+      'audioTracks',
+      'currentAudioTrack',
+    ]);
+  }
+  onPlaybackReady() {
+    return __awaiter$m(this, void 0, void 0, function* () {
+      const player = yield custom_elements_findPlayer(this);
+      if (isUndefined(player))
+        return;
+      this.canSetPlaybackQuality = yield player.canSetPlaybackQuality();
+      this.canSetPlaybackRate = yield player.canSetPlaybackRate();
+    });
+  }
+  onAudioTracksChange() {
+    var _a;
+    return __awaiter$m(this, void 0, void 0, function* () {
+      const player = getPlayerFromRegistry(this);
+      this.canSetAudioTrack = (_a = (yield (player === null || player === void 0 ? void 0 : player.canSetAudioTrack()))) !== null && _a !== void 0 ? _a : false;
+    });
+  }
+  onTextTracksChange() {
+    var _a;
+    return __awaiter$m(this, void 0, void 0, function* () {
+      const player = getPlayerFromRegistry(this);
+      this.canSetTextTrack = (_a = (yield (player === null || player === void 0 ? void 0 : player.canSetTextTrack()))) !== null && _a !== void 0 ? _a : false;
+    });
+  }
+  connectedCallback() {
+    this.dispatch = custom_elements_createDispatcher(this);
+  }
+  componentDidLoad() {
+    this.onTextTracksChange();
+  }
+  disconnectedCallback() {
+    this.textTracksDisposal.empty();
+  }
+  onPlaybackRateSelect(event) {
+    const radio = event.target;
+    this.dispatch('playbackRate', parseFloat(radio.value));
+  }
+  buildPlaybackRateSubmenu() {
+    if (this.playbackRates.length <= 1 || !this.canSetPlaybackRate) {
+      return (h("vm-menu-item", { label: this.i18n.playbackRate, hint: this.i18n.normal }));
+    }
+    const formatRate = (rate) => rate === 1 ? this.i18n.normal : `${rate}`;
+    return (h("vm-submenu", { label: this.i18n.playbackRate, hint: formatRate(this.playbackRate) }, h("vm-menu-radio-group", { value: `${this.playbackRate}`, onVmCheck: this.onPlaybackRateSelect.bind(this) }, this.playbackRates.map(rate => (h("vm-menu-radio", { label: formatRate(rate), value: `${rate}` }))))));
+  }
+  onPlaybackQualitySelect(event) {
+    const radio = event.target;
+    this.dispatch('playbackQuality', radio.value);
+  }
+  buildPlaybackQualitySubmenu() {
+    var _a;
+    if (this.playbackQualities.length <= 1 || !this.canSetPlaybackQuality) {
+      return (h("vm-menu-item", { label: this.i18n.playbackQuality, hint: (_a = this.playbackQuality) !== null && _a !== void 0 ? _a : this.i18n.auto }));
+    }
+    // @TODO this doesn't account for audio qualities yet.
+    const getBadge = (quality) => {
+      const verticalPixels = parseInt(quality.slice(0, -1), 10);
+      if (verticalPixels >= 2160)
+        return 'UHD';
+      if (verticalPixels >= 1080)
+        return 'HD';
+      return undefined;
+    };
+    return (h("vm-submenu", { label: this.i18n.playbackQuality, hint: this.playbackQuality }, h("vm-menu-radio-group", { value: this.playbackQuality, onVmCheck: this.onPlaybackQualitySelect.bind(this) }, this.playbackQualities.map(quality => (h("vm-menu-radio", { label: quality, value: quality, badge: getBadge(quality) }))))));
+  }
+  onTextTrackSelect(event) {
+    const radio = event.target;
+    const trackId = parseInt(radio.value, 10);
+    const player = getPlayerFromRegistry(this);
+    if (trackId === -1) {
+      player === null || player === void 0 ? void 0 : player.setTextTrackVisibility(false);
+      return;
+    }
+    player === null || player === void 0 ? void 0 : player.setTextTrackVisibility(true);
+    player === null || player === void 0 ? void 0 : player.setCurrentTextTrack(trackId);
+  }
+  buildTextTracksSubmenu() {
+    var _a, _b, _c;
+    if (this.textTracks.length <= 1 || !this.canSetTextTrack) {
+      return (h("vm-menu-item", { label: this.i18n.subtitlesOrCc, hint: (_b = (_a = this.textTracks[this.currentTextTrack]) === null || _a === void 0 ? void 0 : _a.label) !== null && _b !== void 0 ? _b : this.i18n.none }));
+    }
+    return (h("vm-submenu", { label: this.i18n.subtitlesOrCc, hint: this.isTextTrackVisible
+        ? (_c = this.textTracks[this.currentTextTrack]) === null || _c === void 0 ? void 0 : _c.label
+        : this.i18n.off }, h("vm-menu-radio-group", { value: `${!this.isTextTrackVisible ? -1 : this.currentTextTrack}`, onVmCheck: this.onTextTrackSelect.bind(this) }, [h("vm-menu-radio", { label: this.i18n.off, value: "-1" })].concat(this.textTracks.map((track, i) => (h("vm-menu-radio", { label: track.label, value: `${i}` })))))));
+  }
+  onAudioTrackSelect(event) {
+    const radio = event.target;
+    const trackId = parseInt(radio.value, 10);
+    const player = getPlayerFromRegistry(this);
+    player === null || player === void 0 ? void 0 : player.setCurrentAudioTrack(trackId);
+  }
+  buildAudioTracksMenu() {
+    var _a, _b, _c;
+    if (this.audioTracks.length <= 1 || !this.canSetAudioTrack) {
+      return (h("vm-menu-item", { label: this.i18n.audio, hint: (_b = (_a = this.audioTracks[this.currentAudioTrack]) === null || _a === void 0 ? void 0 : _a.label) !== null && _b !== void 0 ? _b : this.i18n.default }));
+    }
+    return (h("vm-submenu", { label: this.i18n.audio, hint: (_c = this.audioTracks[this.currentAudioTrack]) === null || _c === void 0 ? void 0 : _c.label }, h("vm-menu-radio-group", { value: `${this.currentAudioTrack}`, onVmCheck: this.onAudioTrackSelect.bind(this) }, this.audioTracks.map((track, i) => (h("vm-menu-radio", { label: track.label, value: `${i}` }))))));
+  }
+  render() {
+    return (h("vm-settings", { pin: this.pin }, this.buildAudioTracksMenu(), this.buildPlaybackRateSubmenu(), this.buildPlaybackQualitySubmenu(), this.isVideoView && this.buildTextTracksSubmenu(), h("slot", null)));
+  }
+  static get watchers() { return {
+    "playbackReady": ["onPlaybackReady", "onAudioTracksChange", "onTextTracksChange"],
+    "audioTracks": ["onAudioTracksChange"],
+    "textTracks": ["onTextTracksChange"]
+  }; }
+  static get style() { return defaultSettingsCss; }
+};
+
+const defaultUiCss = ":host{display:contents;pointer-events:none}";
+
+const DefaultUI = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /**
+     * Whether clicking the player should not toggle playback.
+     */
+    this.noClickToPlay = false;
+    /**
+     * Whether double clicking the player should not toggle fullscreen mode.
+     */
+    this.noDblClickFullscreen = false;
+    /**
+     * Whether the custom captions UI should not be loaded.
+     */
+    this.noCaptions = false;
+    /**
+     * Whether the custom poster UI should not be loaded.
+     */
+    this.noPoster = false;
+    /**
+     * Whether the custom spinner UI should not be loaded.
+     */
+    this.noSpinner = false;
+    /**
+     * Whether the custom default controls should not be loaded.
+     */
+    this.noControls = false;
+    /**
+     * Whether the custom default settings menu should not be loaded.
+     */
+    this.noSettings = false;
+    /**
+     * Whether the default loading screen should not be loaded.
+     */
+    this.noLoadingScreen = false;
+    withComponentRegistry(this);
+  }
+  render() {
+    return (h("vm-ui", null, !this.noClickToPlay && h("vm-click-to-play", null), !this.noDblClickFullscreen && h("vm-dbl-click-fullscreen", null), !this.noCaptions && h("vm-captions", null), !this.noPoster && h("vm-poster", null), !this.noSpinner && h("vm-spinner", null), !this.noLoadingScreen && h("vm-loading-screen", null), !this.noControls && h("vm-default-controls", null), !this.noSettings && h("vm-default-settings", null), h("slot", null)));
+  }
+  static get style() { return defaultUiCss; }
+};
+
+class LazyLoader {
+  constructor(el, attributes, onLoad) {
+    var _a;
+    this.el = el;
+    this.attributes = attributes;
+    this.onLoad = onLoad;
+    this.hasLoaded = false;
+    if (isNil(this.el))
+      return;
+    this.intersectionObs = this.canObserveIntersection()
+      ? new IntersectionObserver(this.onIntersection.bind(this))
+      : undefined;
+    this.mutationObs = this.canObserveMutations()
+      ? new MutationObserver(this.onMutation.bind(this))
+      : undefined;
+    (_a = this.mutationObs) === null || _a === void 0 ? void 0 : _a.observe(this.el, {
+      childList: true,
+      subtree: true,
+      attributeFilter: this.attributes,
+    });
+    this.lazyLoad();
+  }
+  didLoad() {
+    return this.hasLoaded;
+  }
+  destroy() {
+    var _a, _b;
+    (_a = this.intersectionObs) === null || _a === void 0 ? void 0 : _a.disconnect();
+    (_b = this.mutationObs) === null || _b === void 0 ? void 0 : _b.disconnect();
+  }
+  canObserveIntersection() {
+    return IS_CLIENT && window.IntersectionObserver;
+  }
+  canObserveMutations() {
+    return IS_CLIENT && window.MutationObserver;
+  }
+  lazyLoad() {
+    var _a;
+    if (this.canObserveIntersection()) {
+      (_a = this.intersectionObs) === null || _a === void 0 ? void 0 : _a.observe(this.el);
+    }
+    else {
+      this.load();
+    }
+  }
+  onIntersection(entries) {
+    entries.forEach(entry => {
+      if (entry.intersectionRatio > 0 || entry.isIntersecting) {
+        this.load();
+        this.intersectionObs.unobserve(entry.target);
+      }
+    });
+  }
+  onMutation() {
+    if (this.hasLoaded)
+      this.load();
+  }
+  getLazyElements() {
+    const root = !isNil(this.el.shadowRoot) ? this.el.shadowRoot : this.el;
+    return root.querySelectorAll('.lazy');
+  }
+  load() {
+    window.requestAnimationFrame(() => {
+      this.getLazyElements().forEach(this.loadEl.bind(this));
+    });
+  }
+  loadEl(el) {
+    var _a, _b;
+    (_a = this.intersectionObs) === null || _a === void 0 ? void 0 : _a.unobserve(el);
+    this.hasLoaded = true;
+    (_b = this.onLoad) === null || _b === void 0 ? void 0 : _b.call(this, el);
+  }
+}
+
+const embedCss = ":host{z-index:var(--vm-media-z-index)}iframe{position:absolute;top:0;left:0;border:0;width:100%;height:100%;user-select:none}";
+
+var __awaiter$l = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+let idCount$4 = 0;
+const connected = new Set();
+const Embed = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmEmbedSrcChange = createEvent(this, "vmEmbedSrcChange", 3);
+    this.vmEmbedMessage = createEvent(this, "vmEmbedMessage", 3);
+    this.vmEmbedLoaded = createEvent(this, "vmEmbedLoaded", 3);
+    this.srcWithParams = '';
+    this.hasEnteredViewport = false;
+    /**
+     * A URL that will load the external player and media (Eg: https://www.youtube.com/embed/DyTCOwB0DVw).
+     */
+    this.embedSrc = '';
+    /**
+     * The title of the current media so it can be set on the inner `iframe` for screen readers.
+     */
+    this.mediaTitle = '';
+    /**
+     * The parameters to pass to the embedded player which are appended to the `embedSrc` prop. These
+     * can be passed in as a query string or object.
+     */
+    this.params = '';
+    /**
+     * A collection of URLs to that the browser should immediately start establishing a connection
+     * with.
+     */
+    this.preconnections = [];
+    withComponentRegistry(this);
+  }
+  onEmbedSrcChange() {
+    this.srcWithParams =
+      isString(this.embedSrc) && this.embedSrc.length > 0
+        ? appendParamsToURL(this.embedSrc, this.params)
+        : undefined;
+  }
+  srcWithParamsChange() {
+    if (isUndefined(this.srcWithParams)) {
+      this.vmEmbedSrcChange.emit(this.srcWithParams);
+      return;
+    }
+    if (!this.hasEnteredViewport && !connected.has(this.embedSrc)) {
+      if (preconnect(this.srcWithParams))
+        connected.add(this.embedSrc);
+    }
+    this.vmEmbedSrcChange.emit(this.srcWithParams);
+  }
+  preconnectionsChange() {
+    if (this.hasEnteredViewport) {
+      return;
+    }
+    this.preconnections
+      .filter(connection => !connected.has(connection))
+      .forEach(connection => {
+      if (preconnect(connection))
+        connected.add(connection);
+    });
+  }
+  connectedCallback() {
+    this.lazyLoader = new LazyLoader(this.host, ['data-src'], el => {
+      const src = el.getAttribute('data-src');
+      el.removeAttribute('src');
+      if (!isNull(src))
+        el.setAttribute('src', src);
+    });
+    this.onEmbedSrcChange();
+    this.genIframeId();
+  }
+  disconnectedCallback() {
+    this.lazyLoader.destroy();
+  }
+  onWindowMessage(e) {
+    var _a, _b, _c;
+    const originMatches = e.source === ((_a = this.iframe) === null || _a === void 0 ? void 0 : _a.contentWindow) &&
+      (!isString(this.origin) || this.origin === e.origin);
+    if (!originMatches)
+      return;
+    const message = (_c = (_b = this.decoder) === null || _b === void 0 ? void 0 : _b.call(this, e.data)) !== null && _c !== void 0 ? _c : e.data;
+    if (message)
+      this.vmEmbedMessage.emit(message);
+  }
+  /**
+   * Posts a message to the embedded media player.
+   */
+  postMessage(message, target) {
+    var _a, _b;
+    return __awaiter$l(this, void 0, void 0, function* () {
+      (_b = (_a = this.iframe) === null || _a === void 0 ? void 0 : _a.contentWindow) === null || _b === void 0 ? void 0 : _b.postMessage(JSON.stringify(message), target !== null && target !== void 0 ? target : '*');
+    });
+  }
+  onLoad() {
+    this.vmEmbedLoaded.emit();
+  }
+  genIframeId() {
+    idCount$4 += 1;
+    this.id = `vm-iframe-${idCount$4}`;
+  }
+  render() {
+    return (h("iframe", { id: this.id, class: "lazy", title: this.mediaTitle, "data-src": this.srcWithParams, allowFullScreen: true, allow: "autoplay; encrypted-media; picture-in-picture;", onLoad: this.onLoad.bind(this), ref: (el) => {
+        this.iframe = el;
+      } }));
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "embedSrc": ["onEmbedSrcChange"],
+    "params": ["onEmbedSrcChange"],
+    "srcWithParams": ["srcWithParamsChange"],
+    "preconnections": ["preconnectionsChange"]
+  }; }
+  static get style() { return embedCss; }
+};
+
+const endTimeCss = ":host{display:flex;align-items:center;justify-content:center}";
+
+const EndTime = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /** @internal */
+    this.duration = -1;
+    /** @internal */
+    this.i18n = {};
+    /**
+     * Whether the time should always show the hours unit, even if the time is less than
+     * 1 hour (eg: `20:35` -> `00:20:35`).
+     */
+    this.alwaysShowHours = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['duration', 'i18n']);
+  }
+  render() {
+    return (h("vm-time", { label: this.i18n.duration, seconds: Math.max(0, this.duration), alwaysShowHours: this.alwaysShowHours }));
+  }
+  static get style() { return endTimeCss; }
+};
+
+var custom_elements_key = {
+    fullscreenEnabled: 0,
+    fullscreenElement: 1,
+    requestFullscreen: 2,
+    exitFullscreen: 3,
+    fullscreenchange: 4,
+    fullscreenerror: 5,
+    fullscreen: 6
+};
+var custom_elements_webkit = [
+    'webkitFullscreenEnabled',
+    'webkitFullscreenElement',
+    'webkitRequestFullscreen',
+    'webkitExitFullscreen',
+    'webkitfullscreenchange',
+    'webkitfullscreenerror',
+    '-webkit-full-screen',
+];
+var custom_elements_moz = [
+    'mozFullScreenEnabled',
+    'mozFullScreenElement',
+    'mozRequestFullScreen',
+    'mozCancelFullScreen',
+    'mozfullscreenchange',
+    'mozfullscreenerror',
+    '-moz-full-screen',
+];
+var custom_elements_ms = [
+    'msFullscreenEnabled',
+    'msFullscreenElement',
+    'msRequestFullscreen',
+    'msExitFullscreen',
+    'MSFullscreenChange',
+    'MSFullscreenError',
+    '-ms-fullscreen',
+];
+// so it doesn't throw if no window or document
+var document$1 = typeof window !== 'undefined' && typeof window.document !== 'undefined' ? window.document : {};
+var custom_elements_vendor = (('fullscreenEnabled' in document$1 && Object.keys(custom_elements_key)) ||
+    (custom_elements_webkit[0] in document$1 && custom_elements_webkit) ||
+    (custom_elements_moz[0] in document$1 && custom_elements_moz) ||
+    (custom_elements_ms[0] in document$1 && custom_elements_ms) ||
+    []);
+var custom_elements_fscreen = {
+    requestFullscreen: function (element) { return element[custom_elements_vendor[custom_elements_key.requestFullscreen]](); },
+    requestFullscreenFunction: function (element) { return element[custom_elements_vendor[custom_elements_key.requestFullscreen]]; },
+    get exitFullscreen() { return document$1[custom_elements_vendor[custom_elements_key.exitFullscreen]].bind(document$1); },
+    get fullscreenPseudoClass() { return ":" + custom_elements_vendor[custom_elements_key.fullscreen]; },
+    addEventListener: function (type, handler, options) { return document$1.addEventListener(custom_elements_vendor[custom_elements_key[type]], handler, options); },
+    removeEventListener: function (type, handler, options) { return document$1.removeEventListener(custom_elements_vendor[custom_elements_key[type]], handler, options); },
+    get fullscreenEnabled() { return Boolean(document$1[custom_elements_vendor[custom_elements_key.fullscreenEnabled]]); },
+    set fullscreenEnabled(val) { },
+    get fullscreenElement() { return document$1[custom_elements_vendor[custom_elements_key.fullscreenElement]]; },
+    set fullscreenElement(val) { },
+    get onfullscreenchange() { return document$1[("on" + custom_elements_vendor[custom_elements_key.fullscreenchange]).toLowerCase()]; },
+    set onfullscreenchange(handler) { return document$1[("on" + custom_elements_vendor[custom_elements_key.fullscreenchange]).toLowerCase()] = handler; },
+    get onfullscreenerror() { return document$1[("on" + custom_elements_vendor[custom_elements_key.fullscreenerror]).toLowerCase()]; },
+    set onfullscreenerror(handler) { return document$1[("on" + custom_elements_vendor[custom_elements_key.fullscreenerror]).toLowerCase()] = handler; },
+};
+
+function mitt(n){return {all:n=n||new Map,on:function(t,e){var i=n.get(t);i?i.push(e):n.set(t,[e]);},off:function(t,e){var i=n.get(t);i&&(e?i.splice(i.indexOf(e)>>>0,1):n.set(t,[]));},emit:function(t,e){var i=n.get(t);i&&i.slice().map(function(n){n(e);}),(i=n.get("*"))&&i.slice().map(function(n){n(t,e);});}}}
+
+var __awaiter$k = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+/**
+ * Unfortunately fullscreen isn't straight forward due to cross-browser inconsistencies. This
+ * class abstract the logic for handling fullscreen across browsers.
+ */
+class FullscreenController {
+  constructor(host) {
+    this.host = host;
+    this.disposal = new Disposal();
+    this.emitter = mitt();
+  }
+  /**
+   * Whether fullscreen mode can be requested, generally is an API available to do so.
+   */
+  get isSupported() {
+    return this.isSupportedNatively;
+  }
+  /**
+   * Whether the native Fullscreen API is enabled/available.
+   */
+  get isSupportedNatively() {
+    return custom_elements_fscreen.fullscreenEnabled;
+  }
+  /**
+   * Whether the host element is in fullscreen mode.
+   */
+  get isFullscreen() {
+    return this.isNativeFullscreen;
+  }
+  /**
+   * Whether the host element is in fullscreen mode via the native Fullscreen API.
+   */
+  get isNativeFullscreen() {
+    if (custom_elements_fscreen.fullscreenElement === this.host)
+      return true;
+    try {
+      // Throws in iOS Safari...
+      return this.host.matches(
+      // Property `fullscreenPseudoClass` is missing from `@types/fscreen`.
+      custom_elements_fscreen
+        .fullscreenPseudoClass);
+    }
+    catch (error) {
+      return false;
+    }
+  }
+  on(type, handler) {
+    // @ts-expect-error - not typed yet.
+    this.emitter.on(type, handler);
+  }
+  off(type, handler) {
+    // @ts-expect-error - not typed yet.
+    this.emitter.off(type, handler);
+  }
+  /**
+   * Dispose of any event listeners and exit fullscreen (if active).
+   */
+  destroy() {
+    return __awaiter$k(this, void 0, void 0, function* () {
+      if (this.isFullscreen)
+        yield this.exitFullscreen();
+      this.disposal.empty();
+      this.emitter.all.clear();
+    });
+  }
+  addFullscreenChangeEventListener(handler) {
+    if (!this.isSupported)
+      return noop;
+    return listen(custom_elements_fscreen, 'fullscreenchange', handler);
+  }
+  addFullscreenErrorEventListener(handler) {
+    if (!this.isSupported)
+      return noop;
+    return listen(custom_elements_fscreen, 'fullscreenerror', handler);
+  }
+  requestFullscreen() {
+    return __awaiter$k(this, void 0, void 0, function* () {
+      if (this.isFullscreen)
+        return;
+      this.throwIfNoFullscreenSupport();
+      // TODO: Check if PiP is active, if so make sure to exit - need PipController.
+      this.disposal.add(this.addFullscreenChangeEventListener(this.handleFullscreenChange.bind(this)));
+      this.disposal.add(this.addFullscreenErrorEventListener(this.handleFullscreenError.bind(this)));
+      return this.makeEnterFullscreenRequest();
+    });
+  }
+  makeEnterFullscreenRequest() {
+    return __awaiter$k(this, void 0, void 0, function* () {
+      return custom_elements_fscreen.requestFullscreen(this.host);
+    });
+  }
+  handleFullscreenChange() {
+    if (!this.isFullscreen)
+      this.disposal.empty();
+    this.emitter.emit('change', this.isFullscreen);
+  }
+  handleFullscreenError(event) {
+    this.emitter.emit('error', event);
+  }
+  exitFullscreen() {
+    return __awaiter$k(this, void 0, void 0, function* () {
+      if (!this.isFullscreen)
+        return;
+      this.throwIfNoFullscreenSupport();
+      return this.makeExitFullscreenRequest();
+    });
+  }
+  makeExitFullscreenRequest() {
+    return __awaiter$k(this, void 0, void 0, function* () {
+      return custom_elements_fscreen.exitFullscreen();
+    });
+  }
+  throwIfNoFullscreenSupport() {
+    if (this.isSupported)
+      return;
+    throw Error('Fullscreen API is not enabled or supported in this environment.');
+  }
+}
+
+var __awaiter$j = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+/**
+ * Extends the base `FullscreenController` with additional logic for handling fullscreen
+ * on iOS Safari where the native Fullscreen API is not available (in this case it fallsback to
+ * using the `VideoPresentationController`).
+ */
+class VideoFullscreenController extends FullscreenController {
+  constructor(host, presentationController) {
+    super(host);
+    this.host = host;
+    this.presentationController = presentationController;
+  }
+  get isFullscreen() {
+    return this.presentationController.isFullscreenMode;
+  }
+  /**
+   * Whether a fallback fullscreen API is available on Safari using presentation modes. This
+   * is only used on iOS where the native fullscreen API is not available.
+   *
+   * @link https://developer.apple.com/documentation/webkitjs/htmlvideoelement/1631913-webkitpresentationmode
+   */
+  get isSupported() {
+    return this.presentationController.isSupported;
+  }
+  makeEnterFullscreenRequest() {
+    return __awaiter$j(this, void 0, void 0, function* () {
+      return this.presentationController.setPresentationMode('fullscreen');
+    });
+  }
+  makeExitFullscreenRequest() {
+    return __awaiter$j(this, void 0, void 0, function* () {
+      return this.presentationController.setPresentationMode('inline');
+    });
+  }
+  addFullscreenChangeEventListener() {
+    if (!this.isSupported)
+      return noop;
+    this.presentationController.on('change', this.handlePresentationModeChange.bind(this));
+    return () => {
+      this.presentationController.off('change', this.handlePresentationModeChange.bind(this));
+    };
+  }
+  handlePresentationModeChange() {
+    this.handleFullscreenChange();
+  }
+  addFullscreenErrorEventListener() {
+    return noop;
+  }
+}
+
+var __awaiter$i = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+/**
+ * Contains the logic for handling presentation modes on Safari. This class is used by
+ * the `VideoFullscreenController` as a fallback when the native Fullscreen API is not
+ * available (ie: iOS Safari).
+ */
+class VideoPresentationController {
+  constructor(host) {
+    this.host = host;
+    this.disposal = new Disposal();
+    this.emitter = mitt();
+    const disconnectedCallback = host.disconnectedCallback;
+    host.disconnectedCallback = () => __awaiter$i(this, void 0, void 0, function* () {
+      yield this.destroy();
+      disconnectedCallback === null || disconnectedCallback === void 0 ? void 0 : disconnectedCallback.call(host);
+    });
+  }
+  get videoElement() {
+    var _a;
+    if (((_a = this.host.mediaEl) === null || _a === void 0 ? void 0 : _a.tagName.toLowerCase()) === 'video') {
+      return this.host.mediaEl;
+    }
+    return undefined;
+  }
+  /**
+   * The current presentation mode, possible values include `inline`, `picture-in-picture` and
+   * `fullscreen`. Only available in Safari.
+   *
+   * @default undefined
+   * @link https://developer.apple.com/documentation/webkitjs/htmlvideoelement/1631913-webkitpresentationmode
+   */
+  get presentationMode() {
+    var _a;
+    return (_a = this.videoElement) === null || _a === void 0 ? void 0 : _a.webkitPresentationMode;
+  }
+  /**
+   * Whether the current `presentationMode` is `inline`.
+   */
+  get isInlineMode() {
+    return this.presentationMode === 'inline';
+  }
+  /**
+   * Whether the current `presentationMode` is `picture-in-picture`.
+   */
+  get isPictureInPictureMode() {
+    return this.presentationMode === 'inline';
+  }
+  /**
+   * Whether the current `presentationMode` is `fullscreen`.
+   */
+  get isFullscreenMode() {
+    return this.presentationMode === 'fullscreen';
+  }
+  /**
+   * Whether the presentation mode API is available.
+   *
+   * @link https://developer.apple.com/documentation/webkitjs/htmlvideoelement/1628805-webkitsupportsfullscreen
+   */
+  get isSupported() {
+    var _a, _b, _c;
+    return (IS_IOS &&
+      isFunction((_a = this.videoElement) === null || _a === void 0 ? void 0 : _a.webkitSetPresentationMode) &&
+      ((_c = (_b = this.videoElement) === null || _b === void 0 ? void 0 : _b.webkitSupportsFullscreen) !== null && _c !== void 0 ? _c : false));
+  }
+  setPresentationMode(mode) {
+    var _a, _b;
+    (_b = (_a = this.videoElement) === null || _a === void 0 ? void 0 : _a.webkitSetPresentationMode) === null || _b === void 0 ? void 0 : _b.call(_a, mode);
+  }
+  on(type, handler) {
+    // @ts-expect-error - not typed yet.
+    this.emitter.on(type, handler);
+  }
+  off(type, handler) {
+    // @ts-expect-error - not typed yet.
+    this.emitter.off(type, handler);
+  }
+  destroy() {
+    this.setPresentationMode('inline');
+    this.disposal.empty();
+  }
+  addPresentationModeChangeEventListener() {
+    if (!this.isSupported || isNil(this.videoElement))
+      return noop;
+    return listen(this.videoElement, 'webkitpresentationmodechanged', this.handlePresentationModeChange.bind(this));
+  }
+  handlePresentationModeChange() {
+    this.emitter.emit('change', this.presentationMode);
+  }
+}
+
+const fileCss = "audio.sc-vm-file,video.sc-vm-file{border-radius:inherit;vertical-align:middle;width:100%;outline:0}video.sc-vm-file{position:absolute;top:0;left:0;border:0;height:100%;user-select:none}";
+
+var __awaiter$h = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const File = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    this.vmLoadStart = createEvent(this, "vmLoadStart", 7);
+    this.vmError = createEvent(this, "vmError", 7);
+    this.vmMediaElChange = createEvent(this, "vmMediaElChange", 7);
+    this.vmSrcSetChange = createEvent(this, "vmSrcSetChange", 7);
+    this.textTracksDisposal = new Disposal();
+    this.wasPausedBeforeSeeking = true;
+    this.currentSrcSet = [];
+    this.mediaQueryDisposal = new Disposal();
+    /** @internal Whether an external SDK will attach itself to the media player and control it. */
+    this.willAttach = false;
+    /** @inheritdoc */
+    this.preload = 'metadata';
+    /**
+     * The playback rates that are available for this media.
+     */
+    this.playbackRates = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 2];
+    /** @internal */
+    this.language = 'en';
+    /** @internal */
+    this.autoplay = false;
+    /** @internal */
+    this.controls = false;
+    /** @internal */
+    this.loop = false;
+    /** @internal */
+    this.muted = false;
+    /** @internal */
+    this.playsinline = false;
+    /** @internal */
+    this.noConnect = false;
+    /** @internal */
+    this.paused = true;
+    /** @internal */
+    this.currentTime = 0;
+    /** @internal */
+    this.volume = 0;
+    /** @internal */
+    this.playbackReady = false;
+    /** @internal */
+    this.playbackStarted = false;
+    this.presentationController = new VideoPresentationController(this);
+    this.fullscreenController = new VideoFullscreenController(this, this.presentationController);
+    /** @internal */
+    this.currentTextTrack = -1;
+    /** @internal */
+    this.hasCustomTextManager = false;
+    /** @internal */
+    this.isTextTrackVisible = true;
+    /** @internal */
+    this.shouldRenderNativeTextTracks = true;
+    withComponentRegistry(this);
+    withProviderConnect(this);
+    withProviderContext(this, [
+      'playbackReady',
+      'playbackStarted',
+      'currentTime',
+      'volume',
+      'paused',
+      'currentTextTrack',
+      'isTextTrackVisible',
+      'shouldRenderNativeTextTracks',
+    ]);
+    watchComponentRegistry(this, 'vm-poster', regs => {
+      [this.vmPoster] = regs;
+    });
+  }
+  onMediaTitleChange() {
+    this.dispatch('mediaTitle', this.mediaTitle);
+  }
+  onPosterChange() {
+    var _a;
+    if (!this.playbackStarted)
+      (_a = this.mediaEl) === null || _a === void 0 ? void 0 : _a.load();
+  }
+  onViewTypeChange() {
+    this.dispatch('viewType', this.viewType);
+  }
+  connectedCallback() {
+    this.initLazyLoader();
+    this.dispatch = createProviderDispatcher(this);
+    this.onViewTypeChange();
+    this.onPosterChange();
+    this.onMediaTitleChange();
+    this.addPresentationControllerListeners();
+  }
+  componentDidRender() {
+    if (this.prevMediaEl !== this.mediaEl) {
+      this.prevMediaEl = this.mediaEl;
+      this.vmMediaElChange.emit(this.mediaEl);
+      this.presentationController.addPresentationModeChangeEventListener();
+    }
+  }
+  componentDidLoad() {
+    this.onViewTypeChange();
+  }
+  disconnectedCallback() {
+    var _a;
+    this.mediaQueryDisposal.empty();
+    this.textTracksDisposal.empty();
+    this.cancelTimeUpdates();
+    (_a = this.lazyLoader) === null || _a === void 0 ? void 0 : _a.destroy();
+    this.wasPausedBeforeSeeking = true;
+  }
+  initLazyLoader() {
+    this.lazyLoader = new LazyLoader(this.host, ['data-src', 'data-poster'], () => {
+      if (isNil(this.mediaEl))
+        return;
+      const poster = this.mediaEl.getAttribute('data-poster');
+      if (!isNull(poster))
+        this.mediaEl.setAttribute('poster', poster);
+      this.refresh();
+      this.didSrcSetChange();
+    });
+  }
+  refresh() {
+    if (isNil(this.mediaEl))
+      return;
+    const { children } = this.mediaEl;
+    for (let i = 0; i <= children.length - 1; i += 1) {
+      const child = children[i];
+      const src = child.getAttribute('data-src') ||
+        child.getAttribute('src') ||
+        child.getAttribute('data-vs');
+      child.removeAttribute('src');
+      if (isNull(src))
+        continue;
+      child.setAttribute('data-vs', src);
+      child.setAttribute('src', src);
+    }
+  }
+  didSrcSetChange() {
+    if (isNil(this.mediaEl))
+      return;
+    const sources = Array.from(this.mediaEl.querySelectorAll('source'));
+    const srcSet = sources.map(source => {
+      var _a;
+      return ({
+        src: source.getAttribute('data-vs'),
+        media: (_a = source.getAttribute('data-media')) !== null && _a !== void 0 ? _a : undefined,
+        ref: source,
+      });
+    });
+    const didChange = this.currentSrcSet.length !== srcSet.length ||
+      srcSet.some((resource, i) => this.currentSrcSet[i].src !== resource.src);
+    if (didChange) {
+      this.currentSrcSet = srcSet;
+      this.onSrcSetChange();
+    }
+  }
+  onSrcSetChange() {
+    var _a;
+    this.textTracksDisposal.empty();
+    this.mediaQueryDisposal.empty();
+    this.vmLoadStart.emit();
+    this.vmSrcSetChange.emit(this.currentSrcSet);
+    if (!this.willAttach)
+      (_a = this.mediaEl) === null || _a === void 0 ? void 0 : _a.load();
+  }
+  hasCustomPoster() {
+    return !IS_IOS && !isUndefined(this.vmPoster);
+  }
+  cancelTimeUpdates() {
+    if (isNumber(this.timeRAF))
+      window.cancelAnimationFrame(this.timeRAF);
+    this.timeRAF = undefined;
+  }
+  requestTimeUpdates() {
+    var _a, _b;
+    this.dispatch('currentTime', (_b = (_a = this.mediaEl) === null || _a === void 0 ? void 0 : _a.currentTime) !== null && _b !== void 0 ? _b : 0);
+    this.timeRAF = window.requestAnimationFrame(() => {
+      this.requestTimeUpdates();
+    });
+  }
+  getMediaType() {
+    const { currentSrc } = this.mediaEl;
+    if (audioRegex.test(currentSrc))
+      return MediaType.Audio;
+    if (videoRegex.test(currentSrc) || hlsRegex.test(currentSrc))
+      return MediaType.Video;
+    return undefined;
+  }
+  onLoadedMetadata() {
+    this.mediaEl.volume = this.volume / 100;
+    this.listenToTextTracksForChanges();
+    this.onTextTracksChange();
+    this.onProgress();
+    this.dispatch('currentPoster', this.poster);
+    this.dispatch('duration', this.mediaEl.duration);
+    this.dispatch('playbackRates', this.playbackRates);
+    if (!this.willAttach) {
+      this.dispatch('currentSrc', this.mediaEl.currentSrc);
+      this.dispatch('mediaType', this.getMediaType());
+      this.dispatch('playbackReady', true);
+    }
+  }
+  onProgress() {
+    const { buffered, duration } = this.mediaEl;
+    const end = buffered.length === 0 ? 0 : buffered.end(buffered.length - 1);
+    this.dispatch('buffered', end > duration ? duration : end);
+  }
+  onPlay() {
+    this.requestTimeUpdates();
+    this.dispatch('paused', false);
+    if (!this.playbackStarted)
+      this.dispatch('playbackStarted', true);
+  }
+  onPause() {
+    this.cancelTimeUpdates();
+    this.dispatch('paused', true);
+    this.dispatch('buffering', false);
+  }
+  onPlaying() {
+    this.dispatch('playing', true);
+    this.dispatch('buffering', false);
+  }
+  onSeeking() {
+    if (!this.wasPausedBeforeSeeking)
+      this.wasPausedBeforeSeeking = this.mediaEl.paused;
+    this.dispatch('currentTime', this.mediaEl.currentTime);
+    this.dispatch('seeking', true);
+  }
+  onSeeked() {
+    // Avoid calling `attemptToPlay` if seeking to 0 on 0.
+    if (this.currentTime === 0 && !this.playbackStarted)
+      return;
+    this.dispatch('seeking', false);
+    if (!this.playbackStarted || !this.wasPausedBeforeSeeking)
+      this.attemptToPlay();
+    this.wasPausedBeforeSeeking = true;
+  }
+  onRateChange() {
+    this.dispatch('playbackRate', this.mediaEl.playbackRate);
+  }
+  onVolumeChange() {
+    this.dispatch('muted', this.mediaEl.muted);
+    this.dispatch('volume', this.mediaEl.volume * 100);
+  }
+  onDurationChange() {
+    this.dispatch('duration', this.mediaEl.duration);
+  }
+  onWaiting() {
+    this.dispatch('buffering', true);
+  }
+  onSuspend() {
+    this.dispatch('buffering', false);
+  }
+  onEnded() {
+    if (!this.loop)
+      this.dispatch('playbackEnded', true);
+  }
+  onError() {
+    this.vmError.emit(this.mediaEl.error);
+  }
+  attemptToPlay() {
+    var _a;
+    try {
+      (_a = this.mediaEl) === null || _a === void 0 ? void 0 : _a.play();
+    }
+    catch (e) {
+      this.vmError.emit(e);
+    }
+  }
+  togglePiPInChrome(toggle) {
+    var _a;
+    return toggle
+      ? (_a = this.mediaEl) === null || _a === void 0 ? void 0 : _a.requestPictureInPicture()
+      : document.exitPictureInPicture();
+  }
+  togglePiPInSafari(toggle) {
+    var _a, _b;
+    const mode = toggle
+      ? "picture-in-picture" /* PiP */
+      : "inline" /* Inline */;
+    if (!((_a = this.mediaEl) === null || _a === void 0 ? void 0 : _a.webkitSupportsPresentationMode(mode))) {
+      throw new Error('PiP API is not available.');
+    }
+    return (_b = this.mediaEl) === null || _b === void 0 ? void 0 : _b.webkitSetPresentationMode(mode);
+  }
+  togglePiP(toggle) {
+    return __awaiter$h(this, void 0, void 0, function* () {
+      if (canUsePiPInChrome())
+        return this.togglePiPInChrome(toggle);
+      if (canUsePiPInSafari())
+        return this.togglePiPInSafari(toggle);
+      throw new Error('PiP API is not available.');
+    });
+  }
+  onEnterPiP() {
+    this.dispatch('isPiPActive', true);
+  }
+  onLeavePiP() {
+    this.dispatch('isPiPActive', false);
+  }
+  addPresentationControllerListeners() {
+    this.presentationController.on('change', mode => {
+      this.dispatch('isPiPActive', mode === "picture-in-picture" /* PiP */);
+      this.dispatch('isFullscreenActive', mode === "fullscreen" /* Fullscreen */);
+    });
+  }
+  /** @internal */
+  getAdapter() {
+    return __awaiter$h(this, void 0, void 0, function* () {
+      return {
+        getInternalPlayer: () => __awaiter$h(this, void 0, void 0, function* () { return this.mediaEl; }),
+        play: () => __awaiter$h(this, void 0, void 0, function* () { var _a; return (_a = this.mediaEl) === null || _a === void 0 ? void 0 : _a.play(); }),
+        pause: () => __awaiter$h(this, void 0, void 0, function* () { var _b; return (_b = this.mediaEl) === null || _b === void 0 ? void 0 : _b.pause(); }),
+        canPlay: (type) => __awaiter$h(this, void 0, void 0, function* () { return isString(type) && (audioRegex.test(type) || videoRegex.test(type)); }),
+        setCurrentTime: (time) => __awaiter$h(this, void 0, void 0, function* () {
+          if (this.mediaEl)
+            this.mediaEl.currentTime = time;
+        }),
+        setMuted: (muted) => __awaiter$h(this, void 0, void 0, function* () {
+          if (this.mediaEl)
+            this.mediaEl.muted = muted;
+        }),
+        setVolume: (volume) => __awaiter$h(this, void 0, void 0, function* () {
+          if (this.mediaEl)
+            this.mediaEl.volume = volume / 100;
+        }),
+        canSetPlaybackRate: () => __awaiter$h(this, void 0, void 0, function* () { return true; }),
+        setPlaybackRate: (rate) => __awaiter$h(this, void 0, void 0, function* () {
+          if (this.mediaEl)
+            this.mediaEl.playbackRate = rate;
+        }),
+        canSetPiP: () => __awaiter$h(this, void 0, void 0, function* () { return canUsePiP(); }),
+        enterPiP: () => this.togglePiP(true),
+        exitPiP: () => this.togglePiP(false),
+        canSetFullscreen: () => __awaiter$h(this, void 0, void 0, function* () { return this.fullscreenController.isSupported; }),
+        enterFullscreen: () => this.fullscreenController.requestFullscreen(),
+        exitFullscreen: () => this.fullscreenController.exitFullscreen(),
+        setCurrentTextTrack: (trackId) => __awaiter$h(this, void 0, void 0, function* () {
+          if (trackId !== this.currentTextTrack)
+            this.toggleTextTrackModes(trackId);
+        }),
+        setTextTrackVisibility: (isVisible) => __awaiter$h(this, void 0, void 0, function* () {
+          this.isTextTrackVisible = isVisible;
+          this.toggleTextTrackModes(this.currentTextTrack);
+        }),
+      };
+    });
+  }
+  onHasCustomTextManagerChange() {
+    if (this.hasCustomTextManager) {
+      this.textTracksDisposal.empty();
+    }
+    else if (this.playbackReady) {
+      this.listenToTextTracksForChanges();
+    }
+  }
+  onShouldRenderNativeTextTracksChange() {
+    if (this.hasCustomTextManager)
+      return;
+    this.toggleTextTrackModes(this.currentTextTrack);
+  }
+  onProviderConnect(event) {
+    if (this.noConnect)
+      event.stopImmediatePropagation();
+  }
+  onProviderDisconnect(event) {
+    if (this.noConnect)
+      event.stopImmediatePropagation();
+  }
+  getFilteredTextTracks() {
+    const tracks = [];
+    const textTrackList = Array.from(this.mediaEl.textTracks);
+    for (let i = 0; i < textTrackList.length; i += 1) {
+      const track = textTrackList[i];
+      // Edge adds a track without a label; we don't want to use it.
+      if ((track.kind === 'subtitles' || track.kind === 'captions') &&
+        track.label) {
+        tracks.push(textTrackList[i]);
+      }
+    }
+    return tracks;
+  }
+  listenToTextTracksForChanges() {
+    if (this.hasCustomTextManager)
+      return;
+    this.textTracksDisposal.empty();
+    if (isUndefined(this.mediaEl))
+      return;
+    this.textTracksDisposal.add(listen(this.mediaEl.textTracks, 'change', this.onTextTracksChange.bind(this)));
+  }
+  onTextTracksChange() {
+    var _a;
+    const tracks = this.getFilteredTextTracks();
+    let trackId = -1;
+    for (let id = 0; id < tracks.length; id += 1) {
+      if (tracks[id].mode === 'hidden') {
+        // Do not break in case there is a following track with showing.
+        trackId = id;
+      }
+      else if (tracks[id].mode === 'showing') {
+        trackId = id;
+        break;
+      }
+    }
+    if (!this.shouldRenderNativeTextTracks &&
+      ((_a = tracks[trackId]) === null || _a === void 0 ? void 0 : _a.mode) === 'showing') {
+      tracks[trackId].mode = 'hidden';
+      return;
+    }
+    if (this.shouldRenderNativeTextTracks) {
+      this.isTextTrackVisible =
+        trackId !== -1 && tracks[trackId].mode === 'showing';
+      this.dispatch('isTextTrackVisible', this.isTextTrackVisible);
+    }
+    this.dispatch('textTracks', tracks);
+    this.dispatch('currentTextTrack', this.shouldRenderNativeTextTracks && !this.isTextTrackVisible
+      ? -1
+      : trackId);
+  }
+  toggleTextTrackModes(newTrackId) {
+    if (isNil(this.mediaEl))
+      return;
+    const { textTracks } = this.mediaEl;
+    if (newTrackId === -1) {
+      Array.from(textTracks).forEach(track => {
+        track.mode = 'disabled';
+      });
+    }
+    else {
+      const oldTrack = textTracks[this.currentTextTrack];
+      if (oldTrack)
+        oldTrack.mode = 'disabled';
+    }
+    const nextTrack = textTracks[newTrackId];
+    if (nextTrack) {
+      nextTrack.mode =
+        this.isTextTrackVisible && this.shouldRenderNativeTextTracks
+          ? 'showing'
+          : 'hidden';
+    }
+    this.dispatch('currentTextTrack', this.shouldRenderNativeTextTracks && !this.isTextTrackVisible
+      ? -1
+      : newTrackId);
+    this.dispatch('isTextTrackVisible', this.isTextTrackVisible);
+  }
+  render() {
+    const mediaProps = {
+      autoplay: this.autoplay,
+      muted: this.muted,
+      playsinline: this.playsinline,
+      playsInline: this.playsinline,
+      'x5-playsinline': this.playsinline,
+      'webkit-playsinline': this.playsinline,
+      controls: this.controls,
+      crossorigin: this.crossOrigin === '' ? 'anonymous' : this.crossOrigin,
+      controlslist: this.controlsList,
+      'data-poster': !this.hasCustomPoster() ? this.poster : undefined,
+      loop: this.loop,
+      preload: this.preload,
+      disablePictureInPicture: this.disablePiP,
+      autoPictureInPicture: this.autoPiP,
+      disableRemotePlayback: this.disableRemotePlayback,
+      'x-webkit-airplay': this.disableRemotePlayback ? 'deny' : 'allow',
+      ref: (el) => {
+        this.mediaEl = el;
+      },
+      onLoadedMetadata: this.onLoadedMetadata.bind(this),
+      onProgress: this.onProgress.bind(this),
+      onPlay: this.onPlay.bind(this),
+      onPause: this.onPause.bind(this),
+      onPlaying: this.onPlaying.bind(this),
+      onSeeking: this.onSeeking.bind(this),
+      onSeeked: this.onSeeked.bind(this),
+      onRateChange: this.onRateChange.bind(this),
+      onVolumeChange: this.onVolumeChange.bind(this),
+      onDurationChange: this.onDurationChange.bind(this),
+      onWaiting: this.onWaiting.bind(this),
+      onSuspend: this.onSuspend.bind(this),
+      onEnded: this.onEnded.bind(this),
+      onError: this.onError.bind(this),
+    };
+    const audio = (h("audio", Object.assign({ class: "lazy" }, mediaProps), h("slot", null), "Your browser does not support the", h("code", null, "audio"), "element."));
+    const video = (h("video", Object.assign({ class: "lazy" }, mediaProps, {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      onenterpictureinpicture: this.onEnterPiP.bind(this), onleavepictureinpicture: this.onLeavePiP.bind(this)
+    }), h("slot", null), "Your browser does not support the", h("code", null, "video"), "element."));
+    return this.viewType === ViewType.Audio ? audio : video;
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "mediaTitle": ["onMediaTitleChange"],
+    "poster": ["onPosterChange"],
+    "viewType": ["onViewTypeChange"],
+    "hasCustomTextManager": ["onHasCustomTextManagerChange"],
+    "shouldRenderNativeTextTracks": ["onShouldRenderNativeTextTracksChange"]
+  }; }
+  static get style() { return fileCss; }
+};
+
+const fullscreenControlCss = ":host([hidden]){display:none}";
+
+var __awaiter$g = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const FullscreenControl = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.canSetFullscreen = false;
+    /**
+     * The name of the enter fullscreen icon to resolve from the icon library.
+     */
+    this.enterIcon = 'fullscreen-enter';
+    /**
+     * The name of the exit fullscreen icon to resolve from the icon library.
+     */
+    this.exitIcon = 'fullscreen-exit';
+    /**
+     * Whether the tooltip is positioned above/below the control.
+     */
+    this.tooltipPosition = 'top';
+    /**
+     * Whether the tooltip should not be displayed.
+     */
+    this.hideTooltip = false;
+    /** @inheritdoc */
+    this.keys = 'f';
+    /** @internal */
+    this.isFullscreenActive = false;
+    /** @internal */
+    this.i18n = {};
+    /** @internal */
+    this.playbackReady = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['isFullscreenActive', 'playbackReady', 'i18n']);
+  }
+  onPlaybackReadyChange() {
+    var _a;
+    return __awaiter$g(this, void 0, void 0, function* () {
+      const player = getPlayerFromRegistry(this);
+      this.canSetFullscreen = (_a = (yield (player === null || player === void 0 ? void 0 : player.canSetFullscreen()))) !== null && _a !== void 0 ? _a : false;
+    });
+  }
+  componentDidLoad() {
+    this.onPlaybackReadyChange();
+  }
+  onClick() {
+    const player = getPlayerFromRegistry(this);
+    !this.isFullscreenActive
+      ? player === null || player === void 0 ? void 0 : player.enterFullscreen()
+      : player === null || player === void 0 ? void 0 : player.exitFullscreen();
+  }
+  render() {
+    const tooltip = this.isFullscreenActive
+      ? this.i18n.exitFullscreen
+      : this.i18n.enterFullscreen;
+    const tooltipWithHint = !isUndefined(this.keys)
+      ? `${tooltip} (${this.keys})`
+      : tooltip;
+    return (h(Host, { hidden: !this.canSetFullscreen }, h("vm-control", { label: this.i18n.fullscreen, keys: this.keys, pressed: this.isFullscreenActive, hidden: !this.canSetFullscreen, onClick: this.onClick.bind(this) }, h("vm-icon", { name: this.isFullscreenActive ? this.exitIcon : this.enterIcon, library: this.icons }), h("vm-tooltip", { hidden: this.hideTooltip, position: this.tooltipPosition, direction: this.tooltipDirection }, tooltipWithHint))));
+  }
+  static get watchers() { return {
+    "playbackReady": ["onPlaybackReadyChange"]
+  }; }
+  static get style() { return fullscreenControlCss; }
+};
+
+var __awaiter$f = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const HLS = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    this.vmLoadStart = createEvent(this, "vmLoadStart", 7);
+    this.vmError = createEvent(this, "vmError", 7);
+    this.hasAttached = false;
+    /**
+     * The NPM package version of the `hls.js` library to download and use if HLS is not natively
+     * supported.
+     */
+    this.version = 'latest';
+    /** @inheritdoc */
+    this.preload = 'metadata';
+    /** @internal */
+    this.playbackReady = false;
+    withComponentRegistry(this);
+    withProviderConnect(this);
+    withPlayerContext(this, ['playbackReady']);
+  }
+  connectedCallback() {
+    this.dispatch = createProviderDispatcher(this);
+    if (this.mediaEl)
+      this.setupHls();
+  }
+  disconnectedCallback() {
+    this.destroyHls();
+  }
+  get src() {
+    if (isNil(this.videoProvider))
+      return undefined;
+    const sources = this.videoProvider.querySelectorAll('source');
+    const currSource = Array.from(sources).find(source => hlsRegex.test(source.src) || hlsTypeRegex.test(source.type));
+    return currSource === null || currSource === void 0 ? void 0 : currSource.src;
+  }
+  setupHls() {
+    return __awaiter$f(this, void 0, void 0, function* () {
+      if (!isUndefined(this.hls))
+        return;
+      try {
+        const url = this.libSrc ||
+          `https://cdn.jsdelivr.net/npm/hls.js@${this.version}/dist/hls.min.js`;
+        const Hls = (yield loadSDK(url, 'Hls'));
+        if (!Hls.isSupported()) {
+          this.vmError.emit('hls.js is not supported');
+          return;
+        }
+        this.hls = new Hls(this.config);
+        this.hls.on(Hls.Events.MEDIA_ATTACHED, () => {
+          this.hasAttached = true;
+          this.onSrcChange();
+        });
+        this.hls.on(Hls.Events.AUDIO_TRACKS_UPDATED, () => {
+          this.dispatch('audioTracks', this.hls.audioTracks);
+          this.dispatch('currentAudioTrack', this.hls.audioTrack);
+        });
+        this.hls.on(Hls.Events.AUDIO_TRACK_SWITCHED, () => {
+          this.dispatch('currentAudioTrack', this.hls.audioTrack);
+        });
+        this.hls.on(Hls.Events.ERROR, (event, data) => {
+          if (data.fatal) {
+            switch (data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                this.hls.startLoad();
+                break;
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                this.hls.recoverMediaError();
+                break;
+              default:
+                this.destroyHls();
+                break;
+            }
+          }
+          this.vmError.emit({ event, data });
+        });
+        this.hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          this.dispatch('mediaType', MediaType.Video);
+          this.dispatch('currentSrc', this.src);
+          this.dispatchLevels();
+        });
+        this.hls.on(Hls.Events.LEVEL_LOADED, (_, data) => {
+          if (!this.playbackReady) {
+            this.dispatch('duration', data.details.totalduration);
+            this.dispatch('playbackReady', true);
+          }
+        });
+        this.hls.attachMedia(this.mediaEl);
+      }
+      catch (e) {
+        this.vmError.emit(e);
+      }
+    });
+  }
+  dispatchLevels() {
+    if (!this.hls.levels || this.hls.levels.length === 0)
+      return;
+    this.dispatch('playbackQualities', [
+      'Auto',
+      ...this.hls.levels.map(this.levelToPlaybackQuality),
+    ]);
+    this.dispatch('playbackQuality', 'Auto');
+  }
+  levelToPlaybackQuality(level) {
+    return level === -1 ? 'Auto' : `${level.height}p`;
+  }
+  findLevelIndexFromQuality(quality) {
+    return this.hls.levels.findIndex((level) => this.levelToPlaybackQuality(level) === quality);
+  }
+  destroyHls() {
+    var _a;
+    (_a = this.hls) === null || _a === void 0 ? void 0 : _a.destroy();
+    this.hasAttached = false;
+  }
+  onMediaElChange(event) {
+    return __awaiter$f(this, void 0, void 0, function* () {
+      this.destroyHls();
+      if (isUndefined(event.detail))
+        return;
+      this.mediaEl = event.detail;
+      // Need a small delay incase the media element changes rapidly and Hls.js can't reattach.
+      setTimeout(() => __awaiter$f(this, void 0, void 0, function* () {
+        yield this.setupHls();
+      }), 50);
+    });
+  }
+  onSrcChange() {
+    var _a;
+    return __awaiter$f(this, void 0, void 0, function* () {
+      if (this.hasAttached && this.hls.url !== this.src) {
+        this.vmLoadStart.emit();
+        (_a = this.hls) === null || _a === void 0 ? void 0 : _a.loadSource(this.src);
+      }
+    });
+  }
+  /** @internal */
+  getAdapter() {
+    var _a, _b;
+    return __awaiter$f(this, void 0, void 0, function* () {
+      const adapter = (_b = (yield ((_a = this.videoProvider) === null || _a === void 0 ? void 0 : _a.getAdapter()))) !== null && _b !== void 0 ? _b : {};
+      const canVideoProviderPlay = adapter.canPlay;
+      return Object.assign(Object.assign({}, adapter), { getInternalPlayer: () => __awaiter$f(this, void 0, void 0, function* () { return this.hls; }), canPlay: (type) => __awaiter$f(this, void 0, void 0, function* () {
+          var _c;
+          return (isString(type) && hlsRegex.test(type)) ||
+            ((_c = canVideoProviderPlay === null || canVideoProviderPlay === void 0 ? void 0 : canVideoProviderPlay(type)) !== null && _c !== void 0 ? _c : false);
+        }), canSetPlaybackQuality: () => __awaiter$f(this, void 0, void 0, function* () { var _d, _e; return ((_e = (_d = this.hls) === null || _d === void 0 ? void 0 : _d.levels) === null || _e === void 0 ? void 0 : _e.length) > 0; }), setPlaybackQuality: (quality) => __awaiter$f(this, void 0, void 0, function* () {
+          if (!isUndefined(this.hls)) {
+            this.hls.currentLevel = this.findLevelIndexFromQuality(quality);
+            // Update the provider cache.
+            this.dispatch('playbackQuality', quality);
+          }
+        }), setCurrentAudioTrack: (trackId) => __awaiter$f(this, void 0, void 0, function* () {
+          if (!isUndefined(this.hls)) {
+            this.hls.audioTrack = trackId;
+          }
+        }) });
+    });
+  }
+  render() {
+    return (h("vm-video", { willAttach: true, crossOrigin: this.crossOrigin, preload: this.preload, poster: this.poster, controlsList: this.controlsList, autoPiP: this.autoPiP, disablePiP: this.disablePiP, disableRemotePlayback: this.disableRemotePlayback, mediaTitle: this.mediaTitle, ref: (el) => {
+        this.videoProvider = el;
+      } }, h("slot", null)));
+  }
+};
+
+/**
+ * INSPIRED BY: https://github.com/shoelace-style/shoelace/blob/next/src/components/icon-library/icon-library-registry.ts
+ */
+const ICONS_BASE_CDN_URL = 'https://cdn.jsdelivr.net/npm/@vime/core@latest/icons';
+const registry = new Map(Object.entries({
+  vime: iconName => `${ICONS_BASE_CDN_URL}/vime/vm-${iconName}.svg`,
+  material: iconName => `${ICONS_BASE_CDN_URL}/material/md-${iconName}.svg`,
+}));
+const watch = new Set();
+function withIconRegistry(component) {
+  const el = getElement(component);
+  createStencilHook(component, () => {
+    watch.add(el);
+  }, () => {
+    watch.delete(el);
+  });
+}
+const getIconLibraryResolver = (name) => registry.get(name);
+function registerIconLibrary(name, resolver) {
+  if (!isUndefined(resolver)) {
+    registry.set(name, resolver);
+  }
+  // Redraw watched icons.
+  watch.forEach(iconEl => {
+    if (iconEl.library === name)
+      iconEl.redraw();
+  });
+}
+function deregisterIconLibrary(name) {
+  registry.delete(name);
+}
+
+/**
+ * INSPIRED BY: https://github.com/shoelace-style/shoelace/blob/next/src/components/icon/request.ts
+ */
+var __awaiter$e = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const iconFiles = new Map();
+const requestIcon = (url) => {
+  if (iconFiles.has(url))
+    return iconFiles.get(url);
+  const request = fetch(url).then((response) => __awaiter$e(void 0, void 0, void 0, function* () {
+    if (response.ok) {
+      const div = document.createElement('div');
+      div.innerHTML = yield response.text();
+      const svg = div.firstElementChild;
+      return {
+        ok: response.ok,
+        status: response.status,
+        svg: svg && svg.tagName.toLowerCase() === 'svg' ? svg.outerHTML : '',
+      };
+    }
+    return {
+      ok: response.ok,
+      status: response.status,
+    };
+  }));
+  iconFiles.set(url, request);
+  return request;
+};
+
+const iconCss = ":host{display:inline-block;width:1em;height:1em;contain:strict;box-sizing:content-box !important}.icon,svg{display:block;height:100%;width:100%;transition:var(--vm-icon-transition);transform:var(--vm-icon-transform);fill:var(--vm-icon-fill, currentColor);stroke:var(--vm-icon-stroke)}";
+
+/**
+ * INSPIRED BY: https://github.com/shoelace-style/shoelace/blob/next/src/components/icon/icon.tsx
+ */
+var __awaiter$d = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const parser = new DOMParser();
+const Icon = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmLoad = createEvent(this, "vmLoad", 7);
+    this.vmError = createEvent(this, "vmError", 7);
+    /** @internal */
+    this.icons = 'material';
+    withComponentRegistry(this);
+    withIconRegistry(this);
+  }
+  handleChange() {
+    this.setIcon();
+  }
+  connectedCallback() {
+    withPlayerContext(this, ['icons']);
+  }
+  componentDidLoad() {
+    this.setIcon();
+  }
+  /**
+   * @internal Fetches the icon and redraws it. Used to handle library registrations.
+   */
+  redraw() {
+    return __awaiter$d(this, void 0, void 0, function* () {
+      this.setIcon();
+    });
+  }
+  getLabel() {
+    let label = '';
+    if (this.label) {
+      label = this.label;
+    }
+    else if (this.name) {
+      label = this.name.replace(/-/g, ' ');
+    }
+    else if (this.src) {
+      label = this.src
+        .replace(/.*\//, '')
+        .replace(/-/g, ' ')
+        .replace(/\.svg/i, '');
+    }
+    return label;
+  }
+  setIcon() {
+    var _a;
+    return __awaiter$d(this, void 0, void 0, function* () {
+      const resolver = getIconLibraryResolver((_a = this.library) !== null && _a !== void 0 ? _a : this.icons);
+      let url = this.src;
+      if (this.name && resolver) {
+        url = resolver(this.name);
+      }
+      if (url) {
+        try {
+          const file = yield requestIcon(url);
+          if (file.ok) {
+            const doc = parser.parseFromString(file.svg, 'text/html');
+            const svg = doc.body.querySelector('svg');
+            if (svg) {
+              this.svg = svg.outerHTML;
+              this.vmLoad.emit();
+            }
+            else {
+              this.svg = '';
+              this.vmError.emit({ status: file.status });
+            }
+          }
+        }
+        catch (_b) {
+          this.vmError.emit();
+        }
+      }
+    });
+  }
+  render() {
+    return (h("div", { class: "icon", role: "img", "aria-label": this.getLabel(), innerHTML: this.svg }));
+  }
+  static get watchers() { return {
+    "name": ["handleChange"],
+    "src": ["handleChange"],
+    "library": ["handleChange"],
+    "icons": ["handleChange"]
+  }; }
+  static get style() { return iconCss; }
+};
+
+const IconLibrary = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /** @internal */
+    this.icons = 'material';
+    withComponentRegistry(this);
+    withPlayerContext(this, ['icons']);
+  }
+  handleUpdate() {
+    this.register();
+  }
+  connectedCallback() {
+    this.register();
+  }
+  disconnectedCallback() {
+    if (!isUndefined(this.name))
+      deregisterIconLibrary(this.name);
+  }
+  register() {
+    var _a;
+    registerIconLibrary((_a = this.name) !== null && _a !== void 0 ? _a : this.icons, this.name ? this.resolver : undefined);
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "name": ["handleUpdate"],
+    "resolver": ["handleUpdate"],
+    "icons": ["handleUpdate"]
+  }; }
+};
+
+const liveIndicatorCss = ".liveIndicator{display:flex;align-items:center;font-size:13px;font-weight:bold;letter-spacing:0.6px;color:var(--vm-control-color)}.liveIndicator.hidden{display:none}.indicator{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;background-color:var(--vm-live-indicator-color, red)}";
+
+const LiveIndicator = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /** @internal */
+    this.isLive = false;
+    /** @internal */
+    this.i18n = {};
+    withComponentRegistry(this);
+    withPlayerContext(this, ['isLive', 'i18n']);
+  }
+  render() {
+    return (h("div", { class: {
+        liveIndicator: true,
+        hidden: !this.isLive,
+      } }, h("div", { class: "indicator" }), this.i18n.live));
+  }
+  static get style() { return liveIndicatorCss; }
+};
+
+const loadingScreenCss = ":host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:var(--vm-loading-screen-z-index);display:flex;align-items:center;justify-content:center}.loadingScreen{opacity:100;transition:var(--vm-fade-transition)}.loadingScreen.inactive{opacity:0}.dotPulse{position:relative;left:-9999px;width:var(--vm-loading-screen-dot-size);height:var(--vm-loading-screen-dot-size);border-radius:calc(var(--vm-loading-screen-dot-size) / 2);background-color:var(--vm-loading-screen-dot-color);color:var(--vm-loading-screen-dot-color);box-shadow:9999px 0 0 calc(calc(var(--vm-loading-screen-dot-size) / 2) * -1)\n    var(--vm-loading-screen-dot-color);animation:dotPulse var(--vm-loading-screen-pulse-duration) infinite linear;animation-delay:calc(var(--vm-loading-screen-pulse-duration) / 6)}.dotPulse::before,.dotPulse::after{content:'';display:inline-block;position:absolute;top:0;width:var(--vm-loading-screen-dot-size);height:var(--vm-loading-screen-dot-size);border-radius:calc(var(--vm-loading-screen-dot-size) / 2);background-color:var(--vm-loading-screen-dot-color);color:var(--vm-loading-screen-dot-color)}.dotPulse::before{box-shadow:9984px 0 0 calc(calc(var(--vm-loading-screen-dot-size) / 2) * -1)\n    var(--vm-loading-screen-dot-color);animation:dotPulseBefore var(--vm-loading-screen-pulse-duration) infinite\n    linear;animation-delay:0s}.dotPulse::after{box-shadow:10014px 0 0 calc(calc(var(--vm-loading-screen-dot-size) / 2) * -1)\n    var(--vm-loading-screen-dot-color);animation:dotPulseAfter var(--vm-loading-screen-pulse-duration) infinite\n    linear;animation-delay:calc(var(--vm-loading-screen-pulse-duration) / 3)}@keyframes dotPulseBefore{0%{box-shadow:9984px 0 0\n      calc(calc(var(--vm-loading-screen-dot-size) / 2) * -1)\n      var(--vm-loading-screen-dot-color)}30%{box-shadow:9984px 0 0 2px var(--vm-loading-screen-dot-color)}60%,100%{box-shadow:9984px 0 0\n      calc(calc(var(--vm-loading-screen-dot-size) / 2) * -1)\n      var(--vm-loading-screen-dot-color)}}@keyframes dotPulse{0%{box-shadow:9999px 0 0\n      calc(calc(var(--vm-loading-screen-dot-size) / 2) * -1)\n      var(--vm-loading-screen-dot-color)}30%{box-shadow:9999px 0 0 2px var(--vm-loading-screen-dot-color)}60%,100%{box-shadow:9999px 0 0\n      calc(calc(var(--vm-loading-screen-dot-size) / 2) * -1)\n      var(--vm-loading-screen-dot-color)}}@keyframes dotPulseAfter{0%{box-shadow:10014px 0 0\n      calc(calc(var(--vm-loading-screen-dot-size) / 2) * -1)\n      var(--vm-loading-screen-dot-color)}30%{box-shadow:10014px 0 0 2px var(--vm-loading-screen-dot-color)}60%,100%{box-shadow:10014px 0 0\n      calc(calc(var(--vm-loading-screen-dot-size) / 2) * -1)\n      var(--vm-loading-screen-dot-color)}}";
+
+const LoadingScreen = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /** @internal */
+    this.playbackReady = false;
+    /**
+     * Whether the loading dots are hidden or not.
+     */
+    this.hideDots = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['playbackReady']);
+  }
+  render() {
+    return (h("div", { class: {
+        loadingScreen: true,
+        inactive: this.playbackReady,
+      } }, h("slot", null), !this.hideDots && h("div", { class: "dotPulse" })));
+  }
+  static get style() { return loadingScreenCss; }
+};
+
+function unwrapSubmenu(el) {
+  if (el.tagName.toLowerCase() !== 'vm-submenu')
+    return el;
+  const submenu = el;
+  return submenu.shadowRoot.querySelector('vm-menu-item');
+}
+function unwrapRadioGroup(el) {
+  var _a;
+  if (el.tagName.toLowerCase() !== 'vm-menu-radio-group')
+    return el;
+  const radioGroup = el;
+  const slot = radioGroup.shadowRoot.querySelector('slot');
+  const assignedElements = Array.from((_a = slot === null || slot === void 0 ? void 0 : slot.assignedElements()) !== null && _a !== void 0 ? _a : []);
+  return assignedElements
+    .filter(radio => radio.tagName.toLowerCase() === 'vm-menu-radio')
+    .map(radio => radio.shadowRoot.querySelector('vm-menu-item'));
+}
+function menuItemHunter(assignedElements) {
+  if (isUndefined(assignedElements))
+    return [];
+  const allowed = ['vm-menu-item', 'vm-menu-radio-group', 'vm-submenu'];
+  return Array.from(assignedElements !== null && assignedElements !== void 0 ? assignedElements : [])
+    .filter(el => allowed.includes(el.tagName.toLowerCase()))
+    .map(el => unwrapSubmenu(el))
+    .map(el => unwrapRadioGroup(el))
+    .reduce((acc, val) => acc.concat(val), []);
+}
+
+const menuCss = ":host{position:absolute;top:0;left:0;width:100%;height:100%;overflow:hidden;pointer-events:none;z-index:var(--vm-menu-z-index)}:host([active]){pointer-events:auto;z-index:calc(var(--vm-menu-z-index) + 1)}.menu{position:absolute;top:0;left:0;width:100%;height:100%;box-sizing:border-box;transition:var(--vm-menu-transition)}.menu.slideIn{transform:translateX(0)}.menu[aria-hidden='true'].slideInFromLeft{transform:translateX(-100%)}.menu[aria-hidden='true'].slideInFromRight{transform:translateX(100%)}.container{display:flex;flex-direction:column;position:relative;text-align:left;width:100%;height:100%;color:var(--vm-menu-color);background:var(--vm-menu-bg);font-size:var(--vm-menu-font-size);font-weight:var(--vm-menu-font-weight)}.menu:focus{outline:0}";
+
+var __awaiter$c = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const Menu = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmOpen = createEvent(this, "vmOpen", 7);
+    this.vmClose = createEvent(this, "vmClose", 7);
+    this.vmFocus = createEvent(this, "vmFocus", 7);
+    this.vmBlur = createEvent(this, "vmBlur", 7);
+    this.vmActiveSubmenuChange = createEvent(this, "vmActiveSubmenuChange", 7);
+    this.vmActiveMenuItemChange = createEvent(this, "vmActiveMenuItemChange", 7);
+    this.vmMenuHeightChange = createEvent(this, "vmMenuHeightChange", 3);
+    this.hasDisconnected = false;
+    /**
+     * Whether the menu is open/visible.
+     */
+    this.active = false;
+    withComponentRegistry(this);
+  }
+  onActiveMenuitemChange() {
+    this.vmActiveMenuItemChange.emit(this.activeMenuItem);
+  }
+  onActiveSubmenuChange() {
+    this.vmActiveSubmenuChange.emit(this.activeSubmenu);
+  }
+  onActiveChange() {
+    var _a;
+    if (this.hasDisconnected)
+      return;
+    this.active ? this.vmOpen.emit(this.host) : this.vmClose.emit(this.host);
+    if (((_a = this.controller) === null || _a === void 0 ? void 0 : _a.tagName.toLowerCase()) === 'vm-menu-item') {
+      this.controller.expanded = true;
+    }
+  }
+  connectedCallback() {
+    this.hasDisconnected = false;
+  }
+  componentDidRender() {
+    writeTask(() => {
+      if (!this.hasDisconnected)
+        this.calculateHeight();
+    });
+  }
+  disconnectedCallback() {
+    this.controller = undefined;
+    this.hasDisconnected = true;
+  }
+  /**
+   * Focuses the menu.
+   */
+  focusMenu() {
+    var _a;
+    return __awaiter$c(this, void 0, void 0, function* () {
+      (_a = this.menu) === null || _a === void 0 ? void 0 : _a.focus();
+    });
+  }
+  /**
+   * Removes focus from the menu.
+   */
+  blurMenu() {
+    var _a;
+    return __awaiter$c(this, void 0, void 0, function* () {
+      (_a = this.menu) === null || _a === void 0 ? void 0 : _a.blur();
+    });
+  }
+  /**
+   * Returns the currently focused menu item.
+   */
+  getActiveMenuItem() {
+    return __awaiter$c(this, void 0, void 0, function* () {
+      return this.activeMenuItem;
+    });
+  }
+  /**
+   * Sets the currently focused menu item.
+   */
+  setActiveMenuItem(item) {
+    return __awaiter$c(this, void 0, void 0, function* () {
+      item === null || item === void 0 ? void 0 : item.focusItem();
+      this.activeMenuItem = item;
+    });
+  }
+  /**
+   * Calculates the height of the settings menu based on its children.
+   */
+  calculateHeight() {
+    var _a, _b;
+    return __awaiter$c(this, void 0, void 0, function* () {
+      let height = 0;
+      if (this.activeSubmenu) {
+        const submenu = yield this.activeSubmenu.getMenu();
+        height = (_a = (yield (submenu === null || submenu === void 0 ? void 0 : submenu.calculateHeight()))) !== null && _a !== void 0 ? _a : 0;
+        height += yield this.activeSubmenu.getControllerHeight();
+      }
+      else {
+        const children = ((_b = this.container) === null || _b === void 0 ? void 0 : _b.firstChild).assignedElements({ flatten: true });
+        children === null || children === void 0 ? void 0 : children.forEach(child => {
+          height += parseFloat(window.getComputedStyle(child).height);
+        });
+      }
+      this.vmMenuHeightChange.emit(height);
+      return height;
+    });
+  }
+  onOpenSubmenu(event) {
+    event.stopPropagation();
+    if (!isUndefined(this.activeSubmenu))
+      this.activeSubmenu.active = false;
+    this.activeSubmenu = event.detail;
+    this.getChildren().forEach(child => {
+      if (child !== this.activeSubmenu) {
+        child.style.opacity = '0';
+        child.style.visibility = 'hidden';
+      }
+    });
+    writeTask(() => {
+      this.activeSubmenu.active = true;
+    });
+  }
+  onCloseSubmenu(event) {
+    event === null || event === void 0 ? void 0 : event.stopPropagation();
+    if (!isUndefined(this.activeSubmenu))
+      this.activeSubmenu.active = false;
+    this.getChildren().forEach(child => {
+      if (child !== this.activeSubmenu) {
+        child.style.opacity = '';
+        child.style.visibility = '';
+      }
+    });
+    writeTask(() => {
+      this.activeSubmenu = undefined;
+    });
+  }
+  onWindowClick() {
+    this.onCloseSubmenu();
+    this.onClose();
+  }
+  onWindowKeyDown(event) {
+    if (this.active && event.key === 'Escape') {
+      this.onCloseSubmenu();
+      this.onClose();
+      this.focusController();
+    }
+  }
+  getChildren() {
+    var _a;
+    const assignedElements = (_a = this.host
+      .shadowRoot.querySelector('slot')) === null || _a === void 0 ? void 0 : _a.assignedElements({ flatten: true });
+    return (assignedElements !== null && assignedElements !== void 0 ? assignedElements : []);
+  }
+  getMenuItems() {
+    var _a;
+    const assignedElements = (_a = this.host
+      .shadowRoot.querySelector('slot')) === null || _a === void 0 ? void 0 : _a.assignedElements({ flatten: true });
+    return menuItemHunter(assignedElements);
+  }
+  focusController() {
+    var _a, _b, _c, _d, _e;
+    if (!isUndefined((_a = this.controller) === null || _a === void 0 ? void 0 : _a.focusItem)) {
+      (_b = this.controller) === null || _b === void 0 ? void 0 : _b.focusItem();
+    }
+    else if (!isUndefined((_c = this.controller) === null || _c === void 0 ? void 0 : _c.focusControl)) {
+      (_d = this.controller) === null || _d === void 0 ? void 0 : _d.focusControl();
+    }
+    else {
+      (_e = this.controller) === null || _e === void 0 ? void 0 : _e.focus();
+    }
+  }
+  triggerMenuItem() {
+    var _a;
+    if (isUndefined(this.activeMenuItem))
+      return;
+    this.activeMenuItem.click();
+    // If it controls a menu then focus it essentially opening it.
+    (_a = this.activeMenuItem.menu) === null || _a === void 0 ? void 0 : _a.focusMenu();
+  }
+  onClose() {
+    this.activeMenuItem = undefined;
+    this.active = false;
+  }
+  onClick(event) {
+    // Stop the event from propagating while playing with menu so that when it is clicked outside
+    // the menu we can close it in the `onWindowClick` handler above.
+    event.stopPropagation();
+  }
+  onFocus() {
+    var _a;
+    this.active = true;
+    [this.activeMenuItem] = this.getMenuItems();
+    (_a = this.activeMenuItem) === null || _a === void 0 ? void 0 : _a.focusItem();
+    this.vmFocus.emit();
+  }
+  onBlur() {
+    this.vmBlur.emit();
+  }
+  foucsMenuItem(items, index) {
+    if (index < 0)
+      index = items.length - 1;
+    if (index > items.length - 1)
+      index = 0;
+    this.activeMenuItem = items[index];
+    this.activeMenuItem.focusItem();
+  }
+  onKeyDown(event) {
+    if (!this.active)
+      return;
+    event.preventDefault();
+    event.stopPropagation();
+    const items = this.getMenuItems();
+    let index = items.findIndex(item => item === this.activeMenuItem);
+    switch (event.key) {
+      case 'Escape':
+        this.onClose();
+        this.focusController();
+        break;
+      case 'ArrowDown':
+      case 'Tab':
+        this.foucsMenuItem(items, (index += 1));
+        break;
+      case 'ArrowUp':
+        this.foucsMenuItem(items, (index -= 1));
+        break;
+      case 'ArrowLeft':
+        this.onClose();
+        this.focusController();
+        break;
+      case 'ArrowRight':
+      case 'Enter':
+      case ' ':
+        this.triggerMenuItem();
+        break;
+      case 'Home':
+      case 'PageUp':
+        this.foucsMenuItem(items, 0);
+        break;
+      case 'End':
+      case 'PageDown':
+        this.foucsMenuItem(items, items.length - 1);
+        break;
+    }
+  }
+  render() {
+    var _a, _b, _c;
+    return (h("div", { id: this.identifier, class: {
+        menu: true,
+        slideIn: !isUndefined(this.slideInDirection),
+        slideInFromLeft: this.slideInDirection === 'left',
+        slideInFromRight: this.slideInDirection === 'right',
+      }, role: "menu", tabindex: "-1", "aria-labelledby": (_b = (_a = this.controller) === null || _a === void 0 ? void 0 : _a.identifier) !== null && _b !== void 0 ? _b : (_c = this.controller) === null || _c === void 0 ? void 0 : _c.id, "aria-hidden": !this.active ? 'true' : 'false', onFocus: this.onFocus.bind(this), onBlur: this.onBlur.bind(this), onClick: this.onClick.bind(this), onKeyDown: this.onKeyDown.bind(this), ref: el => {
+        this.menu = el;
+      } }, h("div", { class: "container", ref: el => {
+        this.container = el;
+      } }, h("slot", null))));
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "activeMenuItem": ["onActiveMenuitemChange"],
+    "activeSubmenu": ["onActiveSubmenuChange"],
+    "active": ["onActiveChange"]
+  }; }
+  static get style() { return menuCss; }
+};
+
+const menuItemCss = ":host{display:block}.menuItem{display:flex;position:relative;align-items:center;flex-direction:row;cursor:pointer;color:var(--vm-menu-color);background:var(--vm-menu-bg);font-size:var(--vm-menu-font-size);font-weight:var(--vm-menu-font-weight);padding:var(--vm-menu-item-padding);touch-action:manipulation;box-sizing:border-box}.menuItem:focus{outline:0}.menuItem.hidden{display:none}.menuItem.tapHighlight{background:var(--vm-menu-item-tap-highlight)}.menuItem.showDivider{border-bottom:0.5px solid var(--vm-menu-item-divider-color)}.menuItem.notTouch:hover,.menuItem.notTouch:focus{outline:0;color:var(--vm-menu-item-focus-color);background-color:var(--vm-menu-item-focus-bg)}.menuItem[aria-expanded='true']{position:absolute;z-index:2;top:0;width:100%}.menuItem[aria-hidden='true']{display:none}.menuItem[aria-checked='true'] vm-icon{opacity:1;visibility:visible}vm-icon{display:inline-block}vm-icon{fill:currentColor;pointer-events:none;font-size:var(--vm-menu-item-check-icon-size);margin-right:10px;opacity:0;visibility:hidden;transition:var(--vm-fade-transition)}.hint{display:inline-block;margin-left:auto;overflow:hidden;pointer-events:none;margin-right:6px;font-size:var(--vm-menu-item-hint-font-size);opacity:var(--vm-menu-item-hint-opacity);color:var(--vm-menu-item-hint-color)}.badge{display:inline-block;line-height:1;overflow:hidden;pointer-events:none;margin-left:6px;color:var(--vm-menu-item-badge-color);background:var(--vm-menu-item-badge-bg);font-size:var(--vm-menu-item-badge-font-size)}.spacer{flex:1}.arrow{color:var(--vm-menu-item-arrow-color);border:2px solid;padding:2px;display:inline-block;border-width:0 2px 2px 0}.arrow.left{margin-right:6px;transform:rotate(135deg)}.arrow.right{transform:rotate(-45deg);opacity:0.38}";
+
+var __awaiter$b = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const MenuItem = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmFocus = createEvent(this, "vmFocus", 7);
+    this.vmBlur = createEvent(this, "vmBlur", 7);
+    this.showTapHighlight = false;
+    /**
+     * Whether the item is displayed or not.
+     */
+    this.hidden = false;
+    /**
+     * The name of the checkmark icon to resolve from the icon library.
+     */
+    this.checkIcon = 'check';
+    /** @internal */
+    this.isTouch = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['isTouch']);
+  }
+  /**
+   * Focuses the menu item.
+   */
+  focusItem() {
+    var _a;
+    return __awaiter$b(this, void 0, void 0, function* () {
+      (_a = this.menuItem) === null || _a === void 0 ? void 0 : _a.focus();
+    });
+  }
+  /**
+   * Removes focus from the menu item.
+   */
+  blurItem() {
+    var _a;
+    return __awaiter$b(this, void 0, void 0, function* () {
+      (_a = this.menuItem) === null || _a === void 0 ? void 0 : _a.blur();
+    });
+  }
+  /**
+   * Returns the height of the menu item.
+   */
+  getHeight() {
+    return __awaiter$b(this, void 0, void 0, function* () {
+      return parseFloat(this.menuItem ? window.getComputedStyle(this.menuItem).height : '0');
+    });
+  }
+  onClick() {
+    if (!isNil(this.menu))
+      this.menu.active = !this.expanded;
+  }
+  onFocus() {
+    this.vmFocus.emit();
+  }
+  onBlur() {
+    this.vmBlur.emit();
+  }
+  onTouchStart() {
+    this.showTapHighlight = true;
+  }
+  onTouchEnd() {
+    setTimeout(() => {
+      this.showTapHighlight = false;
+    }, 100);
+  }
+  onMouseLeave() {
+    var _a;
+    (_a = this.menuItem) === null || _a === void 0 ? void 0 : _a.blur();
+  }
+  render() {
+    var _a, _b, _c, _d;
+    const isCheckedDefined = !isUndefined(this.checked);
+    const isMenuDefined = !isUndefined(this.menu);
+    const hasExpanded = this.expanded ? 'true' : 'false';
+    const isChecked = this.checked ? 'true' : 'false';
+    const showCheckedIcon = isCheckedDefined && !isUndefined(this.checkIcon);
+    const showLeftNavArrow = isMenuDefined && this.expanded;
+    const showRightNavArrow = isMenuDefined && !this.expanded;
+    const showHint = !isUndefined(this.hint) &&
+      !isCheckedDefined &&
+      (!isMenuDefined || !this.expanded);
+    const showBadge = !isUndefined(this.badge) && !showHint && !showRightNavArrow;
+    const hasSpacer = showHint || showRightNavArrow;
+    return (h("div", { class: {
+        menuItem: true,
+        notTouch: !this.isTouch,
+        tapHighlight: this.showTapHighlight,
+        showDivider: isMenuDefined && ((_a = this.expanded) !== null && _a !== void 0 ? _a : false),
+      }, id: this.identifier, role: isCheckedDefined ? 'menuitemradio' : 'menuitem', tabindex: "0", "aria-label": this.label, "aria-hidden": this.hidden ? 'true' : 'false', "aria-haspopup": isMenuDefined ? 'true' : undefined, "aria-controls": (_c = (_b = this.menu) === null || _b === void 0 ? void 0 : _b.identifier) !== null && _c !== void 0 ? _c : (_d = this.menu) === null || _d === void 0 ? void 0 : _d.id, "aria-expanded": isMenuDefined ? hasExpanded : undefined, "aria-checked": isCheckedDefined ? isChecked : undefined, onClick: this.onClick.bind(this), onFocus: this.onFocus.bind(this), onBlur: this.onBlur.bind(this), onTouchStart: this.onTouchStart.bind(this), onTouchEnd: this.onTouchEnd.bind(this), onMouseLeave: this.onMouseLeave.bind(this), ref: el => {
+        this.menuItem = el;
+      } }, showCheckedIcon && (h("vm-icon", { name: this.checkIcon, library: this.icons })), showLeftNavArrow && h("span", { class: "arrow left" }), this.label, hasSpacer && h("span", { class: "spacer" }), showHint && h("span", { class: "hint" }, this.hint), showBadge && h("span", { class: "badge" }, this.badge), showRightNavArrow && h("span", { class: "arrow right" })));
+  }
+  get host() { return this; }
+  static get style() { return menuItemCss; }
+};
+
+const MenuRadio = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmCheck = createEvent(this, "vmCheck", 7);
+    /**
+     * Whether the radio item is selected or not.
+     */
+    this.checked = false;
+    /**
+     * The URL to an SVG element or fragment to load.
+     */
+    this.checkIcon = 'check';
+    withComponentRegistry(this);
+  }
+  onClick() {
+    this.checked = true;
+    this.vmCheck.emit();
+  }
+  render() {
+    return (h("vm-menu-item", { label: this.label, checked: this.checked, badge: this.badge, checkIcon: this.checkIcon, icons: this.icons, onClick: this.onClick.bind(this) }));
+  }
+};
+
+const MenuRadioGroup = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmCheck = createEvent(this, "vmCheck", 7);
+    withComponentRegistry(this);
+  }
+  onValueChange() {
+    var _a;
+    (_a = this.findRadios()) === null || _a === void 0 ? void 0 : _a.forEach(radio => {
+      radio.checked = radio.value === this.value;
+    });
+  }
+  connectedCallback() {
+    this.onValueChange();
+  }
+  componentDidLoad() {
+    this.onValueChange();
+  }
+  onSelectionChange(event) {
+    const radio = event.target;
+    this.value = radio.value;
+  }
+  findRadios() {
+    var _a;
+    return (_a = this.host
+      .shadowRoot.querySelector('slot')) === null || _a === void 0 ? void 0 : _a.assignedElements();
+  }
+  render() {
+    return h("slot", null);
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "value": ["onValueChange"]
+  }; }
+};
+
+const MuteControl = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmFocus = createEvent(this, "vmFocus", 7);
+    this.vmBlur = createEvent(this, "vmBlur", 7);
+    /**
+     * The name of the low volume icon to resolve from the icon library.
+     */
+    this.lowVolumeIcon = 'volume-low';
+    /**
+     * The name of the high volume icon to resolve from the icon library.
+     */
+    this.highVolumeIcon = 'volume-high';
+    /**
+     * The name of the muted volume icon to resolve from the icon library.
+     */
+    this.mutedIcon = 'volume-mute';
+    /**
+     * Whether the tooltip is positioned above/below the control.
+     */
+    this.tooltipPosition = 'top';
+    /**
+     * Whether the tooltip should not be displayed.
+     */
+    this.hideTooltip = false;
+    /** @inheritdoc */
+    this.keys = 'm';
+    /** @internal */
+    this.volume = 50;
+    /** @internal */
+    this.muted = false;
+    /** @internal */
+    this.i18n = {};
+    withComponentRegistry(this);
+    withPlayerContext(this, ['muted', 'volume', 'i18n']);
+  }
+  connectedCallback() {
+    this.dispatch = custom_elements_createDispatcher(this);
+  }
+  getIcon() {
+    const volumeIcon = this.volume < 50 ? this.lowVolumeIcon : this.highVolumeIcon;
+    return this.muted || this.volume === 0 ? this.mutedIcon : volumeIcon;
+  }
+  onClick() {
+    this.dispatch('muted', !this.muted);
+  }
+  render() {
+    const tooltip = this.muted ? this.i18n.unmute : this.i18n.mute;
+    const tooltipWithHint = !isUndefined(this.keys)
+      ? `${tooltip} (${this.keys})`
+      : tooltip;
+    return (h("vm-control", { label: this.i18n.mute, pressed: this.muted, keys: this.keys, onClick: this.onClick.bind(this) }, h("vm-icon", { name: this.getIcon(), library: this.icons }), h("vm-tooltip", { hidden: this.hideTooltip, position: this.tooltipPosition, direction: this.tooltipDirection }, tooltipWithHint)));
+  }
+};
+
+const pipControlCss = ":host([hidden]){display:none}";
+
+var __awaiter$a = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const PiPControl = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.canSetPiP = false;
+    /**
+     * The name of the enter pip icon to resolve from the icon library.
+     */
+    this.enterIcon = 'pip-enter';
+    /**
+     * The name of the exit pip icon to resolve from the icon library.
+     */
+    this.exitIcon = 'pip-exit';
+    /**
+     * Whether the tooltip is positioned above/below the control.
+     */
+    this.tooltipPosition = 'top';
+    /**
+     * Whether the tooltip should not be displayed.
+     */
+    this.hideTooltip = false;
+    /** @inheritdoc */
+    this.keys = 'p';
+    /** @internal */
+    this.isPiPActive = false;
+    /** @internal */
+    this.i18n = {};
+    /** @internal */
+    this.playbackReady = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['isPiPActive', 'playbackReady', 'i18n']);
+  }
+  onPlaybackReadyChange() {
+    var _a;
+    return __awaiter$a(this, void 0, void 0, function* () {
+      const player = getPlayerFromRegistry(this);
+      this.canSetPiP = (_a = (yield (player === null || player === void 0 ? void 0 : player.canSetPiP()))) !== null && _a !== void 0 ? _a : false;
+    });
+  }
+  componentDidLoad() {
+    this.onPlaybackReadyChange();
+  }
+  onClick() {
+    const player = getPlayerFromRegistry(this);
+    !this.isPiPActive ? player === null || player === void 0 ? void 0 : player.enterPiP() : player === null || player === void 0 ? void 0 : player.exitPiP();
+  }
+  render() {
+    const tooltip = this.isPiPActive ? this.i18n.exitPiP : this.i18n.enterPiP;
+    const tooltipWithHint = !isUndefined(this.keys)
+      ? `${tooltip} (${this.keys})`
+      : tooltip;
+    return (h(Host, { hidden: !this.canSetPiP }, h("vm-control", { label: this.i18n.pip, keys: this.keys, pressed: this.isPiPActive, hidden: !this.canSetPiP, onClick: this.onClick.bind(this) }, h("vm-icon", { name: this.isPiPActive ? this.exitIcon : this.enterIcon, library: this.icons }), h("vm-tooltip", { hidden: this.hideTooltip, position: this.tooltipPosition, direction: this.tooltipDirection }, tooltipWithHint))));
+  }
+  static get watchers() { return {
+    "playbackReady": ["onPlaybackReadyChange"]
+  }; }
+  static get style() { return pipControlCss; }
+};
+
+const PlaybackControl = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /**
+     * The name of the play icon to resolve from the icon library.
+     */
+    this.playIcon = 'play';
+    /**
+     * The name of the pause icon to resolve from the icon library.
+     */
+    this.pauseIcon = 'pause';
+    /**
+     * Whether the tooltip is positioned above/below the control.
+     */
+    this.tooltipPosition = 'top';
+    /**
+     * Whether the tooltip should not be displayed.
+     */
+    this.hideTooltip = false;
+    /** @inheritdoc */
+    this.keys = 'k';
+    /** @internal */
+    this.paused = true;
+    /** @internal */
+    this.i18n = {};
+    withComponentRegistry(this);
+    withPlayerContext(this, ['paused', 'i18n']);
+  }
+  connectedCallback() {
+    this.dispatch = custom_elements_createDispatcher(this);
+  }
+  onClick() {
+    this.dispatch('paused', !this.paused);
+  }
+  render() {
+    const tooltip = this.paused ? this.i18n.play : this.i18n.pause;
+    const tooltipWithHint = !isUndefined(this.keys)
+      ? `${tooltip} (${this.keys})`
+      : tooltip;
+    return (h("vm-control", { label: this.i18n.playback, keys: this.keys, pressed: !this.paused, onClick: this.onClick.bind(this) }, h("vm-icon", { name: this.paused ? this.playIcon : this.pauseIcon, library: this.icons }), h("vm-tooltip", { hidden: this.hideTooltip, position: this.tooltipPosition, direction: this.tooltipDirection }, tooltipWithHint)));
+  }
+};
+
+class Logger {
+  constructor() {
+    this.silent = false;
+  }
+  log(...args) {
+    if (!this.silent && !isUndefined(console))
+      console.log('[Vime tip]:', ...args);
+  }
+  warn(...args) {
+    if (!this.silent && !isUndefined(console))
+      console.error('[Vime warn]:', ...args);
+  }
+}
+
+const players = new Set();
+function withAutopause(player) {
+  const el = getElement(player);
+  createStencilHook(player, () => {
+    players.add(el);
+  }, () => {
+    players.delete(el);
+  });
+}
+function autopause(player) {
+  const el = getElement(player);
+  players.forEach(p => {
+    if (p !== el && p.autopause)
+      p.paused = true;
+  });
+}
+
+/* eslint-disable func-names */
+function withPlayerEvents(player) {
+  const el = getElement(player);
+  const cache = new Map();
+  function initCache() {
+    Object.keys(initialState).forEach(prop => {
+      cache.set(prop, player[prop]);
+    });
+  }
+  createStencilHook(player, () => {
+    initCache();
+  }, () => {
+    cache.clear();
+  });
+  const { componentDidRender } = player;
+  player.componentDidRender = function () {
+    componentDidRender === null || componentDidRender === void 0 ? void 0 : componentDidRender();
+    const props = Array.from(cache.keys());
+    for (let i = 0; i < props.length; i += 1) {
+      const prop = props[i];
+      const oldValue = cache.get(prop);
+      const newValue = player[prop];
+      if (oldValue !== newValue) {
+        firePlayerEvent(el, prop, newValue, oldValue);
+        cache.set(prop, newValue);
+      }
+    }
+  };
+}
+
+var __awaiter$9 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+    function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+// These changes need to be called immediately to avoid the browser blocking the request.
+const immediateAdapterCall = new Set(['currentTime', 'paused']);
+function withPlayerScheduler(player) {
+  const el = getElement(player);
+  const disposal = new Disposal();
+  const cache = new Map();
+  function initCache() {
+    Object.keys(initialState).forEach(prop => {
+      cache.set(prop, player[prop]);
+    });
+  }
+  // Queue of adapter calls to be run when the media is ready for playback.
+  let adapterCalls = [];
+  function flushAdapterCalls() {
+    return __awaiter$9(this, void 0, void 0, function* () {
+      const adapter = yield player.adapter;
+      if (isUndefined(adapter))
+        return;
+      for (let i = 0; i < adapterCalls.length; i += 1) {
+        // eslint-disable-next-line no-await-in-loop
+        yield adapterCalls[i](adapter);
+      }
+      adapterCalls = [];
+    });
+  }
+  let hasMediaChanged = false;
+  function onMediaChange(e) {
+    e === null || e === void 0 ? void 0 : e.stopImmediatePropagation();
+    // Don't reset first time otherwise props intialized by the user will be reset.
+    if (!hasMediaChanged) {
+      hasMediaChanged = true;
+      return;
+    }
+    adapterCalls = [];
+    writeTask(() => {
+      Object.keys(initialState)
+        .filter(shouldPropResetOnMediaChange)
+        .forEach(prop => {
+        player[prop] = initialState[prop];
+      });
+    });
+  }
+  function onStateChange(event) {
+    var _a;
+    return __awaiter$9(this, void 0, void 0, function* () {
+      event.stopImmediatePropagation();
+      const { by, prop, value } = event.detail;
+      if (!isWritableProp(prop)) {
+        (_a = player.logger) === null || _a === void 0 ? void 0 : _a.warn(`${by.nodeName} tried to change \`${prop}\` but it is readonly.`);
+        return;
+      }
+      if (!player.playbackStarted && immediateAdapterCall.has(prop)) {
+        const adapter = yield player.adapter;
+        if (prop === 'paused' && !value) {
+          adapter === null || adapter === void 0 ? void 0 : adapter.play();
+        }
+        if (prop === 'currentTime') {
+          adapter === null || adapter === void 0 ? void 0 : adapter.play();
+          adapter === null || adapter === void 0 ? void 0 : adapter.setCurrentTime(value);
+        }
+      }
+      writeTask(() => {
+        player[prop] = value;
+      });
+    });
+  }
+  // Called by ProviderConnect.
+  const { onProviderDisconnect } = player;
+  player.onProviderDisconnect = function () {
+    onMediaChange();
+    if (onProviderDisconnect)
+      onProviderDisconnect.call(player);
+  };
+  createStencilHook(player, () => {
+    initCache();
+    disposal.add(listen(el, LOAD_START_EVENT, onMediaChange));
+    disposal.add(listen(el, STATE_CHANGE_EVENT, onStateChange));
+  }, () => {
+    cache.clear();
+    disposal.empty();
+  });
+  wrapStencilHook(player, 'componentWillRender', () => __awaiter$9(this, void 0, void 0, function* () {
+    if (player.playbackReady && adapterCalls.length > 0)
+      yield flushAdapterCalls();
+  }));
+  function isAdapterCallRequired(prop, value) {
+    var _a;
+    return value !== ((_a = player[PROVIDER_CACHE_KEY]) === null || _a === void 0 ? void 0 : _a.get(prop));
+  }
+  return function safeAdapterCall(prop, method) {
+    return __awaiter$9(this, void 0, void 0, function* () {
+      if (!isAdapterCallRequired(prop, player[prop]))
+        return;
+      const value = player[prop];
+      const safeCall = (adapter) => __awaiter$9(this, void 0, void 0, function* () {
+        var _a;
+        try {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          yield ((_a = adapter === null || adapter === void 0 ? void 0 : adapter[method]) === null || _a === void 0 ? void 0 : _a.call(adapter, value));
+        }
+        catch (e) {
+          el.dispatchEvent(new CustomEvent('vmError', { detail: e }));
+        }
+      });
+      if (player.playbackReady) {
+        yield safeCall(yield player.adapter);
+      }
+      else {
+        adapterCalls.push(safeCall);
+      }
+    });
+  };
+}
+
+const playerCss = ".player{box-sizing:border-box;direction:ltr;font-family:var(--vm-player-font-family);-moz-osx-font-smoothing:auto;-webkit-font-smoothing:subpixel-antialiased;-webkit-tap-highlight-color:transparent;font-variant-numeric:tabular-nums;font-weight:500;line-height:1.7;width:100%;display:block;max-width:100%;min-width:275px;min-height:40px;position:relative;text-shadow:none;outline:0;transition:box-shadow 0.3s ease;box-shadow:var(--vm-player-box-shadow);border-radius:var(--vm-player-border-radius)}.player.idle{cursor:none}.player.audio{background-color:transparent !important}.player.video{height:0;overflow:hidden;background-color:var(--vm-player-bg, #000)}.player.fullscreen{margin:0;border-radius:0;width:100%;height:100%;padding-bottom:0 !important}.blocker{position:absolute;top:0;left:0;width:100%;height:100%;display:inline-block;z-index:var(--vm-blocker-z-index)}";
+
+var __awaiter$8 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+let idCount$3 = 0;
+const Player = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmThemeChange = createEvent(this, "vmThemeChange", 7);
+    this.vmPausedChange = createEvent(this, "vmPausedChange", 7);
+    this.vmPlay = createEvent(this, "vmPlay", 7);
+    this.vmPlayingChange = createEvent(this, "vmPlayingChange", 7);
+    this.vmSeekingChange = createEvent(this, "vmSeekingChange", 7);
+    this.vmSeeked = createEvent(this, "vmSeeked", 7);
+    this.vmBufferingChange = createEvent(this, "vmBufferingChange", 7);
+    this.vmDurationChange = createEvent(this, "vmDurationChange", 7);
+    this.vmCurrentTimeChange = createEvent(this, "vmCurrentTimeChange", 7);
+    this.vmReady = createEvent(this, "vmReady", 7);
+    this.vmPlaybackReady = createEvent(this, "vmPlaybackReady", 7);
+    this.vmPlaybackStarted = createEvent(this, "vmPlaybackStarted", 7);
+    this.vmPlaybackEnded = createEvent(this, "vmPlaybackEnded", 7);
+    this.vmBufferedChange = createEvent(this, "vmBufferedChange", 7);
+    this.vmError = createEvent(this, "vmError", 7);
+    this.vmLoadStart = createEvent(this, "vmLoadStart", 7);
+    this.vmCurrentProviderChange = createEvent(this, "vmCurrentProviderChange", 7);
+    this.vmCurrentSrcChange = createEvent(this, "vmCurrentSrcChange", 7);
+    this.vmCurrentPosterChange = createEvent(this, "vmCurrentPosterChange", 7);
+    this.vmMediaTitleChange = createEvent(this, "vmMediaTitleChange", 7);
+    this.vmControlsChange = createEvent(this, "vmControlsChange", 7);
+    this.vmPlaybackRateChange = createEvent(this, "vmPlaybackRateChange", 7);
+    this.vmPlaybackRatesChange = createEvent(this, "vmPlaybackRatesChange", 7);
+    this.vmPlaybackQualityChange = createEvent(this, "vmPlaybackQualityChange", 7);
+    this.vmPlaybackQualitiesChange = createEvent(this, "vmPlaybackQualitiesChange", 7);
+    this.vmMutedChange = createEvent(this, "vmMutedChange", 7);
+    this.vmVolumeChange = createEvent(this, "vmVolumeChange", 7);
+    this.vmViewTypeChange = createEvent(this, "vmViewTypeChange", 7);
+    this.vmMediaTypeChange = createEvent(this, "vmMediaTypeChange", 7);
+    this.vmLiveChange = createEvent(this, "vmLiveChange", 7);
+    this.vmTouchChange = createEvent(this, "vmTouchChange", 7);
+    this.vmLanguageChange = createEvent(this, "vmLanguageChange", 7);
+    this.vmI18nChange = createEvent(this, "vmI18nChange", 7);
+    this.vmTranslationsChange = createEvent(this, "vmTranslationsChange", 7);
+    this.vmLanguagesChange = createEvent(this, "vmLanguagesChange", 7);
+    this.vmFullscreenChange = createEvent(this, "vmFullscreenChange", 7);
+    this.vmPiPChange = createEvent(this, "vmPiPChange", 7);
+    this.vmTextTracksChange = createEvent(this, "vmTextTracksChange", 7);
+    this.vmCurrentTextTrackChange = createEvent(this, "vmCurrentTextTrackChange", 7);
+    this.vmTextTrackVisibleChange = createEvent(this, "vmTextTrackVisibleChange", 7);
+    this.vmAudioTracksChange = createEvent(this, "vmAudioTracksChange", 7);
+    this.vmCurrentAudioTrackChange = createEvent(this, "vmCurrentAudioTrackChange", 7);
+    this.disposal = new Disposal();
+    /**
+     * ------------------------------------------------------
+     * Props
+     * ------------------------------------------------------
+     */
+    /** @internal @readonly */
+    this.logger = new Logger();
+    /** @inheritDoc */
+    this.icons = 'vime';
+    /** @inheritDoc */
+    this.paused = true;
+    /** @inheritDoc @readonly */
+    this.playing = false;
+    /** @inheritDoc @readonly */
+    this.duration = -1;
+    /** @inheritDoc */
+    this.currentTime = 0;
+    /** @inheritDoc */
+    this.autoplay = false;
+    /** @inheritDoc @readonly */
+    this.ready = false;
+    /** @inheritDoc @readonly */
+    this.playbackReady = false;
+    /** @inheritDoc */
+    this.loop = false;
+    /** @inheritDoc */
+    this.muted = false;
+    /** @inheritDoc @readonly */
+    this.buffered = 0;
+    /** @inheritDoc */
+    this.playbackRate = 1;
+    this.lastRateCheck = 1;
+    /** @inheritDoc @readonly */
+    this.playbackRates = [1];
+    /** @inheritDoc @readonly */
+    this.playbackQualities = [];
+    /** @inheritDoc @readonly */
+    this.seeking = false;
+    /** @inheritDoc */
+    this.debug = false;
+    /** @inheritDoc @readonly */
+    this.playbackStarted = false;
+    /** @inheritDoc @readonly */
+    this.playbackEnded = false;
+    /** @inheritDoc @readonly */
+    this.buffering = false;
+    /** @inheritDoc */
+    this.controls = false;
+    /** @inheritDoc */
+    this.isControlsActive = false;
+    /** @inheritDoc @readonly */
+    this.isSettingsActive = false;
+    /** @inheritDoc */
+    this.volume = 50;
+    /** @inheritDoc @readonly */
+    this.isFullscreenActive = false;
+    /** @inheritDoc */
+    this.aspectRatio = '16:9';
+    /** @inheritDoc @readonly */
+    this.isAudioView = false;
+    /** @inheritDoc @readonly */
+    this.isVideoView = false;
+    /** @inheritDoc @readonly */
+    this.isAudio = false;
+    /** @inheritDoc @readonly */
+    this.isVideo = false;
+    /** @inheritDoc @readonly */
+    this.isLive = false;
+    /** @inheritDoc @readonly */
+    this.isMobile = false;
+    /** @inheritDoc @readonly */
+    this.isTouch = false;
+    /** @inheritDoc @readonly */
+    this.isPiPActive = false;
+    /** @inheritDoc @readonly */
+    this.textTracks = [];
+    /** @inheritDoc @readonly */
+    this.currentTextTrack = -1;
+    /** @inheritDoc @readonly */
+    this.isTextTrackVisible = true;
+    /** @inheritDoc */
+    this.shouldRenderNativeTextTracks = true;
+    /** @inheritDoc @readonly */
+    this.audioTracks = [];
+    /** @inheritDoc @readonly */
+    this.currentAudioTrack = -1;
+    /** @inheritDoc */
+    this.autopause = true;
+    /** @inheritDoc */
+    this.playsinline = false;
+    /** @inheritDoc */
+    this.language = 'en';
+    /** @inheritDoc */
+    this.translations = { en };
+    /** @inheritDoc @readonly */
+    this.languages = ['en'];
+    /** @inheritDoc @readonly */
+    this.i18n = en;
+    withFindPlayer(this);
+    withComponentRegistrar(this);
+    withAutopause(this);
+    withProviderHost(this);
+    withPlayerEvents(this);
+    this.safeAdapterCall = withPlayerScheduler(this);
+  }
+  get adapter() {
+    var _a;
+    return (_a = this.provider) === null || _a === void 0 ? void 0 : _a.getAdapter();
+  }
+  onContainerChange() {
+    var _a;
+    (_a = this.fullscreenController) === null || _a === void 0 ? void 0 : _a.destroy();
+    if (isUndefined(this.container))
+      return;
+    this.fullscreenController = new FullscreenController(this.container);
+    this.fullscreenController.on('change', isActive => {
+      this.isFullscreenActive = isActive;
+      if (isActive)
+        this.rotateDevice();
+    });
+    this.fullscreenController.on('error', error => {
+      this.vmError.emit(error);
+    });
+  }
+  onPausedChange() {
+    if (this.paused) {
+      this.playing = false;
+    }
+    else {
+      autopause(this);
+    }
+    this.safeAdapterCall('paused', !this.paused ? 'play' : 'pause');
+  }
+  onDurationChange() {
+    this.isLive = this.duration === Infinity;
+  }
+  onCurrentTimeChange() {
+    const duration = this.playbackReady ? this.duration : Infinity;
+    this.currentTime = Math.max(0, Math.min(this.currentTime, duration));
+    this.safeAdapterCall('currentTime', 'setCurrentTime');
+  }
+  onPlaybackReadyChange() {
+    if (!this.ready)
+      this.ready = true;
+  }
+  onMutedChange() {
+    this.safeAdapterCall('muted', 'setMuted');
+  }
+  onPlaybackRateChange(newRate, prevRate) {
+    var _a, _b;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      if (newRate === this.lastRateCheck)
+        return;
+      if (!(yield ((_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.canSetPlaybackRate) === null || _b === void 0 ? void 0 : _b.call(_a)))) {
+        this.logger.log('provider cannot change `playbackRate`.');
+        this.lastRateCheck = prevRate;
+        this.playbackRate = prevRate;
+        return;
+      }
+      if (!this.playbackRates.includes(newRate)) {
+        this.logger.log(`invalid \`playbackRate\` of ${newRate}, ` +
+          `valid values are [${this.playbackRates.join(', ')}]`);
+        this.lastRateCheck = prevRate;
+        this.playbackRate = prevRate;
+        return;
+      }
+      this.lastRateCheck = newRate;
+      this.safeAdapterCall('playbackRate', 'setPlaybackRate');
+    });
+  }
+  onPlaybackQualityChange(newQuality, prevQuality) {
+    var _a, _b;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      if (isUndefined(newQuality) || newQuality === this.lastQualityCheck)
+        return;
+      if (!(yield ((_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.canSetPlaybackQuality) === null || _b === void 0 ? void 0 : _b.call(_a)))) {
+        this.logger.log('provider cannot change `playbackQuality`.');
+        this.lastQualityCheck = prevQuality;
+        this.playbackQuality = prevQuality;
+        return;
+      }
+      if (!this.playbackQualities.includes(newQuality)) {
+        this.logger.log(`invalid \`playbackQuality\` of ${newQuality}, ` +
+          `valid values are [${this.playbackQualities.join(', ')}]`);
+        this.lastQualityCheck = prevQuality;
+        this.playbackQuality = prevQuality;
+        return;
+      }
+      this.lastQualityCheck = newQuality;
+      this.safeAdapterCall('playbackQuality', 'setPlaybackQuality');
+    });
+  }
+  onDebugChange() {
+    this.logger.silent = !this.debug;
+  }
+  onVolumeChange() {
+    return __awaiter$8(this, void 0, void 0, function* () {
+      this.volume = Math.max(0, Math.min(this.volume, 100));
+      this.safeAdapterCall('volume', 'setVolume');
+    });
+  }
+  onViewTypeChange() {
+    this.isAudioView = this.viewType === ViewType.Audio;
+    this.isVideoView = this.viewType === ViewType.Video;
+  }
+  onMediaTypeChange() {
+    this.isAudio = this.mediaType === MediaType.Audio;
+    this.isVideo = this.mediaType === MediaType.Video;
+  }
+  onLanguageChange(_, prevLanguage) {
+    if (!this.languages.includes(this.language)) {
+      this.logger.log(`invalid \`language\` of ${this.language}, ` +
+        `valid values are [${this.languages.join(', ')}]`);
+      this.language = prevLanguage;
+      return;
+    }
+    this.i18n = this.translations[this.language];
+  }
+  onTranslationsChange() {
+    Object.assign(this.translations, { en });
+    this.languages = Object.keys(this.translations);
+    this.i18n = this.translations[this.language];
+  }
+  onError(event) {
+    this.logger.warn(event.detail);
+  }
+  /**
+   * ------------------------------------------------------
+   * Methods
+   * ------------------------------------------------------
+   */
+  /** @inheritDoc */
+  getProvider() {
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return this.provider;
+    });
+  }
+  /** @internal */
+  getAdapter() {
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return this.adapter;
+    });
+  }
+  /** @inheritDoc */
+  play() {
+    var _a;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.play();
+    });
+  }
+  /** @inheritDoc */
+  pause() {
+    var _a;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.pause();
+    });
+  }
+  /** @inheritDoc */
+  canPlay(type) {
+    var _a, _b;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.canPlay(type)) !== null && _b !== void 0 ? _b : false;
+    });
+  }
+  /** @inheritDoc */
+  canAutoplay() {
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return canAutoplay();
+    });
+  }
+  /** @inheritDoc */
+  canMutedAutoplay() {
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return canAutoplay(true);
+    });
+  }
+  /** @inheritDoc */
+  canSetPlaybackRate() {
+    var _a, _b, _c;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return (_c = (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.canSetPlaybackRate) === null || _b === void 0 ? void 0 : _b.call(_a)) !== null && _c !== void 0 ? _c : false;
+    });
+  }
+  /** @inheritDoc */
+  canSetPlaybackQuality() {
+    var _a, _b, _c;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return (_c = (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.canSetPlaybackQuality) === null || _b === void 0 ? void 0 : _b.call(_a)) !== null && _c !== void 0 ? _c : false;
+    });
+  }
+  /** @inheritDoc */
+  canSetFullscreen() {
+    var _a, _b, _c;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return (this.fullscreenController.isSupported ||
+        ((_c = (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.canSetFullscreen) === null || _b === void 0 ? void 0 : _b.call(_a)) !== null && _c !== void 0 ? _c : false));
+    });
+  }
+  /** @inheritDoc */
+  enterFullscreen(options) {
+    var _a, _b, _c;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      if (!this.isVideoView) {
+        throw Error('Cannot enter fullscreen on an audio player view.');
+      }
+      if (this.fullscreenController.isSupported) {
+        return this.fullscreenController.requestFullscreen();
+      }
+      const adapter = yield this.adapter;
+      const canProviderSetFullscreen = (_b = (yield ((_a = adapter === null || adapter === void 0 ? void 0 : adapter.canSetFullscreen) === null || _a === void 0 ? void 0 : _a.call(adapter)))) !== null && _b !== void 0 ? _b : false;
+      if (canProviderSetFullscreen) {
+        return (_c = adapter === null || adapter === void 0 ? void 0 : adapter.enterFullscreen) === null || _c === void 0 ? void 0 : _c.call(adapter, options);
+      }
+      throw Error('Fullscreen API is not available.');
+    });
+  }
+  /** @inheritDoc */
+  exitFullscreen() {
+    var _a, _b;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      if (this.fullscreenController.isSupported) {
+        return this.fullscreenController.exitFullscreen();
+      }
+      return (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.exitFullscreen) === null || _b === void 0 ? void 0 : _b.call(_a);
+    });
+  }
+  /** @inheritDoc */
+  canSetPiP() {
+    var _a, _b, _c;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return (_c = (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.canSetPiP) === null || _b === void 0 ? void 0 : _b.call(_a)) !== null && _c !== void 0 ? _c : false;
+    });
+  }
+  /** @inheritDoc */
+  enterPiP() {
+    var _a, _b;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      if (!this.isVideoView)
+        throw Error('Cannot enter PiP mode on an audio player view.');
+      if (!(yield this.canSetPiP()))
+        throw Error('Picture-in-Picture API is not available.');
+      return (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.enterPiP) === null || _b === void 0 ? void 0 : _b.call(_a);
+    });
+  }
+  /** @inheritDoc */
+  exitPiP() {
+    var _a, _b;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.exitPiP) === null || _b === void 0 ? void 0 : _b.call(_a);
+    });
+  }
+  /** @inheritDoc */
+  canSetAudioTrack() {
+    var _a;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return !isUndefined((_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.setCurrentAudioTrack);
+    });
+  }
+  /** @inheritDoc */
+  setCurrentAudioTrack(trackId) {
+    var _a, _b;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.setCurrentAudioTrack) === null || _b === void 0 ? void 0 : _b.call(_a, trackId);
+    });
+  }
+  /** @inheritDoc */
+  canSetTextTrack() {
+    var _a;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return !isUndefined((_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.setCurrentTextTrack);
+    });
+  }
+  /** @inheritDoc */
+  setCurrentTextTrack(trackId) {
+    var _a, _b;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.setCurrentTextTrack) === null || _b === void 0 ? void 0 : _b.call(_a, trackId);
+    });
+  }
+  /** @inheritDoc */
+  canSetTextTrackVisibility() {
+    var _a;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return !isUndefined((_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.setTextTrackVisibility);
+    });
+  }
+  /** @inheritDoc */
+  setTextTrackVisibility(isVisible) {
+    var _a, _b;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      (_b = (_a = (yield this.adapter)) === null || _a === void 0 ? void 0 : _a.setTextTrackVisibility) === null || _b === void 0 ? void 0 : _b.call(_a, isVisible);
+    });
+  }
+  /** @inheritDoc */
+  extendLanguage(language, translation) {
+    var _a;
+    return __awaiter$8(this, void 0, void 0, function* () {
+      const translations = Object.assign(Object.assign({}, this.translations), { [language]: Object.assign(Object.assign({}, ((_a = this.translations[language]) !== null && _a !== void 0 ? _a : {})), translation) });
+      this.translations = translations;
+    });
+  }
+  connectedCallback() {
+    this.onPausedChange();
+    this.onCurrentTimeChange();
+    this.onVolumeChange();
+    this.onMutedChange();
+    this.onDebugChange();
+    this.onContainerChange();
+    this.onTranslationsChange();
+    this.onLanguageChange(this.language, initialState.language);
+    this.disposal.add(onMobileChange(isMobile => {
+      this.isMobile = isMobile;
+    }));
+    this.disposal.add(onTouchInputChange(isTouch => {
+      this.isTouch = isTouch;
+    }));
+  }
+  componentWillLoad() {
+    Universe.create(this, this.getPlayerState());
+  }
+  disconnectedCallback() {
+    var _a;
+    (_a = this.fullscreenController) === null || _a === void 0 ? void 0 : _a.destroy();
+    this.disposal.empty();
+  }
+  rotateDevice() {
+    return __awaiter$8(this, void 0, void 0, function* () {
+      if (!this.isMobile || !canRotateScreen())
+        return;
+      try {
+        if (this.isFullscreenActive) {
+          yield window.screen.orientation.lock('landscape');
+        }
+        else {
+          yield window.screen.orientation.unlock();
+        }
+      }
+      catch (err) {
+        this.vmError.emit(err);
+      }
+    });
+  }
+  getPlayerState() {
+    const state = {};
+    const props = Object.keys(initialState);
+    for (let i = 0; i < props.length; i += 1) {
+      state[props[i]] = this[props[i]];
+    }
+    return state;
+  }
+  calcAspectRatio() {
+    const [width, height] = /\d{1,2}:\d{1,2}/.test(this.aspectRatio)
+      ? this.aspectRatio.split(':')
+      : [16, 9];
+    return (100 / Number(width)) * Number(height);
+  }
+  /**
+   * Returns the inner container.
+   */
+  getContainer() {
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return this.container;
+    });
+  }
+  /** @internal Exposed for E2E testing. */
+  callAdapter(method, value) {
+    return __awaiter$8(this, void 0, void 0, function* () {
+      return (yield this.adapter)[method](value);
+    });
+  }
+  hasCustomControls() {
+    return isComponentRegistered(this, 'vm-controls');
+  }
+  genId() {
+    var _a;
+    const id = (_a = this.host) === null || _a === void 0 ? void 0 : _a.id;
+    if (isString(id) && id.length > 0)
+      return id;
+    idCount$3 += 1;
+    return `vm-player-${idCount$3}`;
+  }
+  render() {
+    const label = `${this.isAudioView ? 'Audio Player' : 'Video Player'}` +
+      `${!isUndefined(this.mediaTitle) ? ` - ${this.mediaTitle}` : ''}`;
+    const canShowCustomUI = !IS_IOS ||
+      !this.isVideoView ||
+      (this.playsinline && !this.isFullscreenActive);
+    if (!canShowCustomUI) {
+      this.controls = true;
+    }
+    const isIdle = canShowCustomUI &&
+      this.hasCustomControls() &&
+      this.isVideoView &&
+      !this.paused &&
+      !this.isControlsActive;
+    const isBlockerVisible = !this.controls && canShowCustomUI && this.isVideoView;
+    return (h(Host, { id: this.genId(), idle: isIdle, mobile: this.isMobile, touch: this.isTouch, live: this.isLive, audio: this.isAudioView, video: this.isVideoView, pip: this.isPiPActive, fullscreen: this.isFullscreenActive }, h("div", { "aria-label": label, "aria-hidden": !this.ready ? 'true' : 'false', "aria-busy": !this.playbackReady ? 'true' : 'false', class: {
+        player: true,
+        idle: isIdle,
+        audio: this.isAudioView,
+        video: this.isVideoView,
+        fullscreen: this.isFullscreenActive,
+      }, style: {
+        paddingBottom: this.isVideoView
+          ? `${this.calcAspectRatio()}%`
+          : undefined,
+      }, ref: el => {
+        writeTask(() => {
+          this.container = el;
+        });
+      } }, isBlockerVisible && h("div", { class: "blocker" }), h(Universe.Provider, { state: this.getPlayerState() }, h("slot", null)))));
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "container": ["onContainerChange"],
+    "paused": ["onPausedChange"],
+    "duration": ["onDurationChange"],
+    "currentTime": ["onCurrentTimeChange"],
+    "playbackReady": ["onPlaybackReadyChange"],
+    "muted": ["onMutedChange"],
+    "playbackRate": ["onPlaybackRateChange"],
+    "playbackQuality": ["onPlaybackQualityChange"],
+    "debug": ["onDebugChange"],
+    "volume": ["onVolumeChange"],
+    "viewType": ["onViewTypeChange"],
+    "isAudioView": ["onViewTypeChange"],
+    "isVideoView": ["onViewTypeChange"],
+    "mediaType": ["onMediaTypeChange"],
+    "language": ["onLanguageChange"],
+    "translations": ["onTranslationsChange"]
+  }; }
+  static get style() { return playerCss; }
+};
+
+const posterCss = ":host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:var(--vm-poster-z-index)}.poster{width:100%;height:100%;background:#000;opacity:0;visibility:hidden;pointer-events:none;transition:var(--vm-fade-transition)}.poster.hidden{display:none}.poster.active{opacity:1;visibility:visible}img{width:100%;height:100%;pointer-events:none}";
+
+const Poster = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmLoaded = createEvent(this, "vmLoaded", 3);
+    this.vmWillShow = createEvent(this, "vmWillShow", 3);
+    this.vmWillHide = createEvent(this, "vmWillHide", 3);
+    this.isHidden = true;
+    this.isActive = false;
+    this.hasLoaded = false;
+    /**
+     * How the poster image should be resized to fit the container (sets the `object-fit` property).
+     */
+    this.fit = 'cover';
+    /** @internal */
+    this.isVideoView = false;
+    /** @internal */
+    this.playbackStarted = false;
+    /** @internal */
+    this.currentTime = 0;
+    withComponentRegistry(this);
+    withPlayerContext(this, [
+      'mediaTitle',
+      'currentPoster',
+      'playbackStarted',
+      'currentTime',
+      'isVideoView',
+    ]);
+  }
+  onCurrentPosterChange() {
+    var _a;
+    this.hasLoaded = false;
+    (_a = this.lazyLoader) === null || _a === void 0 ? void 0 : _a.onMutation();
+  }
+  connectedCallback() {
+    this.lazyLoader = new LazyLoader(this.host, ['data-src', 'src'], el => {
+      const src = el.getAttribute('data-src');
+      el.removeAttribute('src');
+      if (!isNull(src)) {
+        el.setAttribute('src', src);
+      }
+    });
+    this.onEnabledChange();
+    this.onActiveChange();
+  }
+  disconnectedCallback() {
+    this.lazyLoader.destroy();
+  }
+  onVisibilityChange() {
+    !this.isHidden && this.isActive
+      ? this.vmWillShow.emit()
+      : this.vmWillHide.emit();
+  }
+  onEnabledChange() {
+    this.isHidden = !this.isVideoView;
+    this.onVisibilityChange();
+  }
+  onActiveChange() {
+    this.isActive = !this.playbackStarted || this.currentTime <= 0.1;
+    this.onVisibilityChange();
+  }
+  onPosterLoad() {
+    this.vmLoaded.emit();
+    this.hasLoaded = true;
+  }
+  render() {
+    return (h("div", { class: {
+        poster: true,
+        hidden: this.isHidden,
+        active: this.isActive && this.hasLoaded,
+      } }, h("img", { class: "lazy", "data-src": this.currentPoster, alt: !isUndefined(this.mediaTitle)
+        ? `${this.mediaTitle} Poster`
+        : 'Media Poster', style: { objectFit: this.fit }, onLoad: this.onPosterLoad.bind(this) })));
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "currentPoster": ["onCurrentPosterChange"],
+    "isVideoView": ["onEnabledChange"],
+    "currentTime": ["onActiveChange"],
+    "playbackStarted": ["onActiveChange"]
+  }; }
+  static get style() { return posterCss; }
+};
+
+const scrimCss = ":host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:var(--vm-scrim-z-index)}.scrim{position:absolute;width:100%;background:var(--vm-scrim-bg);display:inline-block;opacity:0;visibility:hidden;transition:var(--vm-fade-transition)}.scrim.gradient{height:258px;background:none;background-position:bottom;background-image:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAECCAYAAAA/9r2TAAABKklEQVQ4T2XI50cFABiF8dvee++67b33uM17b1MkkSSSSBJJJIkkkkQSSSKJ9Efmeb8cr86HH88JBP4thkfEkiKOFPGkSCCNRE8SKZJJkUIaqZ40UqSTIoMUmaSR5ckmRQ4pckkjz5NPigJSFJKiiDSKPSWkKCVFGWmUeypIUUmKKlJUk0aNJ0iKWlLUkUa9p4EUjaRoIkUzabR4WknRRop20ujwdJKiixTdpOghjV5PHyn6STFAGoOeIVIMk2KEFKOkMeYZJ8UEKUKkMemZIsU0KWZIMUsac54wKSKkiJLGvGeBFIukWCLFMrkCq7AG67ABm7AF27ADu7AH+3AAh3AEx3ACp3AG53ABl3AF13ADt3AH9/AAj/AEz/ACr/AG7/ABn/AF3/ADv39LujSyJPVJ0QAAAABJRU5ErkJggg==')}.scrim.gradientUp{top:unset;bottom:0}.scrim.gradientDown{transform:rotate(180deg)}.scrim.hidden{display:none}.scrim.active{opacity:1;visibility:visible}";
+
+const Scrim = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /** @internal */
+    this.isVideoView = false;
+    /** @internal */
+    this.isControlsActive = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['isVideoView', 'isControlsActive']);
+  }
+  render() {
+    return (h("div", { class: {
+        scrim: true,
+        gradient: !isUndefined(this.gradient),
+        gradientUp: this.gradient === 'up',
+        gradientDown: this.gradient === 'down',
+        hidden: !this.isVideoView,
+        active: this.isControlsActive,
+      } }));
+  }
+  static get style() { return scrimCss; }
+};
+
+const getHours = (value) => Math.trunc((value / 60 / 60) % 60);
+const getMinutes = (value) => Math.trunc((value / 60) % 60);
+const getSeconds = (value) => Math.trunc(value % 60);
+const formatTime = (seconds = 0, alwaysShowHours = false) => {
+  // Format time component to add leading zero.
+  const format = (value) => `0${value}`.slice(-2);
+  const hours = getHours(seconds);
+  const mins = getMinutes(seconds);
+  const secs = getSeconds(seconds);
+  return `${alwaysShowHours || hours > 0 ? `${hours}:` : ''}${format(mins)}:${format(secs)}`;
+};
+
+const scrubberControlCss = ":host{--vm-tooltip-spacing:var(--vm-scrubber-tooltip-spacing);flex:1;position:relative;cursor:pointer;pointer-events:auto;box-sizing:border-box;left:calc(var(--vm-slider-thumb-width) / 2);margin-right:var(--vm-slider-thumb-width);margin-bottom:var(--vm-slider-track-height)}@keyframes progress{to{background-position:var(--vm-scrubber-loading-stripe-size) 0}}.scrubber{position:relative;width:100%}vm-slider,progress{margin-left:calc(calc(var(--vm-slider-thumb-width) / 2) * -1);margin-right:calc(calc(var(--vm-slider-thumb-width) / 2) * -1);width:calc(100% + var(--vm-slider-thumb-width));height:var(--vm-slider-track-height)}vm-slider:hover,progress:hover{cursor:pointer}vm-slider{position:absolute;top:0;left:0;z-index:3}progress{-webkit-appearance:none;background:transparent;border:0;border-radius:100px;position:absolute;left:0;top:50%;padding:0;color:var(--vm-scrubber-buffered-bg);height:var(--vm-slider-track-height)}progress::-webkit-progress-bar{background:transparent}progress::-webkit-progress-value{background:currentColor;border-radius:100px;min-width:var(--vm-slider-track-height);transition:width 0.2s ease}progress::-moz-progress-bar{background:currentColor;border-radius:100px;min-width:var(--vm-slider-track-height);transition:width 0.2s ease}progress::-ms-fill{border-radius:100px;transition:width 0.2s ease}progress.loading{animation:progress 1s linear infinite;background-image:linear-gradient(\n    -45deg,\n    var(--vm-scrubber-loading-stripe-color) 25%,\n    transparent 25%,\n    transparent 50%,\n    var(--vm-scrubber-loading-stripe-color) 50%,\n    var(--vm-scrubber-loading-stripe-color) 75%,\n    transparent 75%,\n    transparent\n  );background-repeat:repeat-x;background-size:var(--vm-scrubber-loading-stripe-size)\n    var(--vm-scrubber-loading-stripe-size);color:transparent;background-color:transparent}";
+
+var __awaiter$7 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const ScrubberControl = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.keyboardDisposal = new Disposal();
+    this.timestamp = '';
+    this.endTime = 0;
+    /**
+     * Whether the timestamp in the tooltip should show the hours unit, even if the time is less than
+     * 1 hour (eg: `20:35` -> `00:20:35`).
+     */
+    this.alwaysShowHours = false;
+    /**
+     * Whether the tooltip should not be displayed.
+     */
+    this.hideTooltip = false;
+    /** @internal */
+    this.currentTime = 0;
+    /** @internal */
+    this.duration = -1;
+    /**
+     * Prevents seeking forward/backward by using the Left/Right arrow keys.
+     */
+    this.noKeyboard = false;
+    /** @internal */
+    this.buffering = false;
+    /** @internal */
+    this.buffered = 0;
+    /** @internal */
+    this.i18n = {};
+    withComponentRegistry(this);
+    withPlayerContext(this, [
+      'i18n',
+      'currentTime',
+      'duration',
+      'buffering',
+      'buffered',
+    ]);
+  }
+  onNoKeyboardChange() {
+    return __awaiter$7(this, void 0, void 0, function* () {
+      this.keyboardDisposal.empty();
+      if (this.noKeyboard)
+        return;
+      const player = yield custom_elements_findPlayer(this);
+      if (isUndefined(player))
+        return;
+      const onKeyDown = (event) => {
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')
+          return;
+        event.preventDefault();
+        const isLeftArrow = event.key === 'ArrowLeft';
+        const seekTo = isLeftArrow
+          ? Math.max(0, this.currentTime - 5)
+          : Math.min(this.duration, this.currentTime + 5);
+        this.dispatch('currentTime', seekTo);
+      };
+      this.keyboardDisposal.add(listen(player, 'keydown', onKeyDown));
+    });
+  }
+  onDurationChange() {
+    // Avoid -1.
+    this.endTime = Math.max(0, this.duration);
+  }
+  connectedCallback() {
+    this.dispatch = custom_elements_createDispatcher(this);
+    this.timestamp = formatTime(this.currentTime, this.alwaysShowHours);
+    this.onNoKeyboardChange();
+  }
+  disconnectedCallback() {
+    this.keyboardDisposal.empty();
+  }
+  setTooltipPosition(value) {
+    var _a, _b;
+    const tooltipRect = (_b = (_a = this.tooltip.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('.tooltip')) === null || _b === void 0 ? void 0 : _b.getBoundingClientRect();
+    const bounds = this.slider.getBoundingClientRect();
+    const thumbWidth = parseFloat(window
+      .getComputedStyle(this.slider)
+      .getPropertyValue('--vm-slider-thumb-width'));
+    const leftLimit = tooltipRect.width / 2 - thumbWidth / 2;
+    const rightLimit = bounds.width - tooltipRect.width / 2 - thumbWidth / 2;
+    const xPos = Math.max(leftLimit, Math.min(value, rightLimit));
+    this.tooltip.style = `--vm-tooltip-left: ${xPos}px`;
+  }
+  onSeek(event) {
+    this.dispatch('currentTime', event.detail);
+  }
+  onSeeking(event) {
+    if (this.duration < 0 || this.tooltip.hidden)
+      return;
+    if (event.type === 'mouseleave') {
+      this.getSliderInput().blur();
+      this.tooltip.active = false;
+      return;
+    }
+    const rect = this.host.getBoundingClientRect();
+    const percent = Math.max(0, Math.min(100, (100 / rect.width) * (event.pageX - rect.left)));
+    this.timestamp = formatTime((this.duration / 100) * percent, this.alwaysShowHours);
+    this.setTooltipPosition((percent / 100) * rect.width);
+    if (!this.tooltip.active) {
+      this.getSliderInput().focus();
+      this.tooltip.active = true;
+    }
+  }
+  getSliderInput() {
+    var _a;
+    return (_a = this.slider.shadowRoot) === null || _a === void 0 ? void 0 : _a.querySelector('input');
+  }
+  render() {
+    const sliderValueText = this.i18n.scrubberLabel
+      .replace(/{currentTime}/, formatTime(this.currentTime))
+      .replace(/{duration}/, formatTime(this.endTime));
+    return (h("div", { class: "scrubber", onMouseEnter: this.onSeeking.bind(this), onMouseLeave: this.onSeeking.bind(this), onMouseMove: this.onSeeking.bind(this), onTouchMove: () => {
+        this.getSliderInput().focus();
+      }, onTouchEnd: () => {
+        this.getSliderInput().blur();
+      } }, h("vm-slider", { step: 0.01, max: this.endTime, value: this.currentTime, label: this.i18n.scrubber, valueText: sliderValueText, onVmValueChange: this.onSeek.bind(this), ref: (el) => {
+        this.slider = el;
+      } }), h("progress", { class: {
+        loading: this.buffering,
+      },
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      min: 0, max: this.endTime, value: this.buffered, "aria-label": this.i18n.buffered, "aria-valuemin": "0", "aria-valuemax": this.endTime, "aria-valuenow": this.buffered, "aria-valuetext": `${(this.endTime > 0
+        ? this.buffered / this.endTime
+        : 0).toFixed(0)}%` }, "% buffered"), h("vm-tooltip", { hidden: this.hideTooltip, ref: (el) => {
+        this.tooltip = el;
+      } }, this.timestamp)));
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "noKeyboard": ["onNoKeyboardChange"],
+    "duration": ["onDurationChange"]
+  }; }
+  static get style() { return scrubberControlCss; }
+};
+
+const settingsCss = ":host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:var(--vm-menu-z-index)}.settings{position:absolute;opacity:0;pointer-events:none;overflow-x:hidden;overflow-y:auto;background-color:var(--vm-menu-bg);max-height:var(--vm-settings-max-height);border-radius:var(--vm-settings-border-radius);padding:var(--vm-settings-padding);box-shadow:var(--vm-settings-shadow);box-sizing:border-box;scrollbar-width:thin;scroll-behavior:smooth;scrollbar-color:var(--vm-settings-scroll-thumb-color)\n    var(--vm-settings-scroll-track-color);transform:translateY(8px);transition:var(--vm-settings-transition)}.container{display:block;width:var(--vm-settings-width);height:100%;position:relative;transition:width 0.25s ease-in, height 0.25s ease-in}.settings.hydrated{visibility:hidden !important}.settings::-webkit-scrollbar{width:var(--vm-settings-scroll-width)}.settings::-webkit-scrollbar-track{background:var(--vm-settings-scroll-track-color)}.settings::-webkit-scrollbar-thumb{border-radius:var(--vm-settings-scroll-width);background-color:var(--vm-settings-scroll-thumb-color);border:2px solid var(--vm-menu-bg)}.settings.active{transform:translateY(0);opacity:1;pointer-events:auto;visibility:visible !important}.settings.mobile{position:fixed;top:auto !important;left:0 !important;right:0 !important;bottom:0 !important;width:100%;min-height:56px;max-height:50%;border-radius:0;z-index:2147483647;transform:translateY(100%)}.settings.mobile.active{transform:translateY(0)}.settings.mobile>vm-menu{height:100% !important;overflow:auto !important}";
+
+var __awaiter$6 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+let idCount$2 = 0;
+const Settings = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.disposal = new Disposal();
+    this.menuHeight = 0;
+    /**
+     * Pins the settings to the defined position inside the video player. This has no effect when
+     * the view is of type `audio` (always `bottomRight`) and on mobile devices (always bottom sheet).
+     */
+    this.pin = 'bottomRight';
+    /**
+     * Whether the settings menu is opened/closed.
+     */
+    this.active = false;
+    /** @internal */
+    this.isMobile = false;
+    /** @internal */
+    this.isAudioView = false;
+    withComponentRegistry(this);
+    withControlsCollisionDetection(this);
+    withPlayerContext(this, ['isMobile', 'isAudioView']);
+  }
+  onActiveChange() {
+    this.dispatch('isSettingsActive', this.active);
+    if (isUndefined(this.controller))
+      return;
+    this.controller.expanded = this.active;
+  }
+  connectedCallback() {
+    this.dispatch = custom_elements_createDispatcher(this);
+    idCount$2 += 1;
+    this.id = `vm-settings-${idCount$2}`;
+  }
+  disconnectedCallback() {
+    this.disposal.empty();
+  }
+  /**
+   * Sets the controller responsible for opening/closing this settings menu.
+   */
+  setController(controller) {
+    return __awaiter$6(this, void 0, void 0, function* () {
+      this.controller = controller;
+      this.controller.menu = this.id;
+      this.disposal.empty();
+      this.disposal.add(listen(this.controller, 'click', () => {
+        this.active = !this.active;
+      }));
+      this.disposal.add(listen(this.controller, 'keydown', (event) => {
+        if (event.key !== 'Enter')
+          return;
+        // We're looking for !active because the `click` event above will toggle it to active.
+        if (!this.active)
+          this.menu.focusMenu();
+      }));
+    });
+  }
+  getPosition() {
+    if (this.isAudioView) {
+      return {
+        right: '0',
+        bottom: 'calc(var(--vm-controls-height, 0) + 4px)',
+      };
+    }
+    // topLeft => { top: 0, left: 0 }
+    const pos = this.pin.split(/(?=[L|R])/).map(s => s.toLowerCase());
+    return {
+      [pos.includes('top') ? 'top' : 'bottom']: 'var(--vm-controls-height, 0)',
+      [pos.includes('left') ? 'left' : 'right']: '8px',
+    };
+  }
+  onOpen(event) {
+    var _a;
+    if (((_a = event.detail) === null || _a === void 0 ? void 0 : _a.identifier) !== this.id)
+      return;
+    this.active = true;
+  }
+  onClose(event) {
+    var _a;
+    if (((_a = event.detail) === null || _a === void 0 ? void 0 : _a.identifier) !== this.id)
+      return;
+    this.active = false;
+  }
+  onHeightChange(event) {
+    this.menuHeight = event.detail;
+  }
+  render() {
+    return (h("div", { style: Object.assign({}, this.getPosition()), class: {
+        settings: true,
+        active: this.active,
+        mobile: this.isMobile,
+      } }, h("div", { class: "container", style: { height: `${this.menuHeight}px` } }, h("vm-menu", { identifier: this.id, active: this.active, controller: this.controller, onVmOpen: this.onOpen.bind(this), onVmClose: this.onClose.bind(this), onVmMenuHeightChange: this.onHeightChange.bind(this), ref: (el) => {
+        this.menu = el;
+      } }, h("slot", null)))));
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "active": ["onActiveChange"]
+  }; }
+  static get style() { return settingsCss; }
+};
+
+const settingsControlCss = ".settingsControl.hidden{display:none}.settingsControl{--vm-icon-transition:transform 0.3s ease}.settingsControl.active{--vm-icon-transform:rotate(90deg)}";
+
+var __awaiter$5 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+let idCount$1 = 0;
+const SettingsControl = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /**
+     * The name of the settings icon to resolve from the icon library.
+     */
+    this.icon = 'settings';
+    /**
+     * Whether the tooltip is positioned above/below the control.
+     */
+    this.tooltipPosition = 'top';
+    /**
+     * Whether the settings menu this control manages is open.
+     */
+    this.expanded = false;
+    /** @internal */
+    this.i18n = {};
+    withComponentRegistry(this);
+    withPlayerContext(this, ['i18n']);
+  }
+  onComponentsChange() {
+    if (!isUndefined(this.vmSettings)) {
+      this.vmSettings.setController(this.host);
+    }
+  }
+  connectedCallback() {
+    idCount$1 += 1;
+    this.id = `vm-settings-control-${idCount$1}`;
+    watchComponentRegistry(this, 'vm-settings', regs => {
+      [this.vmSettings] = regs;
+    });
+  }
+  /**
+   * Focuses the control.
+   */
+  focusControl() {
+    var _a;
+    return __awaiter$5(this, void 0, void 0, function* () {
+      (_a = this.control) === null || _a === void 0 ? void 0 : _a.focusControl();
+    });
+  }
+  /**
+   * Removes focus from the control.
+   */
+  blurControl() {
+    var _a;
+    return __awaiter$5(this, void 0, void 0, function* () {
+      (_a = this.control) === null || _a === void 0 ? void 0 : _a.blurControl();
+    });
+  }
+  render() {
+    const hasSettings = !isUndefined(this.menu);
+    return (h("div", { class: {
+        settingsControl: true,
+        hidden: !hasSettings,
+        active: hasSettings && this.expanded,
+      } }, h("vm-control", { identifier: this.id, menu: this.menu, hidden: !hasSettings, expanded: this.expanded, label: this.i18n.settings, ref: control => {
+        this.control = control;
+      } }, h("vm-icon", { name: this.icon, library: this.icons }), h("vm-tooltip", { hidden: this.expanded, position: this.tooltipPosition, direction: this.tooltipDirection }, this.i18n.settings))));
+  }
+  get host() { return this; }
+  static get watchers() { return {
+    "vmSettings": ["onComponentsChange"]
+  }; }
+  static get style() { return settingsControlCss; }
+};
+
+const skeletonCss = ":host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:var(--vm-skeleton-z-index)}@keyframes sheen{0%{background-position:200% 0}to{background-position:-200% 0}}.skeleton{width:100%;height:100%;display:flex;min-height:1rem;pointer-events:auto}.sheen.hidden{opacity:0;visibility:hidden;transition:var(--vm-fade-transition);pointer-events:none}.indicator{flex:1 1 auto;background:var(--vm-skeleton-color)}.skeleton.sheen .indicator{background:linear-gradient(\n    270deg,\n    var(--vm-skeleton-sheen-color),\n    var(--vm-skeleton-color),\n    var(--vm-skeleton-color),\n    var(--vm-skeleton-sheen-color)\n  );background-size:400% 100%;background-size:400% 100%;animation:sheen 8s ease-in-out infinite}";
+
+const Skeleton = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.hidden = false;
+    /**
+     * Determines which animation effect the skeleton will use.
+     * */
+    this.effect = 'sheen';
+    /** @internal */
+    this.ready = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['ready']);
+  }
+  onReadyChange() {
+    if (!this.ready) {
+      this.hidden = false;
+    }
+    else {
+      setTimeout(() => {
+        this.hidden = true;
+      }, 500);
+    }
+  }
+  render() {
+    return (h("div", { class: {
+        skeleton: true,
+        hidden: this.hidden,
+        sheen: this.effect === 'sheen',
+      } }, h("div", { class: "indicator" })));
+  }
+  static get watchers() { return {
+    "ready": ["onReadyChange"]
+  }; }
+  static get style() { return skeletonCss; }
+};
+
+const sliderCss = ":host{width:100%}.slider{width:100%}input{width:100%;-webkit-appearance:none;background:transparent;border:0;outline:0;cursor:pointer;box-sizing:border-box;border-radius:calc(var(--vm-slider-thumb-height) * 2);user-select:none;-webkit-user-select:none;touch-action:manipulation;color:var(--vm-slider-value-color);display:block;height:var(--vm-slider-track-height);margin:0;padding:0;transition:box-shadow 0.3s ease}input::-webkit-slider-runnable-track{background:transparent;border:0;border-radius:calc(var(--vm-slider-track-height) / 2);height:var(--vm-slider-track-height);transition:box-shadow 0.3s ease;user-select:none;background-image:linear-gradient(\n    to right,\n    currentColor var(--vm-value, 0%),\n    transparent var(--vm-value, 0%)\n  );background-color:var(--vm-slider-track-color)}input::-webkit-slider-thumb{opacity:0;background:var(--vm-slider-thumb-bg);border:0;border-radius:100%;position:relative;transition:all 0.2s ease;width:var(--vm-slider-thumb-width);height:var(--vm-slider-thumb-height);box-shadow:var(--vm-slider-thumb-shadow);-webkit-appearance:none;margin-top:calc(\n    0px -\n      calc(\n        calc(var(--vm-slider-thumb-height) - var(--vm-slider-track-height)) / 2\n      )\n  )}input::-moz-range-track{background:transparent;border:0;border-radius:calc(var(--vm-slider-track-height) / 2);height:var(--vm-slider-track-height);transition:box-shadow 0.3s ease;user-select:none;background-color:var(--vm-slider-track-color)}input::-moz-range-thumb{opacity:0;background:var(--vm-slider-thumb-bg);border:0;border-radius:100%;position:relative;transition:all 0.2s ease;width:var(--vm-slider-thumb-width);height:var(--vm-slider-thumb-height);box-shadow:var(--vm-slider-thumb-shadow)}input::-moz-range-progress{background:currentColor;border-radius:calc(var(--vm-slider-track-height) / 2);height:var(--vm-slider-track-height)}input::-ms-track{border:0;border-radius:calc(var(--vm-slider-track-height) / 2);height:var(--vm-slider-track-height);transition:box-shadow 0.3s ease;user-select:none;color:transparent;background-color:var(--vm-slider-track-color)}input::-ms-fill-upper{background:transparent;border:0;border-radius:calc(var(--vm-slider-track-height) / 2);height:var(--vm-slider-track-height);transition:box-shadow 0.3s ease;user-select:none}input::-ms-fill-lower{border:0;border-radius:calc(var(--vm-slider-track-height) / 2);height:var(--vm-slider-track-height);transition:box-shadow 0.3s ease;user-select:none;background:currentColor}input::-ms-thumb{opacity:0;background:var(--vm-slider-thumb-bg);border:0;border-radius:100%;position:relative;transition:all 0.2s ease;width:var(--vm-slider-thumb-width);height:var(--vm-slider-thumb-height);box-shadow:var(--vm-slider-thumb-shadow);margin-top:0}input::-ms-tooltip{display:none}input:hover::-webkit-slider-runnable-track{height:var(--vm-slider-track-focused-height)}input:hover::-moz-range-track{height:var(--vm-slider-track-focused-height)}input:hover::-ms-track{height:var(--vm-slider-track-focused-height)}input:hover::-ms-fill-upper{height:var(--vm-slider-track-focused-height)}input:hover::-ms-fill-lower{height:var(--vm-slider-track-focused-height)}input:hover::-webkit-slider-thumb{opacity:1}input:hover::-moz-range-thumb{opacity:1}input:hover::-ms-thumb{opacity:1}input:focus{outline:0}input:focus::-webkit-slider-runnable-track{outline:0;height:var(--vm-slider-track-focused-height)}input:focus::-moz-range-track{outline:0;height:var(--vm-slider-track-focused-height)}input:focus::-ms-track{outline:0;height:var(--vm-slider-track-focused-height)}input::-moz-focus-outer{border:0}";
+
+const Slider = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmValueChange = createEvent(this, "vmValueChange", 7);
+    this.vmFocus = createEvent(this, "vmFocus", 7);
+    this.vmBlur = createEvent(this, "vmBlur", 7);
+    /**
+     * A number that specifies the granularity that the value must adhere to.
+     */
+    this.step = 1;
+    /**
+     * The lowest value in the range of permitted values.
+     */
+    this.min = 0;
+    /**
+     * The greatest permitted value.
+     */
+    this.max = 10;
+    /**
+     * The current value.
+     */
+    this.value = 5;
+    withComponentRegistry(this);
+  }
+  getPercentage() {
+    return `${(this.value / this.max) * 100}%`;
+  }
+  onValueChange(event) {
+    var _a;
+    const value = parseFloat((_a = event.target) === null || _a === void 0 ? void 0 : _a.value);
+    this.vmValueChange.emit(value);
+  }
+  calcTouchedValue(event) {
+    const input = event.target;
+    const touch = event.changedTouches[0];
+    const min = parseFloat(input.getAttribute('min'));
+    const max = parseFloat(input.getAttribute('max'));
+    const step = parseFloat(input.getAttribute('step'));
+    const delta = max - min;
+    // Calculate percentage.
+    let percent;
+    const clientRect = input.getBoundingClientRect();
+    const sliderThumbWidth = parseFloat(window
+      .getComputedStyle(this.host)
+      .getPropertyValue('--vm-slider-thumb-width'));
+    const thumbWidth = ((100 / clientRect.width) * (sliderThumbWidth / 2)) / 100;
+    percent = (100 / clientRect.width) * (touch.clientX - clientRect.left);
+    // Don't allow outside bounds.
+    percent = Math.max(0, Math.min(percent, 100));
+    // Factor in the thumb offset.
+    if (percent < 50) {
+      percent -= (100 - percent * 2) * thumbWidth;
+    }
+    else if (percent > 50) {
+      percent += (percent - 50) * 2 * thumbWidth;
+    }
+    const position = delta * (percent / 100);
+    if (step >= 1) {
+      return min + Math.round(position / step) * step;
+    }
+    /**
+     * This part differs from original implementation to save space. Only supports 2 decimal
+     * places (0.01) as the step.
+     */
+    return min + parseFloat(position.toFixed(2));
+  }
+  /**
+   * Basically input[range="type"] on touch devices sucks (particularly iOS), so this helps make it
+   * better.
+   *
+   * @see https://github.com/sampotts/rangetouch
+   */
+  onTouch(event) {
+    const input = event.target;
+    if (input.disabled)
+      return;
+    event.preventDefault();
+    this.value = this.calcTouchedValue(event);
+    this.vmValueChange.emit(this.value);
+    input.dispatchEvent(new window.Event(event.type === 'touchend' ? 'change' : 'input', {
+      bubbles: true,
+    }));
+  }
+  render() {
+    var _a;
+    return (h("div", { class: "slider", style: {
+        '--vm-value': this.getPercentage(),
+      } }, h("input", { type: "range", step: this.step, min: this.min, max: this.max, value: this.value, autocomplete: "off", "aria-label": this.label, "aria-valuemin": this.min, "aria-valuemax": this.max, "aria-valuenow": this.value, "aria-valuetext": (_a = this.valueText) !== null && _a !== void 0 ? _a : this.getPercentage(), "aria-orientation": "horizontal", onInput: this.onValueChange.bind(this), onFocus: () => {
+        this.vmFocus.emit();
+      }, onBlur: () => {
+        this.vmBlur.emit();
+      }, onTouchStart: this.onTouch.bind(this), onTouchMove: this.onTouch.bind(this), onTouchEnd: this.onTouch.bind(this) })));
+  }
+  get host() { return this; }
+  static get style() { return sliderCss; }
+};
+
+const spinnerCss = ":host{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:var(--vm-spinner-z-index)}.spinner{width:100%;height:100%;display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;pointer-events:none;transition:var(--vm-fade-transition)}.spinner.hidden{display:none}.spinner.active{opacity:1;visibility:visible}@keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}.spin{background:transparent;margin:60px auto;font-size:10px;position:relative;text-indent:-9999em;pointer-events:none;border-top:var(--vm-spinner-thickness) solid var(--vm-spinner-fill-color);border-left:var(--vm-spinner-thickness) solid var(--vm-spinner-fill-color);border-right:var(--vm-spinner-thickness) solid var(--vm-spinner-track-color);border-bottom:var(--vm-spinner-thickness) solid var(--vm-spinner-track-color);transform:translateZ(0)}.spin.active{animation:spin var(--vm-spinner-spin-duration) infinite\n    var(--vm-spinner-spin-timing-func)}.spin,.spin::after{border-radius:50%;width:var(--vm-spinner-width);height:var(--vm-spinner-height)}";
+
+const Spinner = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmWillShow = createEvent(this, "vmWillShow", 3);
+    this.vmWillHide = createEvent(this, "vmWillHide", 3);
+    this.blacklist = [Provider.YouTube];
+    this.isHidden = true;
+    this.isActive = false;
+    /** @internal */
+    this.isVideoView = false;
+    /**
+     * Whether the spinner should be active when the player is booting or media is loading.
+     */
+    this.showWhenMediaLoading = false;
+    /** @internal */
+    this.playbackReady = false;
+    /** @internal */
+    this.buffering = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, [
+      'isVideoView',
+      'buffering',
+      'playbackReady',
+      'currentProvider',
+    ]);
+  }
+  onVideoViewChange() {
+    this.isHidden = !this.isVideoView;
+    this.onVisiblityChange();
+  }
+  onActiveChange() {
+    this.isActive =
+      this.buffering || (this.showWhenMediaLoading && !this.playbackReady);
+    this.onVisiblityChange();
+  }
+  onVisiblityChange() {
+    !this.isHidden && this.isActive
+      ? this.vmWillShow.emit()
+      : this.vmWillHide.emit();
+  }
+  render() {
+    return (h("div", { class: {
+        spinner: true,
+        hidden: this.isHidden || this.blacklist.includes(this.currentProvider),
+        active: this.isActive,
+      } }, h("div", { class: {
+        spin: true,
+        active: this.isActive,
+      } }, "Loading...")));
+  }
+  static get watchers() { return {
+    "isVideoView": ["onVideoViewChange"],
+    "buffering": ["onActiveChange"],
+    "playbackReady": ["onActiveChange"]
+  }; }
+  static get style() { return spinnerCss; }
+};
+
+var __awaiter$4 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+let idCount = 0;
+const Submenu = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmOpenSubmenu = createEvent(this, "vmOpenSubmenu", 7);
+    this.vmCloseSubmenu = createEvent(this, "vmCloseSubmenu", 7);
+    /**
+     * The direction the submenu should slide in from.
+     */
+    this.slideInDirection = 'right';
+    /**
+     * Whether the submenu is open/closed.
+     */
+    this.active = false;
+    withComponentRegistry(this);
+  }
+  connectedCallback() {
+    this.genId();
+  }
+  /**
+   * Returns the controller (`vm-menu-item`) for this submenu.
+   */
+  getController() {
+    return __awaiter$4(this, void 0, void 0, function* () {
+      return this.controller;
+    });
+  }
+  /**
+   * Returns the menu (`vm-menu`) for this submenu.
+   */
+  getMenu() {
+    return __awaiter$4(this, void 0, void 0, function* () {
+      return this.menu;
+    });
+  }
+  /**
+   * Returns the height of the submenu controller.
+   */
+  getControllerHeight() {
+    var _a, _b;
+    return __awaiter$4(this, void 0, void 0, function* () {
+      return (_b = (_a = this.controller) === null || _a === void 0 ? void 0 : _a.getHeight()) !== null && _b !== void 0 ? _b : 0;
+    });
+  }
+  getControllerHeightSync() {
+    var _a;
+    const el = (_a = this.controller) === null || _a === void 0 ? void 0 : _a.shadowRoot.querySelector("[role='menuitem']");
+    return el ? parseFloat(window.getComputedStyle(el).height) : 0;
+  }
+  onMenuOpen() {
+    this.active = true;
+    this.vmOpenSubmenu.emit(this.host);
+  }
+  onMenuClose() {
+    this.active = false;
+    this.vmCloseSubmenu.emit(this.host);
+  }
+  genId() {
+    idCount += 1;
+    this.id = `vm-submenu-${idCount}`;
+  }
+  getControllerId() {
+    return `${this.id}-controller`;
+  }
+  render() {
+    return (h("div", null, h("vm-menu-item", { identifier: this.getControllerId(), menu: this.menu, label: this.label, hint: this.hint, expanded: this.active, ref: el => {
+        writeTask(() => {
+          this.controller = el;
+        });
+      } }), h("vm-menu", { identifier: this.id, controller: this.controller, active: this.active, slideInDirection: this.slideInDirection, onVmOpen: this.onMenuOpen.bind(this), onVmClose: this.onMenuClose.bind(this), ref: el => {
+        writeTask(() => {
+          this.menu = el;
+        });
+      }, style: { top: `${this.getControllerHeightSync() + 1}px` } }, h("slot", null))));
+  }
+  get host() { return this; }
+};
+
+const timeCss = ".time{display:flex;align-items:center;color:var(--vm-time-color);font-size:var(--vm-time-font-size);font-weight:var(--vm-time-font-weight)}";
+
+const Time = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /**
+     * The length of time in seconds.
+     */
+    this.seconds = 0;
+    /**
+     * Whether the time should always show the hours unit, even if the time is less than
+     * 1 hour (eg: `20:35` -> `00:20:35`).
+     */
+    this.alwaysShowHours = false;
+    withComponentRegistry(this);
+  }
+  render() {
+    return (h("div", { class: "time", "aria-label": this.label }, formatTime(Math.max(0, this.seconds), this.alwaysShowHours)));
+  }
+  static get style() { return timeCss; }
+};
+
+const timeProgressCss = ".timeProgress{display:flex;width:100%;height:100%;align-items:center;color:var(--vm-time-color)}.separator{margin:0 4px}";
+
+const TimeProgress = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /**
+     * The string used to separate the current time and end time.
+     */
+    this.separator = '/';
+    /**
+     * Whether the times should always show the hours unit, even if the time is less than
+     * 1 hour (eg: `20:35` -> `00:20:35`).
+     */
+    this.alwaysShowHours = false;
+    withComponentRegistry(this);
+  }
+  render() {
+    return (h("div", { class: "timeProgress" }, h("vm-current-time", { alwaysShowHours: this.alwaysShowHours }), h("span", { class: "separator" }, this.separator), h("vm-end-time", { alwaysShowHours: this.alwaysShowHours })));
+  }
+  static get style() { return timeProgressCss; }
+};
+
+const tooltipCss = ":host{display:contents;z-index:var(--vm-tooltip-z-index)}.tooltip{left:var(--vm-tooltip-left, 50%);transform:translateX(-50%);line-height:1.3;pointer-events:none;position:absolute;opacity:0;white-space:nowrap;visibility:hidden;background:var(--vm-tooltip-bg);border-radius:var(--vm-tooltip-border-radius);box-sizing:border-box;box-shadow:var(--vm-tooltip-box-shadow);color:var(--vm-tooltip-color);font-size:var(--vm-tooltip-font-size);padding:var(--vm-tooltip-padding);transition:opacity var(--vm-tooltip-fade-duration)\n    var(--vm-tooltip-fade-timing-func)}.tooltip[aria-hidden='false']{opacity:1;visibility:visible}.tooltip.hidden{display:none}.tooltip.onTop{bottom:100%;margin-bottom:var(--vm-tooltip-spacing)}.tooltip.onBottom{top:100%;margin-top:var(--vm-tooltip-spacing)}.tooltip.growLeft{left:auto;right:0;transform:none}.tooltip.growRight{left:0;transform:none}";
+
+let tooltipIdCount = 0;
+const Tooltip = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    // Avoid tooltips flashing when player initializing.
+    this.hasLoaded = false;
+    /**
+     * Whether the tooltip is displayed or not.
+     */
+    this.hidden = false;
+    /**
+     * Whether the tooltip is visible or not.
+     */
+    this.active = false;
+    /**
+     * Determines if the tooltip appears on top/bottom of it's parent.
+     */
+    this.position = 'top';
+    /** @internal */
+    this.isTouch = false;
+    /** @internal */
+    this.isMobile = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, ['isTouch', 'isMobile']);
+  }
+  componentDidLoad() {
+    this.hasLoaded = true;
+  }
+  getId() {
+    // eslint-disable-next-line prefer-destructuring
+    const id = this.host.id;
+    if (isString(id) && id.length > 0)
+      return id;
+    tooltipIdCount += 1;
+    return `vm-tooltip-${tooltipIdCount}`;
+  }
+  render() {
+    return (h("div", { id: this.getId(), role: "tooltip", "aria-hidden": !this.active || this.isTouch || this.isMobile ? 'true' : 'false', class: {
+        tooltip: true,
+        hidden: !this.hasLoaded || this.hidden,
+        onTop: this.position === 'top',
+        onBottom: this.position === 'bottom',
+        growLeft: this.direction === 'left',
+        growRight: this.direction === 'right',
+      } }, h("slot", null)));
+  }
+  get host() { return this; }
+  static get style() { return tooltipCss; }
+};
+
+const uiCss = ":host{z-index:var(--vm-ui-z-index)}.ui{width:100%;pointer-events:none}.ui.hidden{display:none}.ui.video{position:absolute;top:0;left:0;height:100%}";
+
+const UI = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    /** @internal */
+    this.isVideoView = false;
+    /** @internal */
+    this.playsinline = false;
+    /** @internal */
+    this.isFullscreenActive = false;
+    withComponentRegistry(this);
+    withPlayerContext(this, [
+      'isVideoView',
+      'playsinline',
+      'isFullscreenActive',
+    ]);
+  }
+  render() {
+    const canShowCustomUI = !IS_IOS ||
+      !this.isVideoView ||
+      (this.playsinline && !this.isFullscreenActive);
+    return (h("div", { class: {
+        ui: true,
+        hidden: !canShowCustomUI,
+        video: this.isVideoView,
+      } }, canShowCustomUI && h("slot", null)));
+  }
+  static get style() { return uiCss; }
+};
+
+var __awaiter$3 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const Video = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    /**
+     * @internal Whether an external SDK will attach itself to the media player and control it.
+     */
+    this.willAttach = false;
+    /**
+     * @internal Whether an external SDK will manage the text tracks.
+     */
+    this.hasCustomTextManager = false;
+    /** @inheritdoc */
+    this.preload = 'metadata';
+    withComponentRegistry(this);
+    withProviderConnect(this);
+  }
+  onProviderConnect(event) {
+    if (this.willAttach)
+      event.stopImmediatePropagation();
+  }
+  onProviderDisconnect(event) {
+    if (this.willAttach)
+      event.stopImmediatePropagation();
+  }
+  /** @internal */
+  getAdapter() {
+    var _a;
+    return __awaiter$3(this, void 0, void 0, function* () {
+      return (_a = this.fileProvider) === null || _a === void 0 ? void 0 : _a.getAdapter();
+    });
+  }
+  render() {
+    return (h("vm-file", { noConnect: true, willAttach: this.willAttach, crossOrigin: this.crossOrigin, poster: this.poster, preload: this.preload, controlsList: this.controlsList, autoPiP: this.autoPiP, disablePiP: this.disablePiP, disableRemotePlayback: this.disableRemotePlayback, hasCustomTextManager: this.hasCustomTextManager, mediaTitle: this.mediaTitle, viewType: ViewType.Video, ref: (el) => {
+        this.fileProvider = el;
+      } }, h("slot", null)));
+  }
+};
+
+/**
+ * @see https://developer.vimeo.com/player/sdk/reference#events-for-playback-controls
+ */
+var VimeoEvent;
+(function (VimeoEvent) {
+  VimeoEvent["Play"] = "play";
+  VimeoEvent["Pause"] = "pause";
+  VimeoEvent["Seeking"] = "seeking";
+  VimeoEvent["Seeked"] = "seeked";
+  VimeoEvent["TimeUpdate"] = "timeupdate";
+  VimeoEvent["VolumeChange"] = "volumechange";
+  VimeoEvent["DurationChange"] = "durationchange";
+  VimeoEvent["FullscreenChange"] = "fullscreenchange";
+  VimeoEvent["CueChange"] = "cuechange";
+  VimeoEvent["Progress"] = "progress";
+  VimeoEvent["Error"] = "error";
+  VimeoEvent["PlaybackRateChange"] = "playbackratechange";
+  VimeoEvent["Loaded"] = "loaded";
+  VimeoEvent["BufferStart"] = "bufferstart";
+  VimeoEvent["BufferEnd"] = "bufferend";
+  VimeoEvent["TextTrackChange"] = "texttrackchange";
+  VimeoEvent["Waiting"] = "waiting";
+  VimeoEvent["Ended"] = "ended";
+})(VimeoEvent || (VimeoEvent = {}));
+
+const vimeoCss = ":host{z-index:var(--vm-media-z-index)}vm-embed{position:absolute;top:0;left:0;width:100%;height:100%}vm-embed.hideControls{display:block;width:100%;height:auto;position:relative}";
+
+var __awaiter$2 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const videoInfoCache = new Map();
+const Vimeo = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmLoadStart = createEvent(this, "vmLoadStart", 7);
+    this.vmError = createEvent(this, "vmError", 7);
+    this.defaultInternalState = {};
+    this.volume = 50;
+    this.hasLoaded = false;
+    this.internalState = {
+      paused: true,
+      playing: false,
+      seeking: false,
+      currentTime: 0,
+      buffered: 0,
+      playbackStarted: false,
+      playRequest: false,
+    };
+    this.embedSrc = '';
+    this.mediaTitle = '';
+    /**
+     * Whether to display the video owner's name.
+     */
+    this.byline = true;
+    /**
+     * Whether to display the video owner's portrait.
+     */
+    this.portrait = true;
+    /**
+     * Turns off automatically determining the aspect ratio of the current video.
+     */
+    this.noAutoAspectRatio = false;
+    /**
+     * Whether cookies should be enabled on the embed.
+     */
+    this.cookies = true;
+    /** @internal */
+    this.language = 'en';
+    /** @internal */
+    this.aspectRatio = '16:9';
+    /** @internal */
+    this.autoplay = false;
+    /** @internal */
+    this.controls = false;
+    /** @internal */
+    this.loop = false;
+    /** @internal */
+    this.muted = false;
+    /** @internal */
+    this.playsinline = false;
+    withComponentRegistry(this);
+    withProviderConnect(this);
+    withProviderContext(this);
+  }
+  onVideoIdChange() {
+    this.cancelTimeUpdates();
+    if (!this.videoId) {
+      this.embedSrc = '';
+      return;
+    }
+    this.embedSrc = `${this.getOrigin()}/video/${this.videoId}`;
+    this.pendingDurationCall = deferredPromise();
+    this.pendingMediaTitleCall = deferredPromise();
+    this.fetchVideoInfo = this.getVideoInfo();
+  }
+  onCustomPosterChange() {
+    this.dispatch('currentPoster', this.poster);
+  }
+  connectedCallback() {
+    this.dispatch = createProviderDispatcher(this);
+    this.dispatch('viewType', ViewType.Video);
+    this.onVideoIdChange();
+    this.initialMuted = this.muted;
+    this.defaultInternalState = Object.assign({}, this.internalState);
+  }
+  disconnectedCallback() {
+    this.cancelTimeUpdates();
+    this.pendingPlayRequest = undefined;
+  }
+  getOrigin() {
+    return 'https://player.vimeo.com';
+  }
+  getPreconnections() {
+    return [
+      this.getOrigin(),
+      'https://i.vimeocdn.com',
+      'https://f.vimeocdn.com',
+      'https://fresnel.vimeocdn.com',
+    ];
+  }
+  remoteControl(command, arg) {
+    return this.embed.postMessage({
+      method: command,
+      value: arg,
+    });
+  }
+  buildParams() {
+    return {
+      byline: this.byline,
+      color: this.color,
+      portrait: this.portrait,
+      autopause: false,
+      transparent: false,
+      autoplay: this.autoplay,
+      muted: this.initialMuted,
+      playsinline: this.playsinline,
+      dnt: !this.cookies,
+    };
+  }
+  getVideoInfo() {
+    return __awaiter$2(this, void 0, void 0, function* () {
+      if (videoInfoCache.has(this.videoId))
+        return videoInfoCache.get(this.videoId);
+      return window
+        .fetch(`https://vimeo.com/api/oembed.json?url=${this.embedSrc}`)
+        .then(response => response.json())
+        .then(data => {
+        var _a;
+        const thumnailRegex = /vimeocdn\.com\/video\/([0-9]+)/;
+        const thumbnailId = (_a = data === null || data === void 0 ? void 0 : data.thumbnail_url) === null || _a === void 0 ? void 0 : _a.match(thumnailRegex)[1];
+        const poster = `https://i.vimeocdn.com/video/${thumbnailId}_1920x1080.jpg`;
+        const info = { poster, width: data === null || data === void 0 ? void 0 : data.width, height: data === null || data === void 0 ? void 0 : data.height };
+        videoInfoCache.set(this.videoId, info);
+        return info;
+      });
+    });
+  }
+  onTimeChange(time) {
+    if (this.internalState.currentTime === time)
+      return;
+    this.dispatch('currentTime', time);
+    // This is how we detect `seeking` early.
+    if (Math.abs(this.internalState.currentTime - time) > 1.5) {
+      this.internalState.seeking = true;
+      this.dispatch('seeking', true);
+      if (this.internalState.playing && this.internalState.buffered < time) {
+        this.dispatch('buffering', true);
+      }
+      // Player doesn't resume playback once seeked.
+      window.clearTimeout(this.pendingPlayRequest);
+      if (!this.internalState.paused) {
+        this.internalState.playRequest = true;
+      }
+      this.remoteControl(this.internalState.playbackStarted
+        ? "pause" /* Pause */
+        : "play" /* Play */);
+    }
+    this.internalState.currentTime = time;
+  }
+  cancelTimeUpdates() {
+    if (isNumber(this.timeRAF))
+      window.cancelAnimationFrame(this.timeRAF);
+  }
+  requestTimeUpdates() {
+    this.remoteControl("getCurrentTime" /* GetCurrentTime */);
+    this.timeRAF = window.requestAnimationFrame(() => {
+      this.requestTimeUpdates();
+    });
+  }
+  onSeeked() {
+    if (!this.internalState.seeking)
+      return;
+    this.dispatch('seeking', false);
+    this.internalState.seeking = false;
+    if (this.internalState.playRequest) {
+      window.setTimeout(() => {
+        this.remoteControl("play" /* Play */);
+      }, 150);
+    }
+  }
+  onVimeoMethod(method, arg) {
+    var _a, _b;
+    switch (method) {
+      case "getCurrentTime" /* GetCurrentTime */:
+        if (!this.internalState.seeking)
+          this.onTimeChange(arg);
+        break;
+      case "getDuration" /* GetDuration */:
+        (_a = this.pendingDurationCall) === null || _a === void 0 ? void 0 : _a.resolve(arg);
+        break;
+      case "getVideoTitle" /* GetVideoTitle */:
+        (_b = this.pendingMediaTitleCall) === null || _b === void 0 ? void 0 : _b.resolve(arg);
+        break;
+    }
+  }
+  onLoaded() {
+    var _a, _b;
+    if (this.hasLoaded)
+      return;
+    this.pendingPlayRequest = undefined;
+    this.internalState = Object.assign({}, this.defaultInternalState);
+    this.dispatch('currentSrc', this.embedSrc);
+    this.dispatch('mediaType', MediaType.Video);
+    this.remoteControl("getDuration" /* GetDuration */);
+    this.remoteControl("getVideoTitle" /* GetVideoTitle */);
+    Promise.all([
+      this.fetchVideoInfo,
+      (_a = this.pendingDurationCall) === null || _a === void 0 ? void 0 : _a.promise,
+      (_b = this.pendingMediaTitleCall) === null || _b === void 0 ? void 0 : _b.promise,
+    ]).then(([info, duration, mediaTitle]) => {
+      var _a, _b, _c;
+      this.requestTimeUpdates();
+      this.dispatch('aspectRatio', `${(_a = info === null || info === void 0 ? void 0 : info.width) !== null && _a !== void 0 ? _a : 16}:${(_b = info === null || info === void 0 ? void 0 : info.height) !== null && _b !== void 0 ? _b : 9}`);
+      this.dispatch('currentPoster', (_c = this.poster) !== null && _c !== void 0 ? _c : info === null || info === void 0 ? void 0 : info.poster);
+      this.dispatch('duration', duration !== null && duration !== void 0 ? duration : -1);
+      this.dispatch('mediaTitle', mediaTitle);
+      this.dispatch('playbackReady', true);
+    });
+    this.hasLoaded = true;
+  }
+  onVimeoEvent(event, payload) {
+    switch (event) {
+      case "ready" /* Ready */:
+        Object.values(VimeoEvent).forEach(e => {
+          this.remoteControl("addEventListener" /* AddEventListener */, e);
+        });
+        break;
+      case "loaded" /* Loaded */:
+        this.onLoaded();
+        break;
+      case "play" /* Play */:
+        // Incase of autoplay which might skip `Loaded` event.
+        this.onLoaded();
+        this.internalState.paused = false;
+        this.dispatch('paused', false);
+        break;
+      case "playProgress" /* PlayProgress */:
+        if (!this.internalState.playing) {
+          this.dispatch('playing', true);
+          this.internalState.playing = true;
+          this.internalState.playbackStarted = true;
+          this.pendingPlayRequest = window.setTimeout(() => {
+            this.internalState.playRequest = false;
+            this.pendingPlayRequest = undefined;
+          }, 1000);
+        }
+        this.dispatch('buffering', false);
+        this.onSeeked();
+        break;
+      case "pause" /* Pause */:
+        this.internalState.paused = true;
+        this.internalState.playing = false;
+        this.dispatch('paused', true);
+        this.dispatch('buffering', false);
+        break;
+      case "loadProgress" /* LoadProgress */:
+        this.internalState.buffered = payload.seconds;
+        this.dispatch('buffered', payload.seconds);
+        break;
+      case "bufferstart" /* BufferStart */:
+        this.dispatch('buffering', true);
+        // Attempt to detect `play` events early.
+        if (this.internalState.paused) {
+          this.internalState.paused = false;
+          this.dispatch('paused', false);
+          this.dispatch('playbackStarted', true);
+        }
+        break;
+      case "bufferend" /* BufferEnd */:
+        this.dispatch('buffering', false);
+        if (this.internalState.paused)
+          this.onSeeked();
+        break;
+      case "volumechange" /* VolumeChange */:
+        if (payload.volume > 0) {
+          const newVolume = Math.floor(payload.volume * 100);
+          this.dispatch('muted', false);
+          if (this.volume !== newVolume) {
+            this.volume = newVolume;
+            this.dispatch('volume', this.volume);
+          }
+        }
+        else {
+          this.dispatch('muted', true);
+        }
+        break;
+      case "durationchange" /* DurationChange */:
+        this.dispatch('duration', payload.duration);
+        break;
+      case "playbackratechange" /* PlaybackRateChange */:
+        this.dispatch('playbackRate', payload.playbackRate);
+        break;
+      case "fullscreenchange" /* FullscreenChange */:
+        this.dispatch('isFullscreenActive', payload.fullscreen);
+        break;
+      case "finish" /* Finish */:
+        if (this.loop) {
+          this.remoteControl("setCurrentTime" /* SetCurrentTime */, 0);
+          setTimeout(() => {
+            this.remoteControl("play" /* Play */);
+          }, 200);
+        }
+        else {
+          this.dispatch('playbackEnded', true);
+        }
+        break;
+      case "error" /* Error */:
+        this.vmError.emit(payload);
+        break;
+    }
+  }
+  onEmbedSrcChange() {
+    this.hasLoaded = false;
+    this.vmLoadStart.emit();
+    this.dispatch('viewType', ViewType.Video);
+  }
+  onEmbedMessage(event) {
+    const message = event.detail;
+    if (!isUndefined(message.event))
+      this.onVimeoEvent(message.event, message.data);
+    if (!isUndefined(message.method))
+      this.onVimeoMethod(message.method, message.value);
+  }
+  adjustPosition() {
+    const [aw, ah] = this.aspectRatio.split(':').map(r => parseInt(r, 10));
+    const height = 240;
+    const padding = (100 / aw) * ah;
+    const offset = (height - padding) / (height / 50);
+    return {
+      paddingBottom: `${height}%`,
+      transform: `translateY(-${offset + 0.02}%)`,
+    };
+  }
+  /** @internal */
+  getAdapter() {
+    return __awaiter$2(this, void 0, void 0, function* () {
+      const canPlayRegex = /vimeo(?:\.com|)\/([0-9]{9,})/;
+      const fileRegex = /vimeo\.com\/external\/[0-9]+\..+/;
+      return {
+        getInternalPlayer: () => __awaiter$2(this, void 0, void 0, function* () { return this.embed; }),
+        play: () => __awaiter$2(this, void 0, void 0, function* () {
+          this.remoteControl("play" /* Play */);
+        }),
+        pause: () => __awaiter$2(this, void 0, void 0, function* () {
+          this.remoteControl("pause" /* Pause */);
+        }),
+        canPlay: (type) => __awaiter$2(this, void 0, void 0, function* () { return isString(type) && !fileRegex.test(type) && canPlayRegex.test(type); }),
+        setCurrentTime: (time) => __awaiter$2(this, void 0, void 0, function* () {
+          this.remoteControl("setCurrentTime" /* SetCurrentTime */, time);
+        }),
+        setMuted: (muted) => __awaiter$2(this, void 0, void 0, function* () {
+          if (!muted)
+            this.volume = this.volume > 0 ? this.volume : 30;
+          this.remoteControl("setVolume" /* SetVolume */, muted ? 0 : this.volume / 100);
+        }),
+        setVolume: (volume) => __awaiter$2(this, void 0, void 0, function* () {
+          if (!this.muted) {
+            this.remoteControl("setVolume" /* SetVolume */, volume / 100);
+          }
+          else {
+            // Confirm volume was set.
+            this.dispatch('volume', volume);
+          }
+        }),
+        // @TODO how to check if Vimeo pro?
+        canSetPlaybackRate: () => __awaiter$2(this, void 0, void 0, function* () { return false; }),
+        setPlaybackRate: (rate) => __awaiter$2(this, void 0, void 0, function* () {
+          this.remoteControl("setPlaybackRate" /* SetPlaybackRate */, rate);
+        }),
+      };
+    });
+  }
+  render() {
+    return (h("vm-embed", { class: { hideControls: !this.controls }, style: this.adjustPosition(), embedSrc: this.embedSrc, mediaTitle: this.mediaTitle, origin: this.getOrigin(), params: this.buildParams(), decoder: decodeJSON, preconnections: this.getPreconnections(), onVmEmbedMessage: this.onEmbedMessage.bind(this), onVmEmbedSrcChange: this.onEmbedSrcChange.bind(this), ref: (el) => {
+        this.embed = el;
+      } }));
+  }
+  static get watchers() { return {
+    "videoId": ["onVideoIdChange"],
+    "poster": ["onCustomPosterChange"]
+  }; }
+  static get style() { return vimeoCss; }
+};
+
+const volumeControlCss = ".volumeControl{align-items:center;display:flex;position:relative;pointer-events:auto;box-sizing:border-box}vm-slider{width:75px;height:100%;margin:0;max-width:0;position:relative;z-index:3;transition:margin 0.2s cubic-bezier(0.4, 0, 1, 1),\n    max-width 0.2s cubic-bezier(0.4, 0, 1, 1);margin-left:calc(var(--vm-control-spacing) / 2) !important;visibility:hidden}vm-slider:hover{cursor:pointer}vm-slider.hidden{display:none}vm-slider.active{max-width:75px;visibility:visible;margin:0 calc(var(--vm-control-spacing) / 2)}";
+
+var __awaiter$1 = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const VolumeControl = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.keyboardDisposal = new Disposal();
+    this.prevMuted = false;
+    this.currentVolume = 50;
+    this.isSliderActive = false;
+    /**
+     * The name of the low volume icon to resolve from the icon library.
+     */
+    this.lowVolumeIcon = 'volume-low';
+    /**
+     * The name of the high volume icon to resolve from the icon library.
+     */
+    this.highVolumeIcon = 'volume-high';
+    /**
+     * The name of the muted volume icon to resolve from the icon library.
+     */
+    this.mutedIcon = 'volume-mute';
+    /**
+     * Whether the tooltip is positioned above/below the control.
+     */
+    this.tooltipPosition = 'top';
+    /**
+     * Whether the tooltip should be hidden.
+     */
+    this.hideTooltip = false;
+    /**
+     * A pipe (`/`) separated string of JS keyboard keys, that when caught in a `keydown` event, will
+     * toggle the muted state of the player.
+     */
+    this.muteKeys = 'm';
+    /**
+     * Prevents the volume being changed using the Up/Down arrow keys.
+     */
+    this.noKeyboard = false;
+    /** @internal */
+    this.muted = false;
+    /** @internal */
+    this.volume = 50;
+    /** @internal */
+    this.isMobile = false;
+    /** @internal */
+    this.i18n = {};
+    withComponentRegistry(this);
+    withPlayerContext(this, ['volume', 'muted', 'isMobile', 'i18n']);
+  }
+  onNoKeyboardChange() {
+    return __awaiter$1(this, void 0, void 0, function* () {
+      this.keyboardDisposal.empty();
+      if (this.noKeyboard)
+        return;
+      const player = yield custom_elements_findPlayer(this);
+      if (isUndefined(player))
+        return;
+      this.keyboardDisposal.add(listen(player, 'keydown', (event) => {
+        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown')
+          return;
+        const isUpArrow = event.key === 'ArrowUp';
+        const newVolume = isUpArrow
+          ? Math.min(100, this.volume + 5)
+          : Math.max(0, this.volume - 5);
+        this.dispatch('volume', parseInt(`${newVolume}`, 10));
+      }));
+    });
+  }
+  onPlayerVolumeChange() {
+    this.currentVolume = this.muted ? 0 : this.volume;
+    if (!this.muted && this.prevMuted && this.volume === 0) {
+      this.dispatch('volume', 30);
+    }
+    this.prevMuted = this.muted;
+  }
+  connectedCallback() {
+    this.prevMuted = this.muted;
+    this.dispatch = custom_elements_createDispatcher(this);
+    this.onNoKeyboardChange();
+  }
+  disconnectedCallback() {
+    this.keyboardDisposal.empty();
+  }
+  onShowSlider() {
+    clearTimeout(this.hideSliderTimeout);
+    this.isSliderActive = true;
+  }
+  onHideSlider() {
+    this.hideSliderTimeout = setTimeout(() => {
+      this.isSliderActive = false;
+    }, 100);
+  }
+  onVolumeChange(event) {
+    const newVolume = event.detail;
+    this.currentVolume = newVolume;
+    this.dispatch('volume', newVolume);
+    this.dispatch('muted', newVolume === 0);
+  }
+  onKeyDown(event) {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight')
+      return;
+    event.stopPropagation();
+  }
+  render() {
+    return (h("div", { class: "volumeControl", onMouseEnter: this.onShowSlider.bind(this), onMouseLeave: this.onHideSlider.bind(this) }, h("vm-mute-control", { keys: this.muteKeys, lowVolumeIcon: this.lowVolumeIcon, highVolumeIcon: this.highVolumeIcon, mutedIcon: this.mutedIcon, icons: this.icons, tooltipPosition: this.tooltipPosition, tooltipDirection: this.tooltipDirection, hideTooltip: this.hideTooltip, onVmFocus: this.onShowSlider.bind(this), onVmBlur: this.onHideSlider.bind(this) }), h("vm-slider", { class: {
+        hidden: this.isMobile,
+        active: this.isSliderActive,
+      }, step: 5, max: 100, value: this.currentVolume, label: this.i18n.volume, onKeyDown: this.onKeyDown.bind(this), onVmFocus: this.onShowSlider.bind(this), onVmBlur: this.onHideSlider.bind(this), onVmValueChange: this.onVolumeChange.bind(this) })));
+  }
+  static get watchers() { return {
+    "noKeyboard": ["onNoKeyboardChange"],
+    "muted": ["onPlayerVolumeChange"],
+    "volume": ["onPlayerVolumeChange"]
+  }; }
+  static get style() { return volumeControlCss; }
+};
+
+const mapYouTubePlaybackQuality = (quality) => {
+  switch (quality) {
+    case "unknown" /* Unknown */:
+      return undefined;
+    case "tiny" /* Tiny */:
+      return '144p';
+    case "small" /* Small */:
+      return '240p';
+    case "medium" /* Medium */:
+      return '360p';
+    case "large" /* Large */:
+      return '480p';
+    case "hd720" /* Hd720 */:
+      return '720p';
+    case "hd1080" /* Hd1080 */:
+      return '1080p';
+    case "highres" /* Highres */:
+      return '1440p';
+    case "max" /* Max */:
+      return '2160p';
+    default:
+      return undefined;
+  }
+};
+
+const youtubeCss = ":host{z-index:var(--vm-media-z-index)}";
+
+var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+  function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+  return new (P || (P = Promise))(function (resolve, reject) {
+    function fulfilled(value) { try {
+      step(generator.next(value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function rejected(value) { try {
+      step(generator["throw"](value));
+    }
+    catch (e) {
+      reject(e);
+    } }
+    function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+    step((generator = generator.apply(thisArg, _arguments || [])).next());
+  });
+};
+const posterCache = new Map();
+const YouTube = class extends HTMLElement {
+  constructor() {
+    super();
+    this.__registerHost();
+    attachShadow(this);
+    this.vmLoadStart = createEvent(this, "vmLoadStart", 7);
+    this.defaultInternalState = {};
+    this.internalState = {
+      paused: true,
+      duration: 0,
+      seeking: false,
+      playbackReady: false,
+      playbackStarted: false,
+      currentTime: 0,
+      lastTimeUpdate: 0,
+      playbackRate: 1,
+      state: -1,
+    };
+    this.embedSrc = '';
+    this.mediaTitle = '';
+    /**
+     * Whether cookies should be enabled on the embed.
+     */
+    this.cookies = false;
+    /**
+     * Whether the fullscreen control should be shown.
+     */
+    this.showFullscreenControl = true;
+    /** @internal */
+    this.language = 'en';
+    /** @internal */
+    this.autoplay = false;
+    /** @internal */
+    this.controls = false;
+    /** @internal */
+    this.loop = false;
+    /** @internal */
+    this.muted = false;
+    /** @internal */
+    this.playsinline = false;
+    withComponentRegistry(this);
+    withProviderConnect(this);
+    withProviderContext(this);
+  }
+  onVideoIdChange() {
+    if (!this.videoId) {
+      this.embedSrc = '';
+      return;
+    }
+    this.embedSrc = `${this.getOrigin()}/embed/${this.videoId}`;
+    this.fetchPosterURL = this.findPosterURL();
+  }
+  onCustomPosterChange() {
+    this.dispatch('currentPoster', this.poster);
+  }
+  connectedCallback() {
+    this.dispatch = createProviderDispatcher(this);
+    this.dispatch('viewType', ViewType.Video);
+    this.onVideoIdChange();
+    this.initialMuted = this.muted;
+    this.defaultInternalState = Object.assign({}, this.internalState);
+  }
+  /** @internal */
+  getAdapter() {
+    return __awaiter(this, void 0, void 0, function* () {
+      const canPlayRegex = /(?:youtu\.be|youtube|youtube\.com|youtube-nocookie\.com)\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|)((?:\w|-){11})/;
+      return {
+        getInternalPlayer: () => __awaiter(this, void 0, void 0, function* () { return this.embed; }),
+        play: () => __awaiter(this, void 0, void 0, function* () {
+          this.remoteControl("playVideo" /* Play */);
+        }),
+        pause: () => __awaiter(this, void 0, void 0, function* () {
+          this.remoteControl("pauseVideo" /* Pause */);
+        }),
+        canPlay: (type) => __awaiter(this, void 0, void 0, function* () { return isString(type) && canPlayRegex.test(type); }),
+        setCurrentTime: (time) => __awaiter(this, void 0, void 0, function* () {
+          this.remoteControl("seekTo" /* Seek */, time);
+        }),
+        setMuted: (muted) => __awaiter(this, void 0, void 0, function* () {
+          muted
+            ? this.remoteControl("mute" /* Mute */)
+            : this.remoteControl("unMute" /* Unmute */);
+        }),
+        setVolume: (volume) => __awaiter(this, void 0, void 0, function* () {
+          this.remoteControl("setVolume" /* SetVolume */, volume);
+        }),
+        canSetPlaybackRate: () => __awaiter(this, void 0, void 0, function* () { return true; }),
+        setPlaybackRate: (rate) => __awaiter(this, void 0, void 0, function* () {
+          this.remoteControl("setPlaybackRate" /* SetPlaybackRate */, rate);
+        }),
+      };
+    });
+  }
+  getOrigin() {
+    return !this.cookies
+      ? 'https://www.youtube-nocookie.com'
+      : 'https://www.youtube.com';
+  }
+  getPreconnections() {
+    return [
+      this.getOrigin(),
+      'https://www.google.com',
+      'https://googleads.g.doubleclick.net',
+      'https://static.doubleclick.net',
+      'https://s.ytimg.com',
+      'https://i.ytimg.com',
+    ];
+  }
+  remoteControl(command, arg) {
+    return this.embed.postMessage({
+      event: 'command',
+      func: command,
+      args: arg ? [arg] : undefined,
+    });
+  }
+  buildParams() {
+    return {
+      enablejsapi: 1,
+      cc_lang_pref: this.language,
+      hl: this.language,
+      fs: this.showFullscreenControl ? 1 : 0,
+      controls: this.controls ? 1 : 0,
+      disablekb: !this.controls ? 1 : 0,
+      iv_load_policy: this.controls ? 1 : 3,
+      mute: this.initialMuted ? 1 : 0,
+      playsinline: this.playsinline ? 1 : 0,
+      autoplay: this.autoplay ? 1 : 0,
+    };
+  }
+  onEmbedSrcChange() {
+    this.vmLoadStart.emit();
+    this.dispatch('viewType', ViewType.Video);
+  }
+  onEmbedLoaded() {
+    // Seems like we have to wait a random small delay or else YT player isn't ready.
+    window.setTimeout(() => this.embed.postMessage({ event: 'listening' }), 100);
+  }
+  findPosterURL() {
+    return __awaiter(this, void 0, void 0, function* () {
+      if (posterCache.has(this.videoId))
+        return posterCache.get(this.videoId);
+      const posterURL = (quality) => `https://i.ytimg.com/vi/${this.videoId}/${quality}.jpg`;
+      /**
+       * We are testing a that the image has a min-width of 121px because if the thumbnail does not
+       * exist YouTube returns a blank/error image that is 120px wide.
+       */
+      return custom_elements_loadImage(posterURL('maxresdefault'), 121) // 1080p (no padding)
+        .catch(() => custom_elements_loadImage(posterURL('sddefault'), 121)) // 640p (padded 4:3)
+        .catch(() => custom_elements_loadImage(posterURL('hqdefault'), 121)) // 480p (padded 4:3)
+        .then(img => {
+        const poster = img.src;
+        posterCache.set(this.videoId, poster);
+        return poster;
+      });
+    });
+  }
+  onCued() {
+    if (this.internalState.playbackReady)
+      return;
+    this.internalState = Object.assign({}, this.defaultInternalState);
+    this.dispatch('currentSrc', this.embedSrc);
+    this.dispatch('mediaType', MediaType.Video);
+    this.fetchPosterURL.then(poster => {
+      var _a;
+      this.dispatch('currentPoster', (_a = this.poster) !== null && _a !== void 0 ? _a : poster);
+      this.dispatch('playbackReady', true);
+    });
+    this.internalState.playbackReady = true;
+  }
+  onPlayerStateChange(state) {
+    // Sometimes the embed falls back to an unstarted state for some unknown reason, this will
+    // make sure the player is configured to the right starting state.
+    if (this.internalState.playbackReady &&
+      state === -1 /* Unstarted */) {
+      this.internalState.paused = true;
+      this.internalState.playbackStarted = false;
+      this.dispatch('buffering', false);
+      this.dispatch('paused', true);
+      this.dispatch('playbackStarted', false);
+      return;
+    }
+    const isPlaying = state === 1 /* Playing */;
+    const isBuffering = state === 3 /* Buffering */;
+    this.dispatch('buffering', isBuffering);
+    // Attempt to detect `play` events early.
+    if (this.internalState.paused && (isBuffering || isPlaying)) {
+      this.internalState.paused = false;
+      this.dispatch('paused', false);
+      if (!this.internalState.playbackStarted) {
+        this.dispatch('playbackStarted', true);
+        this.internalState.playbackStarted = true;
+      }
+    }
+    switch (state) {
+      case 5 /* Cued */:
+        this.onCued();
+        break;
+      case 1 /* Playing */:
+        // Incase of autoplay which might skip `Cued` event.
+        this.onCued();
+        this.dispatch('playing', true);
+        break;
+      case 2 /* Paused */:
+        this.internalState.paused = true;
+        this.dispatch('paused', true);
+        break;
+      case 0 /* Ended */:
+        if (this.loop) {
+          window.setTimeout(() => {
+            this.remoteControl("playVideo" /* Play */);
+          }, 150);
+        }
+        else {
+          this.dispatch('playbackEnded', true);
+          this.internalState.paused = true;
+          this.dispatch('paused', true);
+        }
+        break;
+    }
+    this.internalState.state = state;
+  }
+  calcCurrentTime(time) {
+    let currentTime = time;
+    if (this.internalState.state === 0 /* Ended */) {
+      return this.internalState.duration;
+    }
+    if (this.internalState.state === 1 /* Playing */) {
+      const elapsedTime = (Date.now() / 1e3 - this.defaultInternalState.lastTimeUpdate) *
+        this.internalState.playbackRate;
+      if (elapsedTime > 0)
+        currentTime += Math.min(elapsedTime, 1);
+    }
+    return currentTime;
+  }
+  onTimeChange(time) {
+    const currentTime = this.calcCurrentTime(time);
+    this.dispatch('currentTime', currentTime);
+    // This is the only way to detect `seeking`.
+    if (Math.abs(this.internalState.currentTime - currentTime) > 1.5) {
+      this.internalState.seeking = true;
+      this.dispatch('seeking', true);
+    }
+    this.internalState.currentTime = currentTime;
+  }
+  onBufferedChange(buffered) {
+    this.dispatch('buffered', buffered);
+    /**
+     * This is the only way to detect `seeked`. Unfortunately while the player is `paused` `seeking`
+     * and `seeked` will fire at the same time, there are no updates inbetween -_-. We need an
+     * artifical delay between the two events.
+     */
+    if (this.internalState.seeking &&
+      buffered > this.internalState.currentTime) {
+      window.setTimeout(() => {
+        this.internalState.seeking = false;
+        this.dispatch('seeking', false);
+      }, this.internalState.paused ? 100 : 0);
+    }
+  }
+  onEmbedMessage(event) {
+    const message = event.detail;
+    const { info } = message;
+    if (!info)
+      return;
+    if (custom_elements_isObject(info.videoData))
+      this.dispatch('mediaTitle', info.videoData.title);
+    if (isNumber(info.duration)) {
+      this.internalState.duration = info.duration;
+      this.dispatch('duration', info.duration);
+    }
+    if (isArray(info.availablePlaybackRates)) {
+      this.dispatch('playbackRates', info.availablePlaybackRates);
+    }
+    if (isNumber(info.playbackRate)) {
+      this.internalState.playbackRate = info.playbackRate;
+      this.dispatch('playbackRate', info.playbackRate);
+    }
+    if (isNumber(info.currentTime))
+      this.onTimeChange(info.currentTime);
+    if (isNumber(info.currentTimeLastUpdated)) {
+      this.internalState.lastTimeUpdate = info.currentTimeLastUpdated;
+    }
+    if (isNumber(info.videoLoadedFraction)) {
+      this.onBufferedChange(info.videoLoadedFraction * this.internalState.duration);
+    }
+    if (isNumber(info.volume))
+      this.dispatch('volume', info.volume);
+    if (isBoolean(info.muted))
+      this.dispatch('muted', info.muted);
+    if (isArray(info.availableQualityLevels)) {
+      this.dispatch('playbackQualities', info.availableQualityLevels.map(q => mapYouTubePlaybackQuality(q)));
+    }
+    if (isString(info.playbackQuality)) {
+      this.dispatch('playbackQuality', mapYouTubePlaybackQuality(info.playbackQuality));
+    }
+    if (isNumber(info.playerState))
+      this.onPlayerStateChange(info.playerState);
+  }
+  render() {
+    return (h("vm-embed", { embedSrc: this.embedSrc, mediaTitle: this.mediaTitle, origin: this.getOrigin(), params: this.buildParams(), decoder: decodeJSON, preconnections: this.getPreconnections(), onVmEmbedLoaded: this.onEmbedLoaded.bind(this), onVmEmbedMessage: this.onEmbedMessage.bind(this), onVmEmbedSrcChange: this.onEmbedSrcChange.bind(this), ref: (el) => {
+        this.embed = el;
+      } }));
+  }
+  static get watchers() { return {
+    "cookies": ["onVideoIdChange"],
+    "videoId": ["onVideoIdChange"],
+    "poster": ["onCustomPosterChange"]
+  }; }
+  static get style() { return youtubeCss; }
+};
+
+const VmAudio = /*@__PURE__*/proxyCustomElement(Audio, [4,"vm-audio",{"willAttach":[4,"will-attach"],"crossOrigin":[1,"cross-origin"],"preload":[1],"disableRemotePlayback":[4,"disable-remote-playback"],"mediaTitle":[1,"media-title"]}]);
+const VmCaptionControl = /*@__PURE__*/proxyCustomElement(CaptionControl, [1,"vm-caption-control",{"showIcon":[1,"show-icon"],"hideIcon":[1,"hide-icon"],"tooltipPosition":[1,"tooltip-position"],"tooltipDirection":[1,"tooltip-direction"],"hideTooltip":[4,"hide-tooltip"],"icons":[1],"keys":[1],"i18n":[16],"playbackReady":[4,"playback-ready"],"textTracks":[16],"isTextTrackVisible":[4,"is-text-track-visible"],"canToggleCaptionVisibility":[32]}]);
+const VmCaptions = /*@__PURE__*/proxyCustomElement(Captions, [1,"vm-captions",{"hidden":[4],"isControlsActive":[4,"is-controls-active"],"isVideoView":[4,"is-video-view"],"playbackStarted":[4,"playback-started"],"textTracks":[16],"currentTextTrack":[2,"current-text-track"],"isTextTrackVisible":[4,"is-text-track-visible"],"isEnabled":[32],"cue":[32],"fontSize":[32]}]);
+const VmClickToPlay = /*@__PURE__*/proxyCustomElement(ClickToPlay, [1,"vm-click-to-play",{"useOnMobile":[4,"use-on-mobile"],"paused":[4],"isVideoView":[4,"is-video-view"],"isMobile":[4,"is-mobile"]}]);
+const VmControl = /*@__PURE__*/proxyCustomElement(Control, [1,"vm-control",{"keys":[1],"identifier":[1],"hidden":[4],"label":[1],"menu":[1],"expanded":[4],"pressed":[4],"isTouch":[4,"is-touch"],"describedBy":[32],"showTapHighlight":[32]}]);
+const VmControlGroup = /*@__PURE__*/proxyCustomElement(ControlNewLine, [1,"vm-control-group",{"space":[1]}]);
+const VmControlSpacer = /*@__PURE__*/proxyCustomElement(ControlSpacer, [1,"vm-control-spacer"]);
+const VmControls = /*@__PURE__*/proxyCustomElement(Controls, [1,"vm-controls",{"hidden":[4],"fullWidth":[4,"full-width"],"fullHeight":[4,"full-height"],"direction":[1],"align":[1],"justify":[1],"pin":[513],"activeDuration":[2,"active-duration"],"waitForPlaybackStart":[4,"wait-for-playback-start"],"hideWhenPaused":[4,"hide-when-paused"],"hideOnMouseLeave":[4,"hide-on-mouse-leave"],"isAudioView":[4,"is-audio-view"],"isSettingsActive":[4,"is-settings-active"],"playbackReady":[4,"playback-ready"],"isControlsActive":[4,"is-controls-active"],"paused":[4],"playbackStarted":[4,"playback-started"],"isInteracting":[32]}]);
+const VmCurrentTime = /*@__PURE__*/proxyCustomElement(CurrentTime, [1,"vm-current-time",{"currentTime":[2,"current-time"],"i18n":[16],"alwaysShowHours":[4,"always-show-hours"]}]);
+const VmDailymotion = /*@__PURE__*/proxyCustomElement(Dailymotion, [1,"vm-dailymotion",{"videoId":[1,"video-id"],"shouldAutoplayQueue":[4,"should-autoplay-queue"],"showUpNextQueue":[4,"show-up-next-queue"],"showShareButtons":[4,"show-share-buttons"],"color":[1],"syndication":[1],"showDailymotionLogo":[4,"show-dailymotion-logo"],"showVideoInfo":[4,"show-video-info"],"language":[1],"autoplay":[4],"controls":[4],"poster":[1],"logger":[16],"loop":[4],"muted":[4],"playsinline":[4],"embedSrc":[32],"mediaTitle":[32]}]);
+const VmDash = /*@__PURE__*/proxyCustomElement(Dash, [1,"vm-dash",{"src":[1],"version":[1],"libSrc":[1,"lib-src"],"config":[16],"autoplay":[4],"crossOrigin":[1,"cross-origin"],"preload":[1],"poster":[1],"controlsList":[1,"controls-list"],"autoPiP":[4,"auto-pip"],"disablePiP":[4,"disable-pip"],"disableRemotePlayback":[4,"disable-remote-playback"],"mediaTitle":[1,"media-title"],"enableTextTracksByDefault":[4,"enable-text-tracks-by-default"],"shouldRenderNativeTextTracks":[4,"should-render-native-text-tracks"],"isTextTrackVisible":[4,"is-text-track-visible"],"currentTextTrack":[2,"current-text-track"],"hasAttached":[32]},[[0,"vmMediaElChange","onMediaElChange"]]]);
+const VmDblClickFullscreen = /*@__PURE__*/proxyCustomElement(DblClickFullscreen, [1,"vm-dbl-click-fullscreen",{"useOnMobile":[4,"use-on-mobile"],"isFullscreenActive":[4,"is-fullscreen-active"],"isVideoView":[4,"is-video-view"],"playbackReady":[4,"playback-ready"],"isMobile":[4,"is-mobile"],"canSetFullscreen":[32]}]);
+const VmDefaultControls = /*@__PURE__*/proxyCustomElement(DefaultControls, [1,"vm-default-controls",{"activeDuration":[2,"active-duration"],"waitForPlaybackStart":[4,"wait-for-playback-start"],"hideWhenPaused":[4,"hide-when-paused"],"hideOnMouseLeave":[4,"hide-on-mouse-leave"],"theme":[1],"isMobile":[4,"is-mobile"],"isLive":[4,"is-live"],"isAudioView":[4,"is-audio-view"],"isVideoView":[4,"is-video-view"]}]);
+const VmDefaultSettings = /*@__PURE__*/proxyCustomElement(DefaultSettings, [1,"vm-default-settings",{"pin":[513],"i18n":[16],"playbackReady":[4,"playback-ready"],"playbackRate":[2,"playback-rate"],"playbackRates":[16],"isVideoView":[4,"is-video-view"],"playbackQuality":[1,"playback-quality"],"playbackQualities":[16],"textTracks":[16],"currentTextTrack":[2,"current-text-track"],"audioTracks":[16],"currentAudioTrack":[2,"current-audio-track"],"isTextTrackVisible":[4,"is-text-track-visible"],"canSetPlaybackRate":[32],"canSetPlaybackQuality":[32],"canSetTextTrack":[32],"canSetAudioTrack":[32]}]);
+const VmDefaultUi = /*@__PURE__*/proxyCustomElement(DefaultUI, [1,"vm-default-ui",{"noClickToPlay":[4,"no-click-to-play"],"noDblClickFullscreen":[4,"no-dbl-click-fullscreen"],"noCaptions":[4,"no-captions"],"noPoster":[4,"no-poster"],"noSpinner":[4,"no-spinner"],"noControls":[4,"no-controls"],"noSettings":[4,"no-settings"],"noLoadingScreen":[4,"no-loading-screen"]}]);
+const VmEmbed = /*@__PURE__*/proxyCustomElement(Embed, [1,"vm-embed",{"embedSrc":[1,"embed-src"],"mediaTitle":[1,"media-title"],"params":[1],"origin":[1],"preconnections":[16],"decoder":[16],"srcWithParams":[32],"hasEnteredViewport":[32]},[[8,"message","onWindowMessage"]]]);
+const VmEndTime = /*@__PURE__*/proxyCustomElement(EndTime, [1,"vm-end-time",{"duration":[2],"i18n":[16],"alwaysShowHours":[4,"always-show-hours"]}]);
+const VmFile = /*@__PURE__*/proxyCustomElement(File, [6,"vm-file",{"willAttach":[4,"will-attach"],"crossOrigin":[1,"cross-origin"],"preload":[1],"poster":[1],"mediaTitle":[1,"media-title"],"controlsList":[1,"controls-list"],"autoPiP":[4,"auto-pip"],"disablePiP":[4,"disable-pip"],"disableRemotePlayback":[4,"disable-remote-playback"],"viewType":[1,"view-type"],"playbackRates":[16],"language":[1],"autoplay":[4],"controls":[4],"logger":[16],"loop":[4],"muted":[4],"playsinline":[4],"noConnect":[4,"no-connect"],"paused":[4],"currentTime":[2,"current-time"],"volume":[2],"playbackReady":[4,"playback-ready"],"playbackStarted":[4,"playback-started"],"currentTextTrack":[2,"current-text-track"],"hasCustomTextManager":[4,"has-custom-text-manager"],"isTextTrackVisible":[4,"is-text-track-visible"],"shouldRenderNativeTextTracks":[4,"should-render-native-text-tracks"],"vmPoster":[32]},[[0,"vmMediaProviderConnect","onProviderConnect"],[0,"vmMediaProviderDisconnect","onProviderDisconnect"]]]);
+const VmFullscreenControl = /*@__PURE__*/proxyCustomElement(FullscreenControl, [1,"vm-fullscreen-control",{"enterIcon":[1,"enter-icon"],"exitIcon":[1,"exit-icon"],"icons":[1],"tooltipPosition":[1,"tooltip-position"],"tooltipDirection":[1,"tooltip-direction"],"hideTooltip":[4,"hide-tooltip"],"keys":[1],"isFullscreenActive":[4,"is-fullscreen-active"],"i18n":[16],"playbackReady":[4,"playback-ready"],"canSetFullscreen":[32]}]);
+const VmHls = /*@__PURE__*/proxyCustomElement(HLS, [4,"vm-hls",{"version":[1],"libSrc":[1,"lib-src"],"config":[8],"crossOrigin":[1,"cross-origin"],"preload":[1],"poster":[1],"controlsList":[1,"controls-list"],"autoPiP":[4,"auto-pip"],"disablePiP":[4,"disable-pip"],"disableRemotePlayback":[4,"disable-remote-playback"],"playbackReady":[4,"playback-ready"],"mediaTitle":[1,"media-title"],"hasAttached":[32]},[[0,"vmMediaElChange","onMediaElChange"],[0,"vmSrcSetChange","onSrcChange"]]]);
+const VmIcon = /*@__PURE__*/proxyCustomElement(Icon, [1,"vm-icon",{"name":[1],"src":[1],"label":[1],"library":[1],"icons":[1],"svg":[32]}]);
+const VmIconLibrary = /*@__PURE__*/proxyCustomElement(IconLibrary, [1,"vm-icon-library",{"name":[1],"resolver":[16],"icons":[1]}]);
+const VmLiveIndicator = /*@__PURE__*/proxyCustomElement(LiveIndicator, [1,"vm-live-indicator",{"isLive":[4,"is-live"],"i18n":[16]}]);
+const VmLoadingScreen = /*@__PURE__*/proxyCustomElement(LoadingScreen, [1,"vm-loading-screen",{"playbackReady":[4,"playback-ready"],"hideDots":[4,"hide-dots"]}]);
+const VmMenu = /*@__PURE__*/proxyCustomElement(Menu, [1,"vm-menu",{"active":[1540],"identifier":[1],"controller":[16],"slideInDirection":[1,"slide-in-direction"],"activeMenuItem":[32],"activeSubmenu":[32]},[[0,"vmOpenSubmenu","onOpenSubmenu"],[0,"vmCloseSubmenu","onCloseSubmenu"],[8,"click","onWindowClick"],[8,"keydown","onWindowKeyDown"]]]);
+const VmMenuItem = /*@__PURE__*/proxyCustomElement(MenuItem, [1,"vm-menu-item",{"identifier":[1],"hidden":[4],"label":[1],"menu":[16],"expanded":[4],"checked":[4],"hint":[1],"badge":[1],"checkIcon":[1,"check-icon"],"icons":[1],"isTouch":[4,"is-touch"],"showTapHighlight":[32]}]);
+const VmMenuRadio = /*@__PURE__*/proxyCustomElement(MenuRadio, [1,"vm-menu-radio",{"label":[1],"value":[1],"checked":[1028],"badge":[1],"checkIcon":[1,"check-icon"],"icons":[1]}]);
+const VmMenuRadioGroup = /*@__PURE__*/proxyCustomElement(MenuRadioGroup, [1,"vm-menu-radio-group",{"value":[1025]},[[0,"vmCheck","onSelectionChange"]]]);
+const VmMuteControl = /*@__PURE__*/proxyCustomElement(MuteControl, [1,"vm-mute-control",{"lowVolumeIcon":[1,"low-volume-icon"],"highVolumeIcon":[1,"high-volume-icon"],"mutedIcon":[1,"muted-icon"],"icons":[1],"tooltipPosition":[1,"tooltip-position"],"tooltipDirection":[1,"tooltip-direction"],"hideTooltip":[4,"hide-tooltip"],"keys":[1],"volume":[2],"muted":[4],"i18n":[16]}]);
+const VmPipControl = /*@__PURE__*/proxyCustomElement(PiPControl, [1,"vm-pip-control",{"enterIcon":[1,"enter-icon"],"exitIcon":[1,"exit-icon"],"icons":[1],"tooltipPosition":[1,"tooltip-position"],"tooltipDirection":[1,"tooltip-direction"],"hideTooltip":[4,"hide-tooltip"],"keys":[1],"isPiPActive":[4,"is-pi-p-active"],"i18n":[16],"playbackReady":[4,"playback-ready"],"canSetPiP":[32]}]);
+const VmPlaybackControl = /*@__PURE__*/proxyCustomElement(PlaybackControl, [1,"vm-playback-control",{"playIcon":[1,"play-icon"],"pauseIcon":[1,"pause-icon"],"icons":[1],"tooltipPosition":[1,"tooltip-position"],"tooltipDirection":[1,"tooltip-direction"],"hideTooltip":[4,"hide-tooltip"],"keys":[1],"paused":[4],"i18n":[16]}]);
+const VmPlayer = /*@__PURE__*/proxyCustomElement(Player, [1,"vm-player",{"logger":[16],"theme":[513],"icons":[513],"paused":[1028],"playing":[1028],"duration":[1026],"mediaTitle":[1025,"media-title"],"currentProvider":[1025,"current-provider"],"currentSrc":[1025,"current-src"],"currentPoster":[1025,"current-poster"],"currentTime":[1026,"current-time"],"autoplay":[4],"ready":[1540],"playbackReady":[1028,"playback-ready"],"loop":[4],"muted":[1028],"buffered":[1026],"playbackRate":[1026,"playback-rate"],"playbackRates":[1040],"playbackQuality":[1025,"playback-quality"],"playbackQualities":[1040],"seeking":[1028],"debug":[4],"playbackStarted":[1028,"playback-started"],"playbackEnded":[1028,"playback-ended"],"buffering":[1028],"controls":[4],"isControlsActive":[4,"is-controls-active"],"isSettingsActive":[1028,"is-settings-active"],"volume":[1026],"isFullscreenActive":[1028,"is-fullscreen-active"],"aspectRatio":[1025,"aspect-ratio"],"viewType":[1025,"view-type"],"isAudioView":[1028,"is-audio-view"],"isVideoView":[1028,"is-video-view"],"mediaType":[1025,"media-type"],"isAudio":[1028,"is-audio"],"isVideo":[1028,"is-video"],"isLive":[1028,"is-live"],"isMobile":[1028,"is-mobile"],"isTouch":[1028,"is-touch"],"isPiPActive":[1028,"is-pi-p-active"],"textTracks":[16],"currentTextTrack":[2,"current-text-track"],"isTextTrackVisible":[4,"is-text-track-visible"],"shouldRenderNativeTextTracks":[4,"should-render-native-text-tracks"],"audioTracks":[16],"currentAudioTrack":[2,"current-audio-track"],"autopause":[4],"playsinline":[4],"language":[1025],"translations":[1040],"languages":[1040],"i18n":[1040],"container":[32]},[[0,"vmError","onError"]]]);
+const VmPoster = /*@__PURE__*/proxyCustomElement(Poster, [1,"vm-poster",{"fit":[1],"isVideoView":[4,"is-video-view"],"currentPoster":[1,"current-poster"],"mediaTitle":[1,"media-title"],"playbackStarted":[4,"playback-started"],"currentTime":[2,"current-time"],"isHidden":[32],"isActive":[32],"hasLoaded":[32]}]);
+const VmScrim = /*@__PURE__*/proxyCustomElement(Scrim, [1,"vm-scrim",{"gradient":[1],"isVideoView":[4,"is-video-view"],"isControlsActive":[4,"is-controls-active"]}]);
+const VmScrubberControl = /*@__PURE__*/proxyCustomElement(ScrubberControl, [1,"vm-scrubber-control",{"alwaysShowHours":[4,"always-show-hours"],"hideTooltip":[4,"hide-tooltip"],"currentTime":[2,"current-time"],"duration":[2],"noKeyboard":[4,"no-keyboard"],"buffering":[4],"buffered":[2],"i18n":[16],"timestamp":[32],"endTime":[32]}]);
+const VmSettings = /*@__PURE__*/proxyCustomElement(Settings, [1,"vm-settings",{"pin":[513],"active":[1540],"isMobile":[4,"is-mobile"],"isAudioView":[4,"is-audio-view"],"menuHeight":[32]}]);
+const VmSettingsControl = /*@__PURE__*/proxyCustomElement(SettingsControl, [1,"vm-settings-control",{"icon":[1],"icons":[1],"tooltipPosition":[1,"tooltip-position"],"tooltipDirection":[1,"tooltip-direction"],"menu":[1],"expanded":[4],"i18n":[16],"vmSettings":[32]}]);
+const VmSkeleton = /*@__PURE__*/proxyCustomElement(Skeleton, [1,"vm-skeleton",{"effect":[1],"ready":[4],"hidden":[32]}]);
+const VmSlider = /*@__PURE__*/proxyCustomElement(Slider, [1,"vm-slider",{"step":[2],"min":[2],"max":[2],"value":[2],"valueText":[1,"value-text"],"label":[1]}]);
+const VmSpinner = /*@__PURE__*/proxyCustomElement(Spinner, [1,"vm-spinner",{"isVideoView":[4,"is-video-view"],"currentProvider":[1,"current-provider"],"showWhenMediaLoading":[4,"show-when-media-loading"],"playbackReady":[4,"playback-ready"],"buffering":[4],"isHidden":[32],"isActive":[32]}]);
+const VmSubmenu = /*@__PURE__*/proxyCustomElement(Submenu, [1,"vm-submenu",{"label":[1],"hint":[1],"slideInDirection":[1,"slide-in-direction"],"active":[1540],"menu":[32],"controller":[32]}]);
+const VmTime = /*@__PURE__*/proxyCustomElement(Time, [1,"vm-time",{"label":[1],"seconds":[2],"alwaysShowHours":[4,"always-show-hours"]}]);
+const VmTimeProgress = /*@__PURE__*/proxyCustomElement(TimeProgress, [1,"vm-time-progress",{"separator":[1],"alwaysShowHours":[4,"always-show-hours"]}]);
+const VmTooltip = /*@__PURE__*/proxyCustomElement(Tooltip, [1,"vm-tooltip",{"hidden":[4],"active":[4],"position":[1],"direction":[1],"isTouch":[4,"is-touch"],"isMobile":[4,"is-mobile"]}]);
+const VmUi = /*@__PURE__*/proxyCustomElement(UI, [1,"vm-ui",{"isVideoView":[4,"is-video-view"],"playsinline":[4],"isFullscreenActive":[4,"is-fullscreen-active"]}]);
+const VmVideo = /*@__PURE__*/proxyCustomElement(Video, [4,"vm-video",{"willAttach":[4,"will-attach"],"hasCustomTextManager":[4,"has-custom-text-manager"],"crossOrigin":[1,"cross-origin"],"preload":[1],"poster":[1],"controlsList":[1,"controls-list"],"autoPiP":[4,"auto-pip"],"disablePiP":[4,"disable-pip"],"disableRemotePlayback":[4,"disable-remote-playback"],"mediaTitle":[1,"media-title"]},[[0,"vmMediaProviderConnect","onProviderConnect"],[0,"vmMediaProviderDisconnect","onProviderDisconnect"]]]);
+const VmVimeo = /*@__PURE__*/proxyCustomElement(Vimeo, [1,"vm-vimeo",{"videoId":[1,"video-id"],"byline":[4],"color":[1],"portrait":[4],"noAutoAspectRatio":[4,"no-auto-aspect-ratio"],"poster":[1],"cookies":[4],"language":[1],"aspectRatio":[1,"aspect-ratio"],"autoplay":[4],"controls":[4],"logger":[16],"loop":[4],"muted":[4],"playsinline":[4],"embedSrc":[32],"mediaTitle":[32]}]);
+const VmVolumeControl = /*@__PURE__*/proxyCustomElement(VolumeControl, [1,"vm-volume-control",{"lowVolumeIcon":[1,"low-volume-icon"],"highVolumeIcon":[1,"high-volume-icon"],"mutedIcon":[1,"muted-icon"],"icons":[1],"tooltipPosition":[1,"tooltip-position"],"tooltipDirection":[1,"tooltip-direction"],"hideTooltip":[4,"hide-tooltip"],"muteKeys":[1,"mute-keys"],"noKeyboard":[4,"no-keyboard"],"muted":[4],"volume":[2],"isMobile":[4,"is-mobile"],"i18n":[16],"currentVolume":[32],"isSliderActive":[32]}]);
+const VmYoutube = /*@__PURE__*/proxyCustomElement(YouTube, [1,"vm-youtube",{"cookies":[4],"videoId":[1,"video-id"],"showFullscreenControl":[4,"show-fullscreen-control"],"poster":[1],"language":[1],"autoplay":[4],"controls":[4],"logger":[16],"loop":[4],"muted":[4],"playsinline":[4],"embedSrc":[32],"mediaTitle":[32]}]);
+const defineCustomElements = (opts) => {
+  if (typeof customElements !== 'undefined') {
+    [
+      VmAudio,
+  VmCaptionControl,
+  VmCaptions,
+  VmClickToPlay,
+  VmControl,
+  VmControlGroup,
+  VmControlSpacer,
+  VmControls,
+  VmCurrentTime,
+  VmDailymotion,
+  VmDash,
+  VmDblClickFullscreen,
+  VmDefaultControls,
+  VmDefaultSettings,
+  VmDefaultUi,
+  VmEmbed,
+  VmEndTime,
+  VmFile,
+  VmFullscreenControl,
+  VmHls,
+  VmIcon,
+  VmIconLibrary,
+  VmLiveIndicator,
+  VmLoadingScreen,
+  VmMenu,
+  VmMenuItem,
+  VmMenuRadio,
+  VmMenuRadioGroup,
+  VmMuteControl,
+  VmPipControl,
+  VmPlaybackControl,
+  VmPlayer,
+  VmPoster,
+  VmScrim,
+  VmScrubberControl,
+  VmSettings,
+  VmSettingsControl,
+  VmSkeleton,
+  VmSlider,
+  VmSpinner,
+  VmSubmenu,
+  VmTime,
+  VmTimeProgress,
+  VmTooltip,
+  VmUi,
+  VmVideo,
+  VmVimeo,
+  VmVolumeControl,
+  VmYoutube
+    ].forEach(cmp => {
+      if (!customElements.get(cmp.is)) {
+        customElements.define(cmp.is, cmp, opts);
+      }
+    });
+  }
+};
+
+
+
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Audio.jsx
+
+
+
+lib_define('vm-audio', VmAudio);
+lib_define('vm-file', VmFile);
+;
+/* harmony default export */ const components_Audio = (createComponent('vm-audio', new Set(['willAttach', 'crossOrigin', 'preload', 'disableRemotePlayback', 'mediaTitle'])));
+//# sourceMappingURL=Audio.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/CaptionControl.jsx
+
+
+
+lib_define('vm-caption-control', VmCaptionControl);
+lib_define('vm-control', VmControl);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-tooltip', VmTooltip);
+;
+/* harmony default export */ const components_CaptionControl = (createComponent('vm-caption-control', new Set(['showIcon', 'hideIcon', 'tooltipPosition', 'tooltipDirection', 'hideTooltip', 'icons', 'keys', 'i18n', 'playbackReady', 'textTracks', 'isTextTrackVisible'])));
+//# sourceMappingURL=CaptionControl.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Captions.jsx
+
+
+
+lib_define('vm-captions', VmCaptions);
+;
+/* harmony default export */ const components_Captions = (createComponent('vm-captions', new Set(['hidden', 'isControlsActive', 'isVideoView', 'playbackStarted', 'textTracks', 'currentTextTrack', 'isTextTrackVisible'])));
+//# sourceMappingURL=Captions.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/ClickToPlay.jsx
+
+
+
+lib_define('vm-click-to-play', VmClickToPlay);
+;
+/* harmony default export */ const components_ClickToPlay = (createComponent('vm-click-to-play', new Set(['useOnMobile', 'paused', 'isVideoView', 'isMobile'])));
+//# sourceMappingURL=ClickToPlay.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Control.jsx
+
+
+
+lib_define('vm-control', VmControl);
+;
+/* harmony default export */ const components_Control = (createComponent('vm-control', new Set(['keys', 'identifier', 'hidden', 'label', 'menu', 'expanded', 'pressed', 'isTouch'])));
+//# sourceMappingURL=Control.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/ControlGroup.jsx
+
+
+
+lib_define('vm-control-group', VmControlGroup);
+;
+/* harmony default export */ const ControlGroup = (createComponent('vm-control-group', new Set(['space'])));
+//# sourceMappingURL=ControlGroup.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/ControlSpacer.jsx
+
+
+
+lib_define('vm-control-spacer', VmControlSpacer);
+;
+/* harmony default export */ const components_ControlSpacer = (createComponent('vm-control-spacer', new Set([])));
+//# sourceMappingURL=ControlSpacer.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Controls.jsx
+
+
+
+lib_define('vm-controls', VmControls);
+;
+/* harmony default export */ const components_Controls = (createComponent('vm-controls', new Set(['hidden', 'fullWidth', 'fullHeight', 'direction', 'align', 'justify', 'pin', 'activeDuration', 'waitForPlaybackStart', 'hideWhenPaused', 'hideOnMouseLeave', 'isAudioView', 'isSettingsActive', 'playbackReady', 'isControlsActive', 'paused', 'playbackStarted'])));
+//# sourceMappingURL=Controls.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/CurrentTime.jsx
+
+
+
+lib_define('vm-current-time', VmCurrentTime);
+lib_define('vm-time', VmTime);
+;
+/* harmony default export */ const components_CurrentTime = (createComponent('vm-current-time', new Set(['currentTime', 'i18n', 'alwaysShowHours'])));
+//# sourceMappingURL=CurrentTime.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Dailymotion.jsx
+
+
+
+lib_define('vm-dailymotion', VmDailymotion);
+lib_define('vm-embed', VmEmbed);
+;
+/* harmony default export */ const components_Dailymotion = (createComponent('vm-dailymotion', new Set(['videoId', 'shouldAutoplayQueue', 'showUpNextQueue', 'showShareButtons', 'color', 'syndication', 'showDailymotionLogo', 'showVideoInfo', 'language', 'autoplay', 'controls', 'poster', 'logger', 'loop', 'muted', 'playsinline'])));
+//# sourceMappingURL=Dailymotion.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Dash.jsx
+
+
+
+lib_define('vm-dash', VmDash);
+lib_define('vm-file', VmFile);
+lib_define('vm-video', VmVideo);
+;
+/* harmony default export */ const components_Dash = (createComponent('vm-dash', new Set(['src', 'version', 'libSrc', 'config', 'autoplay', 'crossOrigin', 'preload', 'poster', 'controlsList', 'autoPiP', 'disablePiP', 'disableRemotePlayback', 'mediaTitle', 'enableTextTracksByDefault', 'shouldRenderNativeTextTracks', 'isTextTrackVisible', 'currentTextTrack'])));
+//# sourceMappingURL=Dash.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/DblClickFullscreen.jsx
+
+
+
+lib_define('vm-dbl-click-fullscreen', VmDblClickFullscreen);
+;
+/* harmony default export */ const components_DblClickFullscreen = (createComponent('vm-dbl-click-fullscreen', new Set(['useOnMobile', 'isFullscreenActive', 'isVideoView', 'playbackReady', 'isMobile'])));
+//# sourceMappingURL=DblClickFullscreen.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/DefaultControls.jsx
+
+
+
+lib_define('vm-default-controls', VmDefaultControls);
+lib_define('vm-caption-control', VmCaptionControl);
+lib_define('vm-control', VmControl);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-tooltip', VmTooltip);
+lib_define('vm-control-group', VmControlGroup);
+lib_define('vm-control-spacer', VmControlSpacer);
+lib_define('vm-controls', VmControls);
+lib_define('vm-current-time', VmCurrentTime);
+lib_define('vm-time', VmTime);
+lib_define('vm-end-time', VmEndTime);
+lib_define('vm-fullscreen-control', VmFullscreenControl);
+lib_define('vm-live-indicator', VmLiveIndicator);
+lib_define('vm-mute-control', VmMuteControl);
+lib_define('vm-pip-control', VmPipControl);
+lib_define('vm-playback-control', VmPlaybackControl);
+lib_define('vm-scrim', VmScrim);
+lib_define('vm-scrubber-control', VmScrubberControl);
+lib_define('vm-slider', VmSlider);
+lib_define('vm-settings-control', VmSettingsControl);
+lib_define('vm-time-progress', VmTimeProgress);
+lib_define('vm-volume-control', VmVolumeControl);
+;
+/* harmony default export */ const components_DefaultControls = (createComponent('vm-default-controls', new Set(['activeDuration', 'waitForPlaybackStart', 'hideWhenPaused', 'hideOnMouseLeave', 'theme', 'isMobile', 'isLive', 'isAudioView', 'isVideoView'])));
+//# sourceMappingURL=DefaultControls.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/DefaultSettings.jsx
+
+
+
+lib_define('vm-default-settings', VmDefaultSettings);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-menu', VmMenu);
+lib_define('vm-menu-item', VmMenuItem);
+lib_define('vm-menu-radio', VmMenuRadio);
+lib_define('vm-menu-radio-group', VmMenuRadioGroup);
+lib_define('vm-settings', VmSettings);
+lib_define('vm-submenu', VmSubmenu);
+;
+/* harmony default export */ const components_DefaultSettings = (createComponent('vm-default-settings', new Set(['pin', 'i18n', 'playbackReady', 'playbackRate', 'playbackRates', 'isVideoView', 'playbackQuality', 'playbackQualities', 'textTracks', 'currentTextTrack', 'audioTracks', 'currentAudioTrack', 'isTextTrackVisible'])));
+//# sourceMappingURL=DefaultSettings.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/DefaultUi.jsx
+
+
+
+lib_define('vm-default-ui', VmDefaultUi);
+lib_define('vm-caption-control', VmCaptionControl);
+lib_define('vm-control', VmControl);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-tooltip', VmTooltip);
+lib_define('vm-captions', VmCaptions);
+lib_define('vm-click-to-play', VmClickToPlay);
+lib_define('vm-control-group', VmControlGroup);
+lib_define('vm-control-spacer', VmControlSpacer);
+lib_define('vm-controls', VmControls);
+lib_define('vm-current-time', VmCurrentTime);
+lib_define('vm-time', VmTime);
+lib_define('vm-dbl-click-fullscreen', VmDblClickFullscreen);
+lib_define('vm-default-controls', VmDefaultControls);
+lib_define('vm-end-time', VmEndTime);
+lib_define('vm-fullscreen-control', VmFullscreenControl);
+lib_define('vm-live-indicator', VmLiveIndicator);
+lib_define('vm-mute-control', VmMuteControl);
+lib_define('vm-pip-control', VmPipControl);
+lib_define('vm-playback-control', VmPlaybackControl);
+lib_define('vm-scrim', VmScrim);
+lib_define('vm-scrubber-control', VmScrubberControl);
+lib_define('vm-slider', VmSlider);
+lib_define('vm-settings-control', VmSettingsControl);
+lib_define('vm-time-progress', VmTimeProgress);
+lib_define('vm-volume-control', VmVolumeControl);
+lib_define('vm-default-settings', VmDefaultSettings);
+lib_define('vm-menu', VmMenu);
+lib_define('vm-menu-item', VmMenuItem);
+lib_define('vm-menu-radio', VmMenuRadio);
+lib_define('vm-menu-radio-group', VmMenuRadioGroup);
+lib_define('vm-settings', VmSettings);
+lib_define('vm-submenu', VmSubmenu);
+lib_define('vm-loading-screen', VmLoadingScreen);
+lib_define('vm-poster', VmPoster);
+lib_define('vm-spinner', VmSpinner);
+lib_define('vm-ui', VmUi);
+;
+/* harmony default export */ const DefaultUi = (createComponent('vm-default-ui', new Set(['noClickToPlay', 'noDblClickFullscreen', 'noCaptions', 'noPoster', 'noSpinner', 'noControls', 'noSettings', 'noLoadingScreen'])));
+//# sourceMappingURL=DefaultUi.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Embed.jsx
+
+
+
+lib_define('vm-embed', VmEmbed);
+;
+/* harmony default export */ const components_Embed = (createComponent('vm-embed', new Set(['embedSrc', 'mediaTitle', 'params', 'origin', 'preconnections', 'decoder'])));
+//# sourceMappingURL=Embed.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/EndTime.jsx
+
+
+
+lib_define('vm-end-time', VmEndTime);
+lib_define('vm-time', VmTime);
+;
+/* harmony default export */ const components_EndTime = (createComponent('vm-end-time', new Set(['duration', 'i18n', 'alwaysShowHours'])));
+//# sourceMappingURL=EndTime.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/File.jsx
+
+
+
+lib_define('vm-file', VmFile);
+;
+/* harmony default export */ const components_File = (createComponent('vm-file', new Set(['willAttach', 'crossOrigin', 'preload', 'poster', 'mediaTitle', 'controlsList', 'autoPiP', 'disablePiP', 'disableRemotePlayback', 'viewType', 'playbackRates', 'language', 'autoplay', 'controls', 'logger', 'loop', 'muted', 'playsinline', 'noConnect', 'paused', 'currentTime', 'volume', 'playbackReady', 'playbackStarted', 'currentTextTrack', 'hasCustomTextManager', 'isTextTrackVisible', 'shouldRenderNativeTextTracks'])));
+//# sourceMappingURL=File.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/FullscreenControl.jsx
+
+
+
+lib_define('vm-fullscreen-control', VmFullscreenControl);
+lib_define('vm-control', VmControl);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-tooltip', VmTooltip);
+;
+/* harmony default export */ const components_FullscreenControl = (createComponent('vm-fullscreen-control', new Set(['enterIcon', 'exitIcon', 'icons', 'tooltipPosition', 'tooltipDirection', 'hideTooltip', 'keys', 'isFullscreenActive', 'i18n', 'playbackReady'])));
+//# sourceMappingURL=FullscreenControl.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Hls.jsx
+
+
+
+lib_define('vm-hls', VmHls);
+lib_define('vm-file', VmFile);
+lib_define('vm-video', VmVideo);
+;
+/* harmony default export */ const Hls = (createComponent('vm-hls', new Set(['version', 'libSrc', 'config', 'crossOrigin', 'preload', 'poster', 'controlsList', 'autoPiP', 'disablePiP', 'disableRemotePlayback', 'playbackReady', 'mediaTitle'])));
+//# sourceMappingURL=Hls.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Icon.jsx
+
+
+
+lib_define('vm-icon', VmIcon);
+;
+/* harmony default export */ const components_Icon = (createComponent('vm-icon', new Set(['name', 'src', 'label', 'library', 'icons'])));
+//# sourceMappingURL=Icon.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/IconLibrary.jsx
+
+
+
+lib_define('vm-icon-library', VmIconLibrary);
+;
+/* harmony default export */ const components_IconLibrary = (createComponent('vm-icon-library', new Set(['name', 'resolver', 'icons'])));
+//# sourceMappingURL=IconLibrary.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/LiveIndicator.jsx
+
+
+
+lib_define('vm-live-indicator', VmLiveIndicator);
+;
+/* harmony default export */ const components_LiveIndicator = (createComponent('vm-live-indicator', new Set(['isLive', 'i18n'])));
+//# sourceMappingURL=LiveIndicator.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/LoadingScreen.jsx
+
+
+
+lib_define('vm-loading-screen', VmLoadingScreen);
+;
+/* harmony default export */ const components_LoadingScreen = (createComponent('vm-loading-screen', new Set(['playbackReady', 'hideDots'])));
+//# sourceMappingURL=LoadingScreen.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Menu.jsx
+
+
+
+lib_define('vm-menu', VmMenu);
+;
+/* harmony default export */ const components_Menu = (createComponent('vm-menu', new Set(['active', 'identifier', 'controller', 'slideInDirection'])));
+//# sourceMappingURL=Menu.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/MenuItem.jsx
+
+
+
+lib_define('vm-menu-item', VmMenuItem);
+lib_define('vm-icon', VmIcon);
+;
+/* harmony default export */ const components_MenuItem = (createComponent('vm-menu-item', new Set(['identifier', 'hidden', 'label', 'menu', 'expanded', 'checked', 'hint', 'badge', 'checkIcon', 'icons', 'isTouch'])));
+//# sourceMappingURL=MenuItem.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/MenuRadio.jsx
+
+
+
+lib_define('vm-menu-radio', VmMenuRadio);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-menu-item', VmMenuItem);
+;
+/* harmony default export */ const components_MenuRadio = (createComponent('vm-menu-radio', new Set(['label', 'value', 'checked', 'badge', 'checkIcon', 'icons'])));
+//# sourceMappingURL=MenuRadio.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/MenuRadioGroup.jsx
+
+
+
+lib_define('vm-menu-radio-group', VmMenuRadioGroup);
+;
+/* harmony default export */ const components_MenuRadioGroup = (createComponent('vm-menu-radio-group', new Set(['value'])));
+//# sourceMappingURL=MenuRadioGroup.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/MuteControl.jsx
+
+
+
+lib_define('vm-mute-control', VmMuteControl);
+lib_define('vm-control', VmControl);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-tooltip', VmTooltip);
+;
+/* harmony default export */ const components_MuteControl = (createComponent('vm-mute-control', new Set(['lowVolumeIcon', 'highVolumeIcon', 'mutedIcon', 'icons', 'tooltipPosition', 'tooltipDirection', 'hideTooltip', 'keys', 'volume', 'muted', 'i18n'])));
+//# sourceMappingURL=MuteControl.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/PipControl.jsx
+
+
+
+lib_define('vm-pip-control', VmPipControl);
+lib_define('vm-control', VmControl);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-tooltip', VmTooltip);
+;
+/* harmony default export */ const PipControl = (createComponent('vm-pip-control', new Set(['enterIcon', 'exitIcon', 'icons', 'tooltipPosition', 'tooltipDirection', 'hideTooltip', 'keys', 'isPiPActive', 'i18n', 'playbackReady'])));
+//# sourceMappingURL=PipControl.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/PlaybackControl.jsx
+
+
+
+lib_define('vm-playback-control', VmPlaybackControl);
+lib_define('vm-control', VmControl);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-tooltip', VmTooltip);
+;
+/* harmony default export */ const components_PlaybackControl = (createComponent('vm-playback-control', new Set(['playIcon', 'pauseIcon', 'icons', 'tooltipPosition', 'tooltipDirection', 'hideTooltip', 'keys', 'paused', 'i18n'])));
+//# sourceMappingURL=PlaybackControl.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Player.jsx
+
+
+
+lib_define('vm-player', VmPlayer);
+;
+/* harmony default export */ const components_Player = (createComponent('vm-player', new Set(['logger', 'theme', 'icons', 'paused', 'playing', 'duration', 'mediaTitle', 'currentProvider', 'currentSrc', 'currentPoster', 'currentTime', 'autoplay', 'ready', 'playbackReady', 'loop', 'muted', 'buffered', 'playbackRate', 'playbackRates', 'playbackQuality', 'playbackQualities', 'seeking', 'debug', 'playbackStarted', 'playbackEnded', 'buffering', 'controls', 'isControlsActive', 'isSettingsActive', 'volume', 'isFullscreenActive', 'aspectRatio', 'viewType', 'isAudioView', 'isVideoView', 'mediaType', 'isAudio', 'isVideo', 'isLive', 'isMobile', 'isTouch', 'isPiPActive', 'textTracks', 'currentTextTrack', 'isTextTrackVisible', 'shouldRenderNativeTextTracks', 'audioTracks', 'currentAudioTrack', 'autopause', 'playsinline', 'language', 'translations', 'languages', 'i18n'])));
+//# sourceMappingURL=Player.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Poster.jsx
+
+
+
+lib_define('vm-poster', VmPoster);
+;
+/* harmony default export */ const components_Poster = (createComponent('vm-poster', new Set(['fit', 'isVideoView', 'currentPoster', 'mediaTitle', 'playbackStarted', 'currentTime'])));
+//# sourceMappingURL=Poster.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Scrim.jsx
+
+
+
+lib_define('vm-scrim', VmScrim);
+;
+/* harmony default export */ const components_Scrim = (createComponent('vm-scrim', new Set(['gradient', 'isVideoView', 'isControlsActive'])));
+//# sourceMappingURL=Scrim.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/ScrubberControl.jsx
+
+
+
+lib_define('vm-scrubber-control', VmScrubberControl);
+lib_define('vm-slider', VmSlider);
+lib_define('vm-tooltip', VmTooltip);
+;
+/* harmony default export */ const components_ScrubberControl = (createComponent('vm-scrubber-control', new Set(['alwaysShowHours', 'hideTooltip', 'currentTime', 'duration', 'noKeyboard', 'buffering', 'buffered', 'i18n'])));
+//# sourceMappingURL=ScrubberControl.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Settings.jsx
+
+
+
+lib_define('vm-settings', VmSettings);
+lib_define('vm-menu', VmMenu);
+;
+/* harmony default export */ const components_Settings = (createComponent('vm-settings', new Set(['pin', 'active', 'isMobile', 'isAudioView'])));
+//# sourceMappingURL=Settings.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/SettingsControl.jsx
+
+
+
+lib_define('vm-settings-control', VmSettingsControl);
+lib_define('vm-control', VmControl);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-tooltip', VmTooltip);
+;
+/* harmony default export */ const components_SettingsControl = (createComponent('vm-settings-control', new Set(['icon', 'icons', 'tooltipPosition', 'tooltipDirection', 'menu', 'expanded', 'i18n'])));
+//# sourceMappingURL=SettingsControl.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Skeleton.jsx
+
+
+
+lib_define('vm-skeleton', VmSkeleton);
+;
+/* harmony default export */ const components_Skeleton = (createComponent('vm-skeleton', new Set(['effect', 'ready'])));
+//# sourceMappingURL=Skeleton.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Slider.jsx
+
+
+
+lib_define('vm-slider', VmSlider);
+;
+/* harmony default export */ const components_Slider = (createComponent('vm-slider', new Set(['step', 'min', 'max', 'value', 'valueText', 'label'])));
+//# sourceMappingURL=Slider.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Spinner.jsx
+
+
+
+lib_define('vm-spinner', VmSpinner);
+;
+/* harmony default export */ const components_Spinner = (createComponent('vm-spinner', new Set(['isVideoView', 'currentProvider', 'showWhenMediaLoading', 'playbackReady', 'buffering'])));
+//# sourceMappingURL=Spinner.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Submenu.jsx
+
+
+
+lib_define('vm-submenu', VmSubmenu);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-menu', VmMenu);
+lib_define('vm-menu-item', VmMenuItem);
+;
+/* harmony default export */ const components_Submenu = (createComponent('vm-submenu', new Set(['label', 'hint', 'slideInDirection', 'active'])));
+//# sourceMappingURL=Submenu.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Time.jsx
+
+
+
+lib_define('vm-time', VmTime);
+;
+/* harmony default export */ const components_Time = (createComponent('vm-time', new Set(['label', 'seconds', 'alwaysShowHours'])));
+//# sourceMappingURL=Time.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/TimeProgress.jsx
+
+
+
+lib_define('vm-time-progress', VmTimeProgress);
+lib_define('vm-current-time', VmCurrentTime);
+lib_define('vm-time', VmTime);
+lib_define('vm-end-time', VmEndTime);
+;
+/* harmony default export */ const components_TimeProgress = (createComponent('vm-time-progress', new Set(['separator', 'alwaysShowHours'])));
+//# sourceMappingURL=TimeProgress.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Tooltip.jsx
+
+
+
+lib_define('vm-tooltip', VmTooltip);
+;
+/* harmony default export */ const components_Tooltip = (createComponent('vm-tooltip', new Set(['hidden', 'active', 'position', 'direction', 'isTouch', 'isMobile'])));
+//# sourceMappingURL=Tooltip.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Ui.jsx
+
+
+
+lib_define('vm-ui', VmUi);
+;
+/* harmony default export */ const Ui = (createComponent('vm-ui', new Set(['isVideoView', 'playsinline', 'isFullscreenActive'])));
+//# sourceMappingURL=Ui.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Video.jsx
+
+
+
+lib_define('vm-video', VmVideo);
+lib_define('vm-file', VmFile);
+;
+/* harmony default export */ const components_Video = (createComponent('vm-video', new Set(['willAttach', 'hasCustomTextManager', 'crossOrigin', 'preload', 'poster', 'controlsList', 'autoPiP', 'disablePiP', 'disableRemotePlayback', 'mediaTitle'])));
+//# sourceMappingURL=Video.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Vimeo.jsx
+
+
+
+lib_define('vm-vimeo', VmVimeo);
+lib_define('vm-embed', VmEmbed);
+;
+/* harmony default export */ const components_Vimeo = (createComponent('vm-vimeo', new Set(['videoId', 'byline', 'color', 'portrait', 'noAutoAspectRatio', 'poster', 'cookies', 'language', 'aspectRatio', 'autoplay', 'controls', 'logger', 'loop', 'muted', 'playsinline'])));
+//# sourceMappingURL=Vimeo.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/VolumeControl.jsx
+
+
+
+lib_define('vm-volume-control', VmVolumeControl);
+lib_define('vm-control', VmControl);
+lib_define('vm-icon', VmIcon);
+lib_define('vm-mute-control', VmMuteControl);
+lib_define('vm-tooltip', VmTooltip);
+lib_define('vm-slider', VmSlider);
+;
+/* harmony default export */ const components_VolumeControl = (createComponent('vm-volume-control', new Set(['lowVolumeIcon', 'highVolumeIcon', 'mutedIcon', 'icons', 'tooltipPosition', 'tooltipDirection', 'hideTooltip', 'muteKeys', 'noKeyboard', 'muted', 'volume', 'isMobile', 'i18n'])));
+//# sourceMappingURL=VolumeControl.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/Youtube.jsx
+
+
+
+lib_define('vm-youtube', VmYoutube);
+lib_define('vm-embed', VmEmbed);
+;
+/* harmony default export */ const Youtube = (createComponent('vm-youtube', new Set(['cookies', 'videoId', 'showFullscreenControl', 'poster', 'language', 'autoplay', 'controls', 'logger', 'loop', 'muted', 'playsinline'])));
+//# sourceMappingURL=Youtube.jsx.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/components/index.js
+/* eslint-disable */
+/* tslint:disable */
+// @ts-nocheck
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const esm_components_Audio = /*#__PURE__*/ (/* unused pure expression or super */ null && (AudioProxy));
+const esm_components_CaptionControl = /*#__PURE__*/ (/* unused pure expression or super */ null && (CaptionControlProxy));
+const esm_components_Captions = /*#__PURE__*/ (/* unused pure expression or super */ null && (CaptionsProxy));
+const esm_components_ClickToPlay = /*#__PURE__*/ (/* unused pure expression or super */ null && (ClickToPlayProxy));
+const esm_components_Control = /*#__PURE__*/ (/* unused pure expression or super */ null && (ControlProxy));
+const components_ControlGroup = /*#__PURE__*/ (/* unused pure expression or super */ null && (ControlGroupProxy));
+const esm_components_ControlSpacer = /*#__PURE__*/ components_ControlSpacer;
+const esm_components_Controls = /*#__PURE__*/ components_Controls;
+const esm_components_CurrentTime = /*#__PURE__*/ (/* unused pure expression or super */ null && (CurrentTimeProxy));
+const esm_components_Dailymotion = /*#__PURE__*/ (/* unused pure expression or super */ null && (DailymotionProxy));
+const esm_components_Dash = /*#__PURE__*/ (/* unused pure expression or super */ null && (DashProxy));
+const esm_components_DblClickFullscreen = /*#__PURE__*/ (/* unused pure expression or super */ null && (DblClickFullscreenProxy));
+const esm_components_DefaultControls = /*#__PURE__*/ (/* unused pure expression or super */ null && (DefaultControlsProxy));
+const esm_components_DefaultSettings = /*#__PURE__*/ (/* unused pure expression or super */ null && (DefaultSettingsProxy));
+const components_DefaultUi = /*#__PURE__*/ DefaultUi;
+const esm_components_Embed = /*#__PURE__*/ (/* unused pure expression or super */ null && (EmbedProxy));
+const esm_components_EndTime = /*#__PURE__*/ (/* unused pure expression or super */ null && (EndTimeProxy));
+const esm_components_File = /*#__PURE__*/ (/* unused pure expression or super */ null && (FileProxy));
+const esm_components_FullscreenControl = /*#__PURE__*/ (/* unused pure expression or super */ null && (FullscreenControlProxy));
+const components_Hls = /*#__PURE__*/ (/* unused pure expression or super */ null && (HlsProxy));
+const esm_components_Icon = /*#__PURE__*/ (/* unused pure expression or super */ null && (IconProxy));
+const esm_components_IconLibrary = /*#__PURE__*/ (/* unused pure expression or super */ null && (IconLibraryProxy));
+const esm_components_LiveIndicator = /*#__PURE__*/ (/* unused pure expression or super */ null && (LiveIndicatorProxy));
+const esm_components_LoadingScreen = /*#__PURE__*/ (/* unused pure expression or super */ null && (LoadingScreenProxy));
+const esm_components_Menu = /*#__PURE__*/ (/* unused pure expression or super */ null && (MenuProxy));
+const esm_components_MenuItem = /*#__PURE__*/ (/* unused pure expression or super */ null && (MenuItemProxy));
+const esm_components_MenuRadio = /*#__PURE__*/ (/* unused pure expression or super */ null && (MenuRadioProxy));
+const esm_components_MenuRadioGroup = /*#__PURE__*/ (/* unused pure expression or super */ null && (MenuRadioGroupProxy));
+const esm_components_MuteControl = /*#__PURE__*/ components_MuteControl;
+const components_PipControl = /*#__PURE__*/ (/* unused pure expression or super */ null && (PipControlProxy));
+const esm_components_PlaybackControl = /*#__PURE__*/ components_PlaybackControl;
+const esm_components_Player = /*#__PURE__*/ components_Player;
+const esm_components_Poster = /*#__PURE__*/ components_Poster;
+const esm_components_Scrim = /*#__PURE__*/ components_Scrim;
+const esm_components_ScrubberControl = /*#__PURE__*/ (/* unused pure expression or super */ null && (ScrubberControlProxy));
+const esm_components_Settings = /*#__PURE__*/ (/* unused pure expression or super */ null && (SettingsProxy));
+const esm_components_SettingsControl = /*#__PURE__*/ (/* unused pure expression or super */ null && (SettingsControlProxy));
+const esm_components_Skeleton = /*#__PURE__*/ (/* unused pure expression or super */ null && (SkeletonProxy));
+const esm_components_Slider = /*#__PURE__*/ (/* unused pure expression or super */ null && (SliderProxy));
+const esm_components_Spinner = /*#__PURE__*/ components_Spinner;
+const esm_components_Submenu = /*#__PURE__*/ (/* unused pure expression or super */ null && (SubmenuProxy));
+const esm_components_Time = /*#__PURE__*/ (/* unused pure expression or super */ null && (TimeProxy));
+const esm_components_TimeProgress = /*#__PURE__*/ components_TimeProgress;
+const esm_components_Tooltip = /*#__PURE__*/ (/* unused pure expression or super */ null && (TooltipProxy));
+const components_Ui = /*#__PURE__*/ (/* unused pure expression or super */ null && (UiProxy));
+const esm_components_Video = /*#__PURE__*/ components_Video;
+const esm_components_Vimeo = /*#__PURE__*/ (/* unused pure expression or super */ null && (VimeoProxy));
+const esm_components_VolumeControl = /*#__PURE__*/ (/* unused pure expression or super */ null && (VolumeControlProxy));
+const components_Youtube = /*#__PURE__*/ (/* unused pure expression or super */ null && (YoutubeProxy));
+//# sourceMappingURL=index.js.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/hooks.js
+var hooks_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+
+
+const hooks_noop = () => { };
+/**
+ * Returns the closest ancestor player to the given `ref`.
+ */
+const usePlayer = (ref) => {
+    const [player, setPlayer] = useState(null);
+    useLayoutEffect(() => {
+        function find() {
+            var _a;
+            return hooks_awaiter(this, void 0, void 0, function* () {
+                setPlayer(ref.current ? (_a = (yield findPlayer(ref.current))) !== null && _a !== void 0 ? _a : null : null);
+            });
+        }
+        find();
+    }, [ref.current]);
+    return player;
+};
+/**
+ * Binds the given `prop` to the closest ancestor player of the given `ref`. When the property
+ * changes on the player, this hook will trigger a re-render with the new value.
+ *
+ * @param ref The ref to start searching from.
+ * @param prop The property to bind to.
+ * @param defaultValue The initial value of the property until the the player context is bound.
+ */
+const hooks_usePlayerContext = (ref, prop, defaultValue) => {
+    const [value, setValue] = useState(defaultValue);
+    const dispatch = useCallback(ref.current === null ? hooks_noop : createDispatcher(ref.current), [ref.current]);
+    const setter = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    (value) => {
+        dispatch(prop, value);
+    }, [dispatch, prop]);
+    useLayoutEffect(() => {
+        if (ref.current === null)
+            return undefined;
+        let cleanup;
+        function connect() {
+            return hooks_awaiter(this, void 0, void 0, function* () {
+                cleanup = yield useContext(ref.current, [prop], (_, newValue) => {
+                    setValue(newValue);
+                });
+            });
+        }
+        connect();
+        return () => {
+            cleanup === null || cleanup === void 0 ? void 0 : cleanup();
+        };
+    }, [ref.current, prop]);
+    return [value, setter];
+};
+//# sourceMappingURL=hooks.js.map
+;// CONCATENATED MODULE: ../../node_modules/@vime/react/dist/esm/index.js
+
+
+
+//# sourceMappingURL=index.js.map
+;// CONCATENATED MODULE: ../ui/src/display/Cinematic.tsx
+
+
+
+var Cinematic = function Cinematic() {
+  return /*#__PURE__*/react.createElement("div", {
+    style: {
+      height: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: '#101010'
+    }
+  }, /*#__PURE__*/react.createElement(esm_components_Player, {
+    style: {
+      width: '80%'
+    }
+  }, /*#__PURE__*/react.createElement(esm_components_Video, {
+    crossOrigin: "",
+    poster: "https://media.vimejs.com/poster.png"
+  }, /*#__PURE__*/react.createElement("source", {
+    "data-src": "https://media.vimejs.com/720p.mp4",
+    type: "video/mp4"
+  }), /*#__PURE__*/react.createElement("track", {
+    "default": true,
+    kind: "subtitles",
+    src: "https://media.vimejs.com/subs/english.vtt",
+    srcLang: "en",
+    label: "English"
+  })), /*#__PURE__*/react.createElement(components_DefaultUi, {
+    noControls: true
+  }, /*#__PURE__*/react.createElement(esm_components_Scrim, null), /*#__PURE__*/react.createElement(esm_components_Spinner, null), /*#__PURE__*/react.createElement(esm_components_Poster, null), /*#__PURE__*/react.createElement(esm_components_Controls, {
+    fullWidth: true,
+    pin: "topLeft"
+  }, /*#__PURE__*/react.createElement(esm_components_ControlSpacer, null), /*#__PURE__*/react.createElement(esm_components_MuteControl, null)), /*#__PURE__*/react.createElement(esm_components_Controls, {
+    fullWidth: true,
+    pin: "center"
+  }, /*#__PURE__*/react.createElement(esm_components_ControlSpacer, null), /*#__PURE__*/react.createElement(esm_components_PlaybackControl, null), /*#__PURE__*/react.createElement(esm_components_ControlSpacer, null)), /*#__PURE__*/react.createElement(esm_components_Controls, {
+    fullWidth: true,
+    pin: "bottomLeft"
+  }, /*#__PURE__*/react.createElement(esm_components_TimeProgress, null)))));
+};
 ;// CONCATENATED MODULE: ../ui/src/display/CharacterNames.tsx
 function CharacterNames_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { CharacterNames_typeof = function _typeof(obj) { return typeof obj; }; } else { CharacterNames_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return CharacterNames_typeof(obj); }
 
@@ -42980,6 +54882,7 @@ var MultipleSelect = function MultipleSelect(props) {
   }));
 };
 ;// CONCATENATED MODULE: ../ui/src/index.ts
+
 
 
 
@@ -43310,6 +55213,17 @@ var Character_fixture_WithButton = function WithButton() {
   Triple: /*#__PURE__*/react.createElement(Character_fixture_Triple, null),
   'All Characters': /*#__PURE__*/react.createElement(Character_fixture_All, null),
   'Change Index with Button': /*#__PURE__*/react.createElement(Character_fixture_WithButton, null)
+});
+;// CONCATENATED MODULE: ./cosmos/Cinematic.fixture.tsx
+
+
+
+var CinematicNoSkip = function CinematicNoSkip() {
+  return /*#__PURE__*/react.createElement(Cinematic, null);
+};
+
+/* harmony default export */ const Cinematic_fixture = ({
+  'Cinematic without skip': /*#__PURE__*/react.createElement(CinematicNoSkip, null)
 });
 // EXTERNAL MODULE: ../../node_modules/css-loader/dist/cjs.js!./cosmos/styles/dialogueX.module.css
 var dialogueX_module = __webpack_require__(3037);
@@ -44233,6 +56147,7 @@ var Options = function Options() {
 
 
 
+
 const rendererConfig = {
   "containerQuerySelector": null
 };
@@ -44241,6 +56156,7 @@ const fixtures = {
   'cosmos/Avatar.fixture.tsx': Avatar_fixture,
   'cosmos/Button.fixture.tsx': Button_fixture,
   'cosmos/Character.fixture.tsx': Character_fixture,
+  'cosmos/Cinematic.fixture.tsx': Cinematic_fixture,
   'cosmos/Dialogue.fixture.tsx': Dialogue_fixture,
   'cosmos/Game.fixture.tsx': Game_fixture,
   'cosmos/MultipleChoice.fixture.tsx': MultipleChoice_fixture,
@@ -49960,6 +61876,28 @@ module.exports = "data:application/font-woff;charset=utf-8;base64, d09GRgABAAAAA
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/ensure chunk */
+/******/ 	(() => {
+/******/ 		__webpack_require__.f = {};
+/******/ 		// This file contains only the entry chunk.
+/******/ 		// The chunk loading function for additional chunks
+/******/ 		__webpack_require__.e = (chunkId) => {
+/******/ 			return Promise.all(Object.keys(__webpack_require__.f).reduce((promises, key) => {
+/******/ 				__webpack_require__.f[key](chunkId, promises);
+/******/ 				return promises;
+/******/ 			}, []));
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/get javascript chunk filename */
+/******/ 	(() => {
+/******/ 		// This function allow to reference async chunks
+/******/ 		__webpack_require__.u = (chunkId) => {
+/******/ 			// return url for filenames based on template
+/******/ 			return "" + chunkId + "." + "0657152e1359f6c23f1f" + ".js";
+/******/ 		};
+/******/ 	})();
+/******/ 	
 /******/ 	/* webpack/runtime/global */
 /******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
@@ -49975,6 +61913,52 @@ module.exports = "data:application/font-woff;charset=utf-8;base64, d09GRgABAAAAA
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
 /******/ 	(() => {
 /******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/load script */
+/******/ 	(() => {
+/******/ 		var inProgress = {};
+/******/ 		var dataWebpackPrefix = "@viveljs/cosmos:";
+/******/ 		// loadScript function to load a script via script tag
+/******/ 		__webpack_require__.l = (url, done, key, chunkId) => {
+/******/ 			if(inProgress[url]) { inProgress[url].push(done); return; }
+/******/ 			var script, needAttach;
+/******/ 			if(key !== undefined) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				for(var i = 0; i < scripts.length; i++) {
+/******/ 					var s = scripts[i];
+/******/ 					if(s.getAttribute("src") == url || s.getAttribute("data-webpack") == dataWebpackPrefix + key) { script = s; break; }
+/******/ 				}
+/******/ 			}
+/******/ 			if(!script) {
+/******/ 				needAttach = true;
+/******/ 				script = document.createElement('script');
+/******/ 		
+/******/ 				script.charset = 'utf-8';
+/******/ 				script.timeout = 120;
+/******/ 				if (__webpack_require__.nc) {
+/******/ 					script.setAttribute("nonce", __webpack_require__.nc);
+/******/ 				}
+/******/ 				script.setAttribute("data-webpack", dataWebpackPrefix + key);
+/******/ 				script.src = url;
+/******/ 			}
+/******/ 			inProgress[url] = [done];
+/******/ 			var onScriptComplete = (prev, event) => {
+/******/ 				// avoid mem leaks in IE.
+/******/ 				script.onerror = script.onload = null;
+/******/ 				clearTimeout(timeout);
+/******/ 				var doneFns = inProgress[url];
+/******/ 				delete inProgress[url];
+/******/ 				script.parentNode && script.parentNode.removeChild(script);
+/******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
+/******/ 				if(prev) return prev(event);
+/******/ 			}
+/******/ 			;
+/******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
+/******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
+/******/ 			script.onload = onScriptComplete.bind(null, script.onload);
+/******/ 			needAttach && document.head.appendChild(script);
+/******/ 		};
 /******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
@@ -50013,7 +61997,44 @@ module.exports = "data:application/font-woff;charset=utf-8;base64, d09GRgABAAAAA
 /******/ 			179: 0
 /******/ 		};
 /******/ 		
-/******/ 		// no chunk on demand loading
+/******/ 		__webpack_require__.f.j = (chunkId, promises) => {
+/******/ 				// JSONP chunk loading for javascript
+/******/ 				var installedChunkData = __webpack_require__.o(installedChunks, chunkId) ? installedChunks[chunkId] : undefined;
+/******/ 				if(installedChunkData !== 0) { // 0 means "already installed".
+/******/ 		
+/******/ 					// a Promise means "currently loading".
+/******/ 					if(installedChunkData) {
+/******/ 						promises.push(installedChunkData[2]);
+/******/ 					} else {
+/******/ 						if(true) { // all chunks have JS
+/******/ 							// setup Promise in chunk cache
+/******/ 							var promise = new Promise((resolve, reject) => (installedChunkData = installedChunks[chunkId] = [resolve, reject]));
+/******/ 							promises.push(installedChunkData[2] = promise);
+/******/ 		
+/******/ 							// start chunk loading
+/******/ 							var url = __webpack_require__.p + __webpack_require__.u(chunkId);
+/******/ 							// create error before stack unwound to get useful stacktrace later
+/******/ 							var error = new Error();
+/******/ 							var loadingEnded = (event) => {
+/******/ 								if(__webpack_require__.o(installedChunks, chunkId)) {
+/******/ 									installedChunkData = installedChunks[chunkId];
+/******/ 									if(installedChunkData !== 0) installedChunks[chunkId] = undefined;
+/******/ 									if(installedChunkData) {
+/******/ 										var errorType = event && (event.type === 'load' ? 'missing' : event.type);
+/******/ 										var realSrc = event && event.target && event.target.src;
+/******/ 										error.message = 'Loading chunk ' + chunkId + ' failed.\n(' + errorType + ': ' + realSrc + ')';
+/******/ 										error.name = 'ChunkLoadError';
+/******/ 										error.type = errorType;
+/******/ 										error.request = realSrc;
+/******/ 										installedChunkData[1](error);
+/******/ 									}
+/******/ 								}
+/******/ 							};
+/******/ 							__webpack_require__.l(url, loadingEnded, "chunk-" + chunkId, chunkId);
+/******/ 						} else installedChunks[chunkId] = 0;
+/******/ 					}
+/******/ 				}
+/******/ 		};
 /******/ 		
 /******/ 		// no prefetching
 /******/ 		
@@ -50025,7 +62046,34 @@ module.exports = "data:application/font-woff;charset=utf-8;base64, d09GRgABAAAAA
 /******/ 		
 /******/ 		// no on chunks loaded
 /******/ 		
-/******/ 		// no jsonp function
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = (parentChunkLoadingFunction, data) => {
+/******/ 			var [chunkIds, moreModules, runtime] = data;
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some((id) => (installedChunks[id] !== 0))) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 			}
+/******/ 		
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunk_viveljs_cosmos"] = self["webpackChunk_viveljs_cosmos"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
 /******/ 	})();
 /******/ 	
 /************************************************************************/
@@ -50071,7 +62119,7 @@ mount();
 
 function mount() {
   // Use dynamic import to load updated modules upon hot reloading
-  var _require = __webpack_require__(9288),
+  var _require = __webpack_require__(6343),
       rendererConfig = _require.rendererConfig,
       fixtures = _require.fixtures,
       decorators = _require.decorators;
@@ -50089,4 +62137,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.731646d88dad0c75e05e.js.map
+//# sourceMappingURL=main.1a1f199851a94e821ade.js.map
