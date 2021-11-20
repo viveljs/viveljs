@@ -37,8 +37,10 @@
     "@dnd-kit/core": "^4.0.1",
     "@vime/react": "^5.0.35",
     "lodash": "^4.17.21",
+    "rc-slider": "^9.7.4",
     "react": "17.0.x",
-    "react-dom": "17.0.x"
+    "react-dom": "17.0.x",
+    "use-sound": "^4.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.5",
