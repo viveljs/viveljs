@@ -14,7 +14,26 @@ import {
 } from '@vime/react';
 import '@vime/core/themes/default.css';
 
-export const Cinematic = () => {
+interface SubtitleProps {
+  src: string;
+  lang: string;
+  label: string;
+}
+
+interface VideoProps {
+  src: string;
+  poster: string;
+  type?: string;
+}
+
+interface CinematicProps {
+  containerClassName?: string;
+  containerBackground?: string;
+  video: VideoProps;
+  subtitle: SubtitleProps;
+}
+
+export const Cinematic = (props: CinematicProps) => {
   return (
     <div
       style={{
@@ -22,22 +41,25 @@ export const Cinematic = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        background: '#101010',
+        background: props.containerBackground ?? '#101010',
       }}
+      className={props.containerClassName}
     >
       <Player style={{ width: '80%' }}>
-        <Video crossOrigin="" poster="https://media.vimejs.com/poster.png">
+        <Video poster={props.video.poster}>
           <source
-            data-src="https://media.vimejs.com/720p.mp4"
-            type="video/mp4"
+            data-src={props.video.src}
+            type={props.video.type ?? 'video/mp4'}
           />
-          <track
-            default
-            kind="subtitles"
-            src="https://media.vimejs.com/subs/english.vtt"
-            srcLang="en"
-            label="English"
-          />
+          {props.subtitle && (
+            <track
+              default
+              kind="subtitles"
+              src={props.subtitle.src}
+              srcLang={props.subtitle.lang}
+              label={props.subtitle.label}
+            />
+          )}
         </Video>
 
         <DefaultUI noControls>

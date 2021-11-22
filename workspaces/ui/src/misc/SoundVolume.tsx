@@ -3,9 +3,9 @@ import Slider from 'rc-slider';
 
 interface SoundVolumeProps {
   image: string;
-  justIcon: boolean;
-  imageClassName: string;
-  containerClassName: string;
+  justIcon?: boolean;
+  imageClassName?: string;
+  containerClassName?: string;
 }
 
 export const SoundVolume = (props: SoundVolumeProps) => {

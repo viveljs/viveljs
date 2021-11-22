@@ -12,3 +12,6 @@ export { CharacterNames } from './display/CharacterNames';
 
 export { MultipleChoice } from './responses/MultipleChoice';
 export { MultipleSelect } from './responses/MultipleSelect';
+
+export { SettingButton } from './misc/SettingButton';
+export { SoundVolume } from './misc/SoundVolume';
