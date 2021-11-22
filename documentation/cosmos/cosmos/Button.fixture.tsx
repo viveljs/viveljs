@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useValue } from 'react-cosmos/fixture';
-import { Button } from '../../ui/src';
+import { Button } from '../../../workspaces/ui/src';
 import styles from './styles/button.module.css';
 
 const ButtonFixture = () => {

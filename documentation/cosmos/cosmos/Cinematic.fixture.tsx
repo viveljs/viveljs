@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Cinematic } from '../../ui/src';
+import { Cinematic } from '../../../workspaces/ui/src';
 
 const video = {
   poster: 'https://media.vimejs.com/poster.png',
