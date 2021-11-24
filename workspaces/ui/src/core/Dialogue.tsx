@@ -2,6 +2,7 @@ import * as React from 'react';
 import { useTypewriter } from 'react-simple-typewriter';
 import { XSideAfter } from '../atoms/XSideAfter';
 import { YSide } from '../atoms/Yside';
+import { Line } from '../atoms/Line'
 
 interface DialogueProps {
   text: string[];
@@ -45,27 +46,27 @@ export const Dialogue = (props: DialogueProps) => {
       onLoopDone: () => setVisibility(true),
     });
 
-    const Line = () => {
-      if (props.characterNames)
-        return (
-          <div>
-            {props.characterNames}
-            <div id="lines" className={props.linesClassName}>
-              {visible ? line : text}
-            </div>
-          </div>
-        );
-      return (
-        <div id="lines" className={props.linesClassName}>
-          {visible ? line : text}
-        </div>
-      );
-    };
+    // const Line = () => {
+    //   if (props.characterNames)
+    //     return (
+    //       <div>
+    //         {props.characterNames}
+    //         <div id="lines" className={props.linesClassName}>
+    //           {visible ? line : text}
+    //         </div>
+    //       </div>
+    //     );
+    //   return (
+    //     <div id="lines" className={props.linesClassName}>
+    //       {visible ? line : text}
+    //     </div>
+    //   );
+    // };
 
     return (
       <div className={props.xClassName}>
         {props.xSideBefore && <div id="xSideBefore">{props.xSideBefore}</div>}
-        <Line />
+        <Line visibles={visible} textProps={text} lineProps={line} characterNames={props.characterNames} linesClassName={props.linesClassName}/>
         {(props.delayed == 'x' ? visible : true) && (
           <XSideAfter component={props.xSideAfter} />
         )}
