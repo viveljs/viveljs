@@ -8,7 +8,7 @@ import {
   Button,
   Character,
   CharacterNames,
-} from '../../ui/src';
+} from '../../../workspaces/ui/src';
 
 import xStyle from './styles/dialogueX.module.css';
 import styles from './styles/avatar.module.css';

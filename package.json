@@ -3,7 +3,8 @@
   "description": "Visual Novel Engine using Typescript and React",
   "workspaces": [
     "./workspaces/*",
-    "./templates/*"
+    "./templates/*",
+    "./documentations/*"
   ],
   "main": "index.js",
   "scripts": {
@@ -16,6 +17,8 @@
     "p:build": "npm run build -w @viveljs/parser",
     "p:run": "npm start -w @viveljs/parser",
     "p:trial": "npm run trial -w @viveljs/parser",
+    "web:start": "npm run start -w @viveljs/website",
+    "web:build": "npm run build -w @viveljs/website",
     "ts:dev": "npm run dev -w template-ts"
   },
   "repository": {
@@ -34,9 +37,13 @@
   },
   "homepage": "https://github.com/viveljs/viveljs#readme",
   "dependencies": {
+    "@dnd-kit/core": "^4.0.1",
+    "@vime/react": "^5.0.35",
     "lodash": "^4.17.21",
+    "rc-slider": "^9.7.4",
     "react": "17.0.x",
-    "react-dom": "17.0.x"
+    "react-dom": "17.0.x",
+    "use-sound": "^4.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.5",

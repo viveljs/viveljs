@@ -29,5 +29,3 @@ export const MultipleChoice = (props: MultipleChoiceProps) => {
 
   return <div className={props.containerClass}>{shuffle}</div>;
 };
-
-export default MultipleChoice;
