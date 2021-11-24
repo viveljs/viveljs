@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useTypewriter } from 'react-simple-typewriter';
 import { XSideAfter } from '../atoms/XSideAfter';
+import { YSide } from '../atoms/Yside';
 
 interface DialogueProps {
   text: string[];
@@ -27,15 +28,15 @@ export const Dialogue = (props: DialogueProps) => {
     setVisibility(false);
   }, [line]);
 
-  const YSide = () => {
-    if (props.ySide)
-      return (
-        <div id="yLines" className={props.yClassName}>
-          {props.ySide}
-        </div>
-      );
-    return null;
-  };
+  // const YSide = () => {
+  //   if (props.ySide)
+  //     return (
+  //       <div id="yLines" className={props.yClassName}>
+  //         {props.ySide}
+  //       </div>
+  //     );
+  //   return null;
+  // };
 
   const Lines = () => {
     const { text } = useTypewriter({
@@ -75,7 +76,7 @@ export const Dialogue = (props: DialogueProps) => {
   if (props.index <= props.text.length - 1)
     return (
       <section id="dialogue" className={props.dialogueClassName}>
-        {(props.delayed == 'y' ? visible : true) && <YSide />}
+        {(props.delayed == 'y' ? visible : true) && <YSide component={props.ySide} yClassName={props.yClassName}/>}
         <Lines />
       </section>
     );
