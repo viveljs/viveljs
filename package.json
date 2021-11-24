@@ -3,7 +3,8 @@
   "description": "Visual Novel Engine using Typescript and React",
   "workspaces": [
     "./workspaces/*",
-    "./templates/*"
+    "./templates/*",
+    "./documentations/*"
   ],
   "main": "index.js",
   "scripts": {
