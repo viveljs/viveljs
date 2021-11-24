@@ -17,6 +17,8 @@
     "p:build": "npm run build -w @viveljs/parser",
     "p:run": "npm start -w @viveljs/parser",
     "p:trial": "npm run trial -w @viveljs/parser",
+    "web:start": "npm run start -w @viveljs/website",
+    "web:build": "npm run build -w @viveljs/website",
     "ts:dev": "npm run dev -w template-ts"
   },
   "repository": {
