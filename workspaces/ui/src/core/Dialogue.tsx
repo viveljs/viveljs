@@ -2,7 +2,8 @@ import * as React from 'react';
 import { useTypewriter } from 'react-simple-typewriter';
 import { XSideAfter } from '../atoms/XSideAfter';
 import { YSide } from '../atoms/Yside';
-import { Line } from '../atoms/Line'
+import { Line } from '../atoms/Line';
+import { Lines } from '../atoms/Lines'
 
 interface DialogueProps {
   text: string[];
@@ -29,29 +30,24 @@ export const Dialogue = (props: DialogueProps) => {
     setVisibility(false);
   }, [line]);
 
-  const Lines = () => {
-    const { text } = useTypewriter({
-      words: [line],
-      typeSpeed: props.instant ? 2 : 20,
-      onLoopDone: () => setVisibility(true),
-    });
-
-    return (
-      <div className={props.xClassName}>
-        {props.xSideBefore && <div id="xSideBefore">{props.xSideBefore}</div>}
-        <Line visibles={visible} textProps={text} lineProps={line} characterNames={props.characterNames} linesClassName={props.linesClassName}/>
-        {(props.delayed == 'x' ? visible : true) && (
-          <XSideAfter component={props.xSideAfter} />
-        )}
-      </div>
-    );
-  };
-
   if (props.index <= props.text.length - 1)
     return (
       <section id="dialogue" className={props.dialogueClassName}>
-        {(props.delayed == 'y' ? visible : true) && <YSide component={props.ySide} yClassName={props.yClassName}/>}
-        <Lines />
+        {(props.delayed == 'y' ? visible : true) && (
+          <YSide component={props.ySide} yClassName={props.yClassName} />
+        )}
+        <Lines 
+          delayed={props.delayed}
+          characterNames={props.characterNames}
+          xSideAfter={props.xSideAfter}
+          xSideBefore={props.xSideBefore}
+          linesClassName={props.linesClassName}
+          xClassName={props.xClassName}
+          instant={props.instant}
+          visibles={visible}
+          setVisibles={setVisibility}
+          lines={line}
+        />
       </section>
     );
   return <div className="error">Dialogue Index Out of Bound</div>;

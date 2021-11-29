@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-import { FullScreenButton } from '../atoms/FullScreenButton'
+import { FullScreenButton } from '../atoms/FullScreenButton';
 
 interface GameProps {
   children: React.ReactNode;
@@ -11,12 +11,19 @@ interface GameProps {
 }
 
 export const Game = (props: GameProps) => {
-  const handle = useFullScreenHandle();
+  const fullScreenHandle = useFullScreenHandle();
 
   return (
-    <FullScreen handle={handle}>
+    <FullScreen handle={fullScreenHandle}>
       <section id="game">{props.children}</section>
-      {props.enableFullScreen && <FullScreenButton imageClass={props.imageClass} buttonClass={props.buttonClass} icon={props.icon}/>}
+      {props.enableFullScreen && (
+        <FullScreenButton
+          handle={fullScreenHandle}
+          imageClass={props.imageClass}
+          buttonClass={props.buttonClass}
+          icon={props.icon}
+        />
+      )}
     </FullScreen>
   );
 };
