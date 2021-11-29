@@ -7,9 +7,9 @@ interface GameProps {
   icon?: string[];
 }
 
-const handle = useFullScreenHandle();
 
 const FullScreenButton = (props: GameProps) => {
+  const handle = useFullScreenHandle();
   return (
     <button
       style={{ position: 'fixed', right: '1rem', bottom: '1rem' }}
