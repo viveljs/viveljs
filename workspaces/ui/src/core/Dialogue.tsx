@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useTypewriter } from 'react-simple-typewriter';
 import { XSideAfter } from '../atoms/XSideAfter';
 import { YSide } from '../atoms/Yside';
-import { Line } from '../atoms/Line'
+import { Line } from '../atoms/Line';
 
 interface DialogueProps {
   text: string[];
@@ -39,7 +39,13 @@ export const Dialogue = (props: DialogueProps) => {
     return (
       <div className={props.xClassName}>
         {props.xSideBefore && <div id="xSideBefore">{props.xSideBefore}</div>}
-        <Line visibles={visible} textProps={text} lineProps={line} characterNames={props.characterNames} linesClassName={props.linesClassName}/>
+        <Line
+          visibles={visible}
+          textProps={text}
+          lineProps={line}
+          characterNames={props.characterNames}
+          linesClassName={props.linesClassName}
+        />
         {(props.delayed == 'x' ? visible : true) && (
           <XSideAfter component={props.xSideAfter} />
         )}
@@ -50,7 +56,9 @@ export const Dialogue = (props: DialogueProps) => {
   if (props.index <= props.text.length - 1)
     return (
       <section id="dialogue" className={props.dialogueClassName}>
-        {(props.delayed == 'y' ? visible : true) && <YSide component={props.ySide} yClassName={props.yClassName}/>}
+        {(props.delayed == 'y' ? visible : true) && (
+          <YSide component={props.ySide} yClassName={props.yClassName} />
+        )}
         <Lines />
       </section>
     );

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { FullScreen, useFullScreenHandle } from 'react-full-screen';
-
+import { Pagination } from 'swiper';
+import { FullScreenButton } from '../atoms/FullScreenButton';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Pagination } from 'swiper';
 
 interface ZoomProps {
   slides: React.ReactNode[];
@@ -29,35 +29,12 @@ const inlineStyle = {
 };
 
 export const Slide = (props: ZoomProps) => {
-  const handle = useFullScreenHandle();
-
-  const FullScreenButton = () => {
-    return (
-      <button
-        onClick={handle.active ? handle.exit : handle.enter}
-        className={props.buttonClass}
-      >
-        {props.icons ? (
-          <img
-            style={{ maxWidth: '2rem' }}
-            src={
-              !handle.active ? props.icons[0] : props.icons[1] ?? props.icons[0]
-            }
-            className={props.imageClass}
-          />
-        ) : handle.active ? (
-          'Exit'
-        ) : (
-          'Enter'
-        )}
-      </button>
-    );
-  };
+  const slideHandle = useFullScreenHandle();
 
   return (
     <FullScreen
-      className={handle.active ? props.fullscreenClass : ''}
-      handle={handle}
+      className={slideHandle.active ? props.fullscreenClass : ''}
+      handle={slideHandle}
     >
       <div
         className={props.containerClass}
@@ -76,7 +53,7 @@ export const Slide = (props: ZoomProps) => {
                   style={{
                     ...inlineStyle,
                     overflow: 'hidden',
-                    maxHeight: handle.active ? 'auto' : '40rem',
+                    maxHeight: slideHandle.active ? 'auto' : '40rem',
                   }}
                 >
                   {slide}
@@ -87,7 +64,7 @@ export const Slide = (props: ZoomProps) => {
           <div slot="wrapper-end">{props.wrapperEnd}</div>
           <div slot="container-end">{props.containerEnd}</div>
         </Swiper>
-        {!handle.active && (
+        {!slideHandle.active && (
           <div
             style={{
               ...inlineStyle,
@@ -97,11 +74,18 @@ export const Slide = (props: ZoomProps) => {
             }}
           >
             {props.component}
-            {props.enableFullScreen && <FullScreenButton />}
+            {props.enableFullScreen && (
+              <FullScreenButton
+                handle={slideHandle}
+                imageClass={props.imageClass}
+                buttonClass={props.buttonClass}
+                icon={props.icons}
+              />
+            )}
           </div>
         )}
       </div>
-      {handle.active && (
+      {slideHandle.active && (
         <div
           style={{
             display: 'flex',
@@ -111,7 +95,12 @@ export const Slide = (props: ZoomProps) => {
             justifyContent: 'center',
           }}
         >
-          <FullScreenButton />
+          <FullScreenButton
+            handle={slideHandle}
+            imageClass={props.imageClass}
+            buttonClass={props.buttonClass}
+            icon={props.icons}
+          />
         </div>
       )}
     </FullScreen>
