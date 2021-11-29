@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useTypewriter } from 'react-simple-typewriter';
 import { XSideAfter } from '../atoms/XSideAfter';
+import { YSide } from '../atoms/Yside';
+import { Line } from '../atoms/Line'
 
 interface DialogueProps {
   text: string[];
@@ -27,16 +29,6 @@ export const Dialogue = (props: DialogueProps) => {
     setVisibility(false);
   }, [line]);
 
-  const YSide = () => {
-    if (props.ySide)
-      return (
-        <div id="yLines" className={props.yClassName}>
-          {props.ySide}
-        </div>
-      );
-    return null;
-  };
-
   const Lines = () => {
     const { text } = useTypewriter({
       words: [line],
@@ -44,27 +36,10 @@ export const Dialogue = (props: DialogueProps) => {
       onLoopDone: () => setVisibility(true),
     });
 
-    const Line = () => {
-      if (props.characterNames)
-        return (
-          <div>
-            {props.characterNames}
-            <div id="lines" className={props.linesClassName}>
-              {visible ? line : text}
-            </div>
-          </div>
-        );
-      return (
-        <div id="lines" className={props.linesClassName}>
-          {visible ? line : text}
-        </div>
-      );
-    };
-
     return (
       <div className={props.xClassName}>
         {props.xSideBefore && <div id="xSideBefore">{props.xSideBefore}</div>}
-        <Line />
+        <Line visibles={visible} textProps={text} lineProps={line} characterNames={props.characterNames} linesClassName={props.linesClassName}/>
         {(props.delayed == 'x' ? visible : true) && (
           <XSideAfter component={props.xSideAfter} />
         )}
@@ -75,7 +50,7 @@ export const Dialogue = (props: DialogueProps) => {
   if (props.index <= props.text.length - 1)
     return (
       <section id="dialogue" className={props.dialogueClassName}>
-        {(props.delayed == 'y' ? visible : true) && <YSide />}
+        {(props.delayed == 'y' ? visible : true) && <YSide component={props.ySide} yClassName={props.yClassName}/>}
         <Lines />
       </section>
     );
