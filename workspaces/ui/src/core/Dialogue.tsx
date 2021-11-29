@@ -29,39 +29,12 @@ export const Dialogue = (props: DialogueProps) => {
     setVisibility(false);
   }, [line]);
 
-  // const YSide = () => {
-  //   if (props.ySide)
-  //     return (
-  //       <div id="yLines" className={props.yClassName}>
-  //         {props.ySide}
-  //       </div>
-  //     );
-  //   return null;
-  // };
-
   const Lines = () => {
     const { text } = useTypewriter({
       words: [line],
       typeSpeed: props.instant ? 2 : 20,
       onLoopDone: () => setVisibility(true),
     });
-
-    // const Line = () => {
-    //   if (props.characterNames)
-    //     return (
-    //       <div>
-    //         {props.characterNames}
-    //         <div id="lines" className={props.linesClassName}>
-    //           {visible ? line : text}
-    //         </div>
-    //       </div>
-    //     );
-    //   return (
-    //     <div id="lines" className={props.linesClassName}>
-    //       {visible ? line : text}
-    //     </div>
-    //   );
-    // };
 
     return (
       <div className={props.xClassName}>
