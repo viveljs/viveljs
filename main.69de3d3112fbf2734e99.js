@@ -57755,24 +57755,20 @@ const hooks_usePlayerContext = (ref, prop, defaultValue) => {
 
 
 var Cinematic = function Cinematic(props) {
-  var _props$containerBackg, _props$video$type;
+  var _props$video$type;
 
-  return /*#__PURE__*/react.createElement("div", {
+  return /*#__PURE__*/react.createElement(esm_components_Player, {
+    muted: true,
+    autoplay: true,
     style: {
       height: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      background: (_props$containerBackg = props.containerBackground) !== null && _props$containerBackg !== void 0 ? _props$containerBackg : '#101010'
-    },
-    className: props.containerClassName
-  }, /*#__PURE__*/react.createElement(esm_components_Player, {
-    style: {
-      width: '80%'
+      width: '100vw',
+      position: 'fixed'
     }
   }, /*#__PURE__*/react.createElement(esm_components_Video, {
     poster: props.video.poster
   }, /*#__PURE__*/react.createElement("source", {
+    src: props.video.src,
     "data-src": props.video.src,
     type: (_props$video$type = props.video.type) !== null && _props$video$type !== void 0 ? _props$video$type : 'video/mp4'
   }), props.subtitle && /*#__PURE__*/react.createElement("track", {
@@ -57792,7 +57788,7 @@ var Cinematic = function Cinematic(props) {
   }, /*#__PURE__*/react.createElement(esm_components_ControlSpacer, null), /*#__PURE__*/react.createElement(esm_components_PlaybackControl, null), /*#__PURE__*/react.createElement(esm_components_ControlSpacer, null)), /*#__PURE__*/react.createElement(esm_components_Controls, {
     fullWidth: true,
     pin: "bottomLeft"
-  }, /*#__PURE__*/react.createElement(esm_components_TimeProgress, null)))));
+  }, /*#__PURE__*/react.createElement(esm_components_TimeProgress, null))));
 };
 ;// CONCATENATED MODULE: ../../workspaces/ui/src/display/CharacterNames.tsx
 function CharacterNames_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { CharacterNames_typeof = function _typeof(obj) { return typeof obj; }; } else { CharacterNames_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return CharacterNames_typeof(obj); }
@@ -66612,7 +66608,7 @@ var video = {
 };
 var subtitle = {
   lang: 'en',
-  src: 'https://media.vimejs.com/subs/english.vtt',
+  src: './misc/englishSubs.vtt',
   label: 'English'
 };
 
@@ -73575,4 +73571,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.20b36bc7b1af1a0daba3.js.map
+//# sourceMappingURL=main.69de3d3112fbf2734e99.js.map
