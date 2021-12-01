@@ -1,5 +1,6 @@
-import { Line } from './Line'
-import { XSideAfter } from './XSideAfter'
+import * as React from 'react';
+import { Line } from './Line';
+import { XSideAfter } from './XSideAfter';
 import { useTypewriter } from 'react-simple-typewriter';
 
 interface LinesProps {
@@ -13,7 +14,7 @@ interface LinesProps {
   visibles?: boolean;
   setVisibles: any;
   lines: any;
-} 
+}
 
 const Lines = (props: LinesProps) => {
   const { text } = useTypewriter({
@@ -39,4 +40,4 @@ const Lines = (props: LinesProps) => {
   );
 };
 
-export { Lines } 
+export { Lines };

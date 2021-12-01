@@ -1,9 +1,6 @@
 import * as React from 'react';
-import { useTypewriter } from 'react-simple-typewriter';
-import { XSideAfter } from '../atoms/XSideAfter';
 import { YSide } from '../atoms/Yside';
-import { Line } from '../atoms/Line';
-import { Lines } from '../atoms/Lines'
+import { Lines } from '../atoms/Lines';
 
 interface DialogueProps {
   text: string[];
@@ -36,7 +33,7 @@ export const Dialogue = (props: DialogueProps) => {
         {(props.delayed == 'y' ? visible : true) && (
           <YSide component={props.ySide} yClassName={props.yClassName} />
         )}
-        <Lines 
+        <Lines
           delayed={props.delayed}
           characterNames={props.characterNames}
           xSideAfter={props.xSideAfter}
