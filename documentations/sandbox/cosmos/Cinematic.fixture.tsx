@@ -8,7 +8,7 @@ const video = {
 
 const subtitle = {
   lang: 'en',
-  src: 'https://media.vimejs.com/subs/english.vtt',
+  src: './misc/englishSubs.vtt',
   label: 'English',
 };
 

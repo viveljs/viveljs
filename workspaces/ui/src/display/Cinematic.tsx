@@ -30,58 +30,52 @@ interface CinematicProps {
   containerClassName?: string;
   containerBackground?: string;
   video: VideoProps;
-  subtitle: SubtitleProps;
+  subtitle?: SubtitleProps;
 }
 
 export const Cinematic = (props: CinematicProps) => {
   return (
-    <div
-      style={{
-        height: '100vh',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        background: props.containerBackground ?? '#101010',
-      }}
-      className={props.containerClassName}
+    <Player
+      muted
+      autoplay
+      style={{ height: '100vh', width: '100vw', position: 'fixed' }}
     >
-      <Player style={{ width: '80%' }}>
-        <Video poster={props.video.poster}>
-          <source
-            data-src={props.video.src}
-            type={props.video.type ?? 'video/mp4'}
+      <Video poster={props.video.poster}>
+        <source
+          src={props.video.src}
+          data-src={props.video.src}
+          type={props.video.type ?? 'video/mp4'}
+        />
+        {props.subtitle && (
+          <track
+            default
+            kind="subtitles"
+            src={props.subtitle.src}
+            srcLang={props.subtitle.lang}
+            label={props.subtitle.label}
           />
-          {props.subtitle && (
-            <track
-              default
-              kind="subtitles"
-              src={props.subtitle.src}
-              srcLang={props.subtitle.lang}
-              label={props.subtitle.label}
-            />
-          )}
-        </Video>
+        )}
+      </Video>
 
-        <DefaultUI noControls>
-          <Scrim />
-          <Spinner />
-          <Poster />
-          <Controls fullWidth pin="topLeft">
-            <ControlSpacer />
-            <MuteControl />
-          </Controls>
+      <DefaultUI noControls>
+        <Scrim />
+        <Spinner />
+        <Poster />
+        <Controls fullWidth pin="topLeft">
+          <ControlSpacer />
+          <MuteControl />
+        </Controls>
 
-          <Controls fullWidth pin="center">
-            <ControlSpacer />
-            <PlaybackControl />
-            <ControlSpacer />
-          </Controls>
+        <Controls fullWidth pin="center">
+          <ControlSpacer />
+          <PlaybackControl />
+          <ControlSpacer />
+        </Controls>
 
-          <Controls fullWidth pin="bottomLeft">
-            <TimeProgress />
-          </Controls>
-        </DefaultUI>
-      </Player>
-    </div>
+        <Controls fullWidth pin="bottomLeft">
+          <TimeProgress />
+        </Controls>
+      </DefaultUI>
+    </Player>
   );
 };
