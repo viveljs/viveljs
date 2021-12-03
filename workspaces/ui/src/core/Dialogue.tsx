@@ -16,6 +16,7 @@ interface DialogueProps {
   xClassName?: string;
   yClassName?: string;
   instant?: boolean;
+  additionalFlag?: boolean;
 }
 
 export const Dialogue = (props: DialogueProps) => {
@@ -30,10 +31,11 @@ export const Dialogue = (props: DialogueProps) => {
   if (props.index <= props.text.length - 1)
     return (
       <section id="dialogue" className={props.dialogueClassName}>
-        {(props.delayed == 'y' ? visible : true) && (
+        {(props.delayed == 'y' ? props.additionalFlag && visible : true) && (
           <YSide component={props.ySide} yClassName={props.yClassName} />
         )}
         <Lines
+          additionalFlag={props.additionalFlag}
           delayed={props.delayed}
           characterNames={props.characterNames}
           xSideAfter={props.xSideAfter}

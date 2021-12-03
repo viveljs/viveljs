@@ -14,6 +14,7 @@ interface LinesProps {
   visibles?: boolean;
   setVisibles: any;
   lines: any;
+  additionalFlag?: boolean;
 }
 
 const Lines = (props: LinesProps) => {
@@ -32,6 +33,7 @@ const Lines = (props: LinesProps) => {
         lineProps={props.lines}
         characterNames={props.characterNames}
         linesClassName={props.linesClassName}
+        additionalFlag={props.additionalFlag}
       />
       {(props.delayed == 'x' ? props.visibles : true) && (
         <XSideAfter component={props.xSideAfter} />

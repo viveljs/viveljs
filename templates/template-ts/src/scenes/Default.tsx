@@ -16,7 +16,6 @@ const Default = () => {
   const [state] = useAtom(globalStateAtom);
   const [characterImages] = useAtom(charactersAtom);
   const [backgroundImages] = useAtom(backgroundsAtom);
-  console.log(state.index);
   return (
     <DefaultScene
       backgrounds={fileArrayFinder(content.backgrounds, backgroundImages)}

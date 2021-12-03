@@ -26,18 +26,21 @@ interface VideoProps {
   type?: string;
 }
 
-interface CinematicProps {
+interface CinematicSceneProps {
   containerClassName?: string;
   containerBackground?: string;
   video: VideoProps;
   subtitle?: SubtitleProps;
+  onEnded?: () => void;
+  nextScene?: 'string';
 }
 
-export const Cinematic = (props: CinematicProps) => {
+export const CinematicScene = (props: CinematicSceneProps) => {
   return (
     <Player
       muted
       autoplay
+      onVmPlaybackEnded={props.onEnded}
       style={{ height: '100vh', width: '100vw', position: 'fixed' }}
     >
       <Video poster={props.video.poster}>

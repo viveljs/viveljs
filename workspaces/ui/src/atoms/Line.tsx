@@ -6,6 +6,7 @@ interface lineProps {
   linesClassName?: string;
   visibles?: boolean;
   lineProps: any;
+  additionalFlag?: boolean;
 }
 
 const Line = (props: lineProps) => {
@@ -14,13 +15,17 @@ const Line = (props: lineProps) => {
       <div>
         {props.characterNames}
         <div id="lines" className={props.linesClassName}>
-          {props.visibles ? props.lineProps : props.textProps}
+          {props.visibles && props.additionalFlag
+            ? props.lineProps
+            : props.textProps}
         </div>
       </div>
     );
   return (
     <div id="lines" className={props.linesClassName}>
-      {props.visibles ? props.lineProps : props.textProps}
+      {props.visibles && props.additionalFlag
+        ? props.lineProps
+        : props.textProps}
     </div>
   );
 };
