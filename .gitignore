@@ -4,6 +4,7 @@ cosmos-export
 .rollup.cache
 workspace/parser/content.json
 .~lock.*
+content.json
 
 # Logs
 logs
