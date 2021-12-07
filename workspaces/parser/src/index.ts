@@ -15,11 +15,19 @@ const main = async () => {
   const keys = [
     'character',
     'characterFlow',
-    'mood',
+    'alias',
     'scene',
-    'line',
+    'sceneType',
     'background',
+    'bgm',
+    'line',
     'component',
+    'series',
+    'option',
+    'value',
+    'code',
+    'tempVar',
+    'sfx',
     'to',
     ...argv.fields,
   ];
@@ -29,7 +37,9 @@ const main = async () => {
     const value = Object.values(wb.SheetNames).map((sheet) => {
       const jsonValues = xlsx.utils.sheet_to_json<[]>(wb.Sheets[sheet], {
         defval: '',
+        range: 1,
       });
+
       const values = columnValues(jsonValues);
       return values;
     });

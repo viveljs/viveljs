@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { WorkSheet } from 'xlsx';
-import { characterMoodSplit } from './characterMoodSplit';
+import { arrayParse } from './arrayParse';
+import { characterAliasSplit } from './characterAliasSplit';
 import { componentParse } from './componentParse';
 
 interface JSONProps {
@@ -22,7 +23,12 @@ const columnValues = (ws: WorkSheet) => {
     const result = _.mapValues(key, (value, key) => {
       if (key == 'Character') return value.replace(/\s+/gm, '');
       if (key == 'Component') return componentParse(value);
-      else return value.replace(/\s+$/gm, '');
+      if (key == 'Option') return arrayParse(value);
+      if (key == 'Value')
+        return arrayParse(value, (x: string) =>
+          x == '1' || x == 'true' || x == 'True' || x == 'TRUE' ? true : false
+        );
+      else return value.toString().replace(/\s+$/gm, '');
     });
 
     return result;
@@ -32,11 +38,12 @@ const columnValues = (ws: WorkSheet) => {
     return _.map(changedColumnValues, key);
   });
 
-  const characterSplitted = characterMoodSplit(mappedObject[1]);
+  const characterSplitted = characterAliasSplit(mappedObject[7]);
   const finalValues = [
     ...characterSplitted,
-    mappedObject[0],
-    ...mappedObject.slice(2),
+    mappedObject[2],
+    ...mappedObject.slice(4, 7),
+    ...mappedObject.slice(9),
   ];
 
   return finalValues;

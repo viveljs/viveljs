@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 const lowerCaseMap = (array: string[]) => array.map((str) => _.lowerCase(str));
 
-const characterMoodSplit = (values: string[]) => {
+const characterAliasSplit = (values: string[]) => {
   const characterArray = values.map((value) => {
     const array = value.replace(/(\w+)\(\w+\)/g, '$1').split(',');
     const sanitizedArray = _.compact(array);
@@ -14,13 +14,13 @@ const characterMoodSplit = (values: string[]) => {
     array.map((value) => characters.indexOf(value))
   );
 
-  const moods = values.map((value) => {
-    const moodArray = value.replace(/\w+\((\w+)\)/g, '$1').split(',');
-    const sanitizedArray = _.compact(moodArray);
+  const alias = values.map((value) => {
+    const aliasArray = value.replace(/\w+\s?\((\S+)\)/g, '$1').split(',');
+    const sanitizedArray = _.compact(aliasArray);
     return lowerCaseMap(sanitizedArray);
   });
 
-  return [characters, characterFlow, moods];
+  return [characters, characterFlow, alias];
 };
 
-export { characterMoodSplit };
+export { characterAliasSplit };
