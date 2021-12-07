@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const arrayParse = (value: string, fn?: (x: any) => any) => {
   const parsedValue = value.split(',');
   const result = parsedValue.map((value: string) => {
@@ -7,7 +9,7 @@ const arrayParse = (value: string, fn?: (x: any) => any) => {
     }
     return manipulatedValue;
   });
-  return result;
+  return _.without(result, null, undefined);
 };
 
 export { arrayParse };

@@ -10,6 +10,12 @@ interface JSONProps {
   Option: string;
 }
 
+const parseToBoolean = (x: string) => {
+  if (x.length > 0)
+    return x == '1' || x == 'true' || x == 'True' || x == 'TRUE' ? true : false;
+  return undefined;
+};
+
 const columnValues = (ws: WorkSheet) => {
   const changedColumnKeys: JSONProps[] = ws.map((json: WorkSheet) => {
     const result = _.mapKeys(json, (_value, key) => {
@@ -25,9 +31,7 @@ const columnValues = (ws: WorkSheet) => {
       if (key == 'Component') return componentParse(value);
       if (key == 'Option') return arrayParse(value);
       if (key == 'Value')
-        return arrayParse(value, (x: string) =>
-          x == '1' || x == 'true' || x == 'True' || x == 'TRUE' ? true : false
-        );
+        return arrayParse(value, (x: string) => parseToBoolean(x));
       else return value.toString().replace(/\s+$/gm, '');
     });
 
