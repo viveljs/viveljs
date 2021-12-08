@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { YSide } from '../atoms/Yside';
-import { Lines } from '../atoms/Lines';
+import { useTypewriter } from 'react-simple-typewriter';
+import { XSideAfter } from '../atoms/XSideAfter';
 
 interface DialogueProps {
   text: string[];
@@ -16,7 +16,6 @@ interface DialogueProps {
   xClassName?: string;
   yClassName?: string;
   instant?: boolean;
-  additionalFlag?: boolean;
 }
 
 export const Dialogue = (props: DialogueProps) => {
@@ -28,25 +27,56 @@ export const Dialogue = (props: DialogueProps) => {
     setVisibility(false);
   }, [line]);
 
+  const YSide = () => {
+    if (props.ySide)
+      return (
+        <div id="yLines" className={props.yClassName}>
+          {props.ySide}
+        </div>
+      );
+    return null;
+  };
+
+  const Lines = () => {
+    const { text } = useTypewriter({
+      words: [line],
+      typeSpeed: props.instant ? 2 : 20,
+      onLoopDone: () => setVisibility(true),
+    });
+
+    const Line = () => {
+      if (props.characterNames)
+        return (
+          <div>
+            {props.characterNames}
+            <div id="lines" className={props.linesClassName}>
+              {visible ? line : text}
+            </div>
+          </div>
+        );
+      return (
+        <div id="lines" className={props.linesClassName}>
+          {visible ? line : text}
+        </div>
+      );
+    };
+
+    return (
+      <div className={props.xClassName}>
+        {props.xSideBefore && <div id="xSideBefore">{props.xSideBefore}</div>}
+        <Line />
+        {(props.delayed == 'x' ? visible : true) && (
+          <XSideAfter component={props.xSideAfter} />
+        )}
+      </div>
+    );
+  };
+
   if (props.index <= props.text.length - 1)
     return (
       <section id="dialogue" className={props.dialogueClassName}>
-        {(props.delayed == 'y' ? props.additionalFlag && visible : true) && (
-          <YSide component={props.ySide} yClassName={props.yClassName} />
-        )}
-        <Lines
-          additionalFlag={props.additionalFlag}
-          delayed={props.delayed}
-          characterNames={props.characterNames}
-          xSideAfter={props.xSideAfter}
-          xSideBefore={props.xSideBefore}
-          linesClassName={props.linesClassName}
-          xClassName={props.xClassName}
-          instant={props.instant}
-          visibles={visible}
-          setVisibles={setVisibility}
-          lines={line}
-        />
+        {(props.delayed == 'y' ? visible : true) && <YSide />}
+        <Lines />
       </section>
     );
   return <div className="error">Dialogue Index Out of Bound</div>;

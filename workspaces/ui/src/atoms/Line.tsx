@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 interface lineProps {
-  textProps: any;
+  text: string;
   characterNames?: React.ReactNode;
   linesClassName?: string;
-  visibles?: boolean;
-  lineProps: any;
+  visible?: boolean;
+  line: string;
   additionalFlag?: boolean;
 }
 
@@ -15,17 +15,13 @@ const Line = (props: lineProps) => {
       <div>
         {props.characterNames}
         <div id="lines" className={props.linesClassName}>
-          {props.visibles && props.additionalFlag
-            ? props.lineProps
-            : props.textProps}
+          {props.visible && props.additionalFlag ? props.line : props.text}
         </div>
       </div>
     );
   return (
     <div id="lines" className={props.linesClassName}>
-      {props.visibles && props.additionalFlag
-        ? props.lineProps
-        : props.textProps}
+      {props.visible && props.additionalFlag ? props.line : props.text}
     </div>
   );
 };
