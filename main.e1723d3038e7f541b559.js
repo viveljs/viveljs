@@ -34039,7 +34039,7 @@ if (false) { var webpackRendererConnect; }
 
 /***/ }),
 
-/***/ 8873:
+/***/ 5941:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -34121,33 +34121,8 @@ var Button = function Button(props) {
     className: props.className
   }, (0,lodash.capitalize)(props.text));
 };
-;// CONCATENATED MODULE: ../../workspaces/ui/src/atoms/Yside.tsx
-
-
-var YSide = function YSide(props) {
-  if (props.component) return /*#__PURE__*/react.createElement("div", {
-    id: "yLines",
-    className: props.yClassName
-  }, props.component);
-  return null;
-};
-
-
-;// CONCATENATED MODULE: ../../workspaces/ui/src/atoms/Line.tsx
-
-
-var Line = function Line(props) {
-  if (props.characterNames) return /*#__PURE__*/react.createElement("div", null, props.characterNames, /*#__PURE__*/react.createElement("div", {
-    id: "lines",
-    className: props.linesClassName
-  }, props.visibles && props.additionalFlag ? props.lineProps : props.textProps));
-  return /*#__PURE__*/react.createElement("div", {
-    id: "lines",
-    className: props.linesClassName
-  }, props.visibles && props.additionalFlag ? props.lineProps : props.textProps);
-};
-
-
+// EXTERNAL MODULE: ../../node_modules/react-simple-typewriter/dist/index.js
+var dist = __webpack_require__(2092);
 ;// CONCATENATED MODULE: ../../workspaces/ui/src/atoms/XSideAfter.tsx
 
 var XSideAfter = function XSideAfter(props) {
@@ -34156,41 +34131,6 @@ var XSideAfter = function XSideAfter(props) {
   }, props.component);
   return null;
 };
-// EXTERNAL MODULE: ../../node_modules/react-simple-typewriter/dist/index.js
-var dist = __webpack_require__(2092);
-;// CONCATENATED MODULE: ../../workspaces/ui/src/atoms/Lines.tsx
-
-
-
-
-
-var Lines = function Lines(props) {
-  var _useTypewriter = (0,dist/* useTypewriter */.Ku)({
-    words: [props.lines],
-    typeSpeed: props.instant ? 2 : 20,
-    onLoopDone: function onLoopDone() {
-      return props.setVisibles(true);
-    }
-  }),
-      text = _useTypewriter.text;
-
-  return /*#__PURE__*/react.createElement("div", {
-    className: props.xClassName
-  }, props.xSideBefore && /*#__PURE__*/react.createElement("div", {
-    id: "xSideBefore"
-  }, props.xSideBefore), /*#__PURE__*/react.createElement(Line, {
-    visibles: props.visibles,
-    textProps: text,
-    lineProps: props.lines,
-    characterNames: props.characterNames,
-    linesClassName: props.linesClassName,
-    additionalFlag: props.additionalFlag
-  }), (props.delayed == 'x' ? props.visibles : true) && /*#__PURE__*/react.createElement(XSideAfter, {
-    component: props.xSideAfter
-  }));
-};
-
-
 ;// CONCATENATED MODULE: ../../workspaces/ui/src/core/Dialogue.tsx
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
@@ -34217,25 +34157,49 @@ var Dialogue = function Dialogue(props) {
   react.useEffect(function () {
     setVisibility(false);
   }, [line]);
+
+  var YSide = function YSide() {
+    if (props.ySide) return /*#__PURE__*/react.createElement("div", {
+      id: "yLines",
+      className: props.yClassName
+    }, props.ySide);
+    return null;
+  };
+
+  var Lines = function Lines() {
+    var _useTypewriter = (0,dist/* useTypewriter */.Ku)({
+      words: [line],
+      typeSpeed: props.instant ? 2 : 20,
+      onLoopDone: function onLoopDone() {
+        return setVisibility(true);
+      }
+    }),
+        text = _useTypewriter.text;
+
+    var Line = function Line() {
+      if (props.characterNames) return /*#__PURE__*/react.createElement("div", null, props.characterNames, /*#__PURE__*/react.createElement("div", {
+        id: "lines",
+        className: props.linesClassName
+      }, visible ? line : text));
+      return /*#__PURE__*/react.createElement("div", {
+        id: "lines",
+        className: props.linesClassName
+      }, visible ? line : text);
+    };
+
+    return /*#__PURE__*/react.createElement("div", {
+      className: props.xClassName
+    }, props.xSideBefore && /*#__PURE__*/react.createElement("div", {
+      id: "xSideBefore"
+    }, props.xSideBefore), /*#__PURE__*/react.createElement(Line, null), (props.delayed == 'x' ? visible : true) && /*#__PURE__*/react.createElement(XSideAfter, {
+      component: props.xSideAfter
+    }));
+  };
+
   if (props.index <= props.text.length - 1) return /*#__PURE__*/react.createElement("section", {
     id: "dialogue",
     className: props.dialogueClassName
-  }, (props.delayed == 'y' ? props.additionalFlag && visible : true) && /*#__PURE__*/react.createElement(YSide, {
-    component: props.ySide,
-    yClassName: props.yClassName
-  }), /*#__PURE__*/react.createElement(Lines, {
-    additionalFlag: props.additionalFlag,
-    delayed: props.delayed,
-    characterNames: props.characterNames,
-    xSideAfter: props.xSideAfter,
-    xSideBefore: props.xSideBefore,
-    linesClassName: props.linesClassName,
-    xClassName: props.xClassName,
-    instant: props.instant,
-    visibles: visible,
-    setVisibles: setVisibility,
-    lines: line
-  }));
+  }, (props.delayed == 'y' ? visible : true) && /*#__PURE__*/react.createElement(YSide, null), /*#__PURE__*/react.createElement(Lines, null));
   return /*#__PURE__*/react.createElement("div", {
     className: "error"
   }, "Dialogue Index Out of Bound");
@@ -73652,7 +73616,7 @@ mount();
 
 function mount() {
   // Use dynamic import to load updated modules upon hot reloading
-  var _require = __webpack_require__(8873),
+  var _require = __webpack_require__(5941),
       rendererConfig = _require.rendererConfig,
       fixtures = _require.fixtures,
       decorators = _require.decorators;
@@ -73670,4 +73634,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.d96a7e9d229dc3390748.js.map
+//# sourceMappingURL=main.e1723d3038e7f541b559.js.map
