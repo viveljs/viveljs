@@ -24,9 +24,13 @@ export const DefaultScene = (props: DefaultSceneProps) => {
         alignItems: 'center',
         justifyContent: 'flex-end',
       }}
-      className={props.className}
     >
-      <div style={{ width: '90%' }}>{props.children}</div>
+      <div
+        style={props.className ? {} : { width: '90%' }}
+        className={props.className}
+      >
+        {props.children}
+      </div>
     </main>
   );
 };

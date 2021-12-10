@@ -30,6 +30,7 @@ const columnValues = (ws: WorkSheet) => {
       if (key == 'Character') return value.replace(/\s+/gm, '');
       if (key == 'Component') return componentParse(value);
       if (key == 'Option') return arrayParse(value);
+      if (key == 'Next Scene') return arrayParse(value);
       if (key == 'Value')
         return arrayParse(value, (x: string) => parseToBoolean(x));
       else return value.toString().replace(/\s+$/gm, '');

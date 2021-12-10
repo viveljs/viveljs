@@ -15,6 +15,7 @@ interface DialogueProps {
   linesClassName?: string;
   xClassName?: string;
   yClassName?: string;
+  cursorImage?: string;
   instant?: boolean;
 }
 
@@ -74,7 +75,12 @@ export const Dialogue = (props: DialogueProps) => {
 
   if (props.index <= props.text.length - 1)
     return (
-      <section id="dialogue" className={props.dialogueClassName}>
+      <section
+        id="dialogue"
+        onClick={() => setVisibility(true)}
+        style={{ cursor: `url(${props.cursorImage}), pointer` }}
+        className={props.dialogueClassName}
+      >
         {(props.delayed == 'y' ? visible : true) && <YSide />}
         <Lines />
       </section>
