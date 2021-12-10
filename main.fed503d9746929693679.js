@@ -34198,6 +34198,12 @@ var Dialogue = function Dialogue(props) {
 
   if (props.index <= props.text.length - 1) return /*#__PURE__*/react.createElement("section", {
     id: "dialogue",
+    onClick: function onClick() {
+      return setVisibility(true);
+    },
+    style: {
+      cursor: "url(".concat(props.cursorImage, "), pointer")
+    },
     className: props.dialogueClassName
   }, (props.delayed == 'y' ? visible : true) && /*#__PURE__*/react.createElement(YSide, null), /*#__PURE__*/react.createElement(Lines, null));
   return /*#__PURE__*/react.createElement("div", {
@@ -34333,12 +34339,12 @@ var DefaultScene = function DefaultScene(props) {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'flex-end'
+    }
+  }, /*#__PURE__*/react.createElement("div", {
+    style: props.className ? {} : {
+      width: '90%'
     },
     className: props.className
-  }, /*#__PURE__*/react.createElement("div", {
-    style: {
-      width: '90%'
-    }
   }, props.children));
 };
 ;// CONCATENATED MODULE: ../../workspaces/ui/src/core/TransitionScene.tsx
@@ -73634,4 +73640,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.e1723d3038e7f541b559.js.map
+//# sourceMappingURL=main.fed503d9746929693679.js.map
