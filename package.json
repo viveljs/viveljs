@@ -41,6 +41,7 @@
     "@dnd-kit/core": "^4.0.1",
     "@saucelabs/theme-github-codeblock": "^0.1.1",
     "@vime/react": "^5.0.35",
+    "@viveljs/ui": "file:workspaces/ui",
     "lodash": "^4.17.21",
     "rc-slider": "^9.7.4",
     "react": "17.0.x",
