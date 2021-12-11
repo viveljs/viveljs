@@ -11,12 +11,6 @@ interface GameProps {
 const FullScreenButton = (props: GameProps) => {
   return (
     <button
-      style={{
-        position: 'fixed',
-        right: '1rem',
-        bottom: '1rem',
-        userSelect: 'none',
-      }}
       onClick={props.handle.active ? props.handle.exit : props.handle.enter}
       className={props.buttonClass}
     >
