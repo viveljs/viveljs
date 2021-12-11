@@ -34127,7 +34127,7 @@ var dist = __webpack_require__(2092);
 
 var XSideAfter = function XSideAfter(props) {
   if (props.component) return /*#__PURE__*/react.createElement("div", {
-    id: "xSideAfter"
+    className: "xSideAfter"
   }, props.component);
   return null;
 };
@@ -46426,7 +46426,8 @@ var FullScreenButton = function FullScreenButton(props) {
     style: {
       position: 'fixed',
       right: '1rem',
-      bottom: '1rem'
+      bottom: '1rem',
+      userSelect: 'none'
     },
     onClick: props.handle.active ? props.handle.exit : props.handle.enter,
     className: props.buttonClass
@@ -46446,6 +46447,7 @@ var Game = function Game(props) {
   return /*#__PURE__*/react.createElement(FullScreen, {
     handle: fullScreenHandle
   }, /*#__PURE__*/react.createElement("section", {
+    className: props.containerClass,
     id: "game"
   }, props.children), props.enableFullScreen && /*#__PURE__*/react.createElement(FullScreenButton, {
     handle: fullScreenHandle,
@@ -76998,4 +77000,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.42c69774396239a153b4.js.map
+//# sourceMappingURL=main.c526cb94a14d373fdced.js.map
