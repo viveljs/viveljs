@@ -17,7 +17,7 @@ export const Droppable = (props: DroppableProps) => {
     color: props.hoverColor,
     backgroundColor: props.hoverBGColor,
   };
-
+  // console.log(isOver, 'cxcxcx')
   return (
     <div
       style={isOver ? style : undefined}
