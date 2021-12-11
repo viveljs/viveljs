@@ -26,7 +26,9 @@ const Lines = (props: LinesProps) => {
 
   return (
     <div className={props.xClassName}>
-      {props.xSideBefore && <div id="xSideBefore">{props.xSideBefore}</div>}
+      {props.xSideBefore && (
+        <div className="xSideBefore">{props.xSideBefore}</div>
+      )}
       <Line
         visible={props.visible}
         text={text}
