@@ -1,13 +1,6 @@
 import * as React from 'react';
 
-interface SceneProps {
-  children: React.ReactNode;
-  className?: string;
-  backgrounds: string[];
-  index: number;
-}
-
-interface TransitionProps {
+interface TransitionSceneProps {
   transition?: 'dark' | 'light';
   children: React.ReactNode;
   className?: string;
@@ -15,7 +8,7 @@ interface TransitionProps {
   index: number;
 }
 
-export const TransitionScene = (props: TransitionProps) => {
+export const TransitionScene = (props: TransitionSceneProps) => {
   return (
     <main
       id={`scene-${props.index}`}
@@ -47,30 +40,6 @@ export const TransitionScene = (props: TransitionProps) => {
       >
         {props.children}
       </div>
-    </main>
-  );
-};
-
-export const DefaultScene = (props: SceneProps) => {
-  return (
-    <main
-      id={`scene-${props.index}`}
-      style={{
-        backgroundImage: `url(${props.backgrounds[props.index]})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundPositionX: 'center',
-        boxSizing: 'border-box',
-        height: '100vh',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-      }}
-      className={props.className}
-    >
-      <div style={{ width: '90%' }}>{props.children}</div>
     </main>
   );
 };

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Cinematic } from '../../../workspaces/ui/src';
+import { CinematicScene } from '../../../workspaces/ui/src/core/CinematicScene';
 
 const video = {
   poster: 'https://media.vimejs.com/poster.png',
@@ -8,12 +8,12 @@ const video = {
 
 const subtitle = {
   lang: 'en',
-  src: 'https://media.vimejs.com/subs/english.vtt',
+  src: './misc/englishSubs.vtt',
   label: 'English',
 };
 
 const CinematicNoSkip = () => {
-  return <Cinematic subtitle={subtitle} video={video} />;
+  return <CinematicScene subtitle={subtitle} video={video} />;
 };
 
 export default {

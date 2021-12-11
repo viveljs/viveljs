@@ -14,9 +14,9 @@ const App = () => {
   const [state] = useAtom(globalStateAtom);
   const [scenes] = useAtom(scenesAtom);
 
-  const CurrentScene = sceneFinder(state.scene, scenes).custom
-    ? sceneFinder(state.scene, scenes).value
-    : sceneFinder('default', scenes).value;
+  const CurrentScene = sceneFinder(state.scene, scenes, state.index).custom
+    ? sceneFinder(state.scene, scenes, state.index).value
+    : sceneFinder('default', scenes, state.index).value;
 
   return (
     <Game enableFullScreen icon={[enter, exit]}>

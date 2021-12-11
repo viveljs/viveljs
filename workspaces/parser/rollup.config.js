@@ -33,7 +33,7 @@ export default [
       ...Object.keys(pkg.devDependencies || {}),
     ],
     plugins: [
-      pluginTypescript(),
+      pluginTypescript({ outputToFilesystem: true }),
       pluginCommonjs({
         extensions: ['.js', '.ts'],
       }),
@@ -45,6 +45,7 @@ export default [
       }),
       pluginNodeResolve({
         browser: false,
+        preferBuiltins: true,
       }),
     ],
   },

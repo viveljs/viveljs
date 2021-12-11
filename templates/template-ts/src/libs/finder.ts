@@ -2,6 +2,11 @@ import _ from 'lodash';
 import { stateProxy } from '../stores/game';
 import content from '@contentJSON';
 
+interface sceneFinderProps {
+  custom: boolean;
+  value: string;
+}
+
 const fileArrayFinder = (array: string[], object: { [key: string]: any }) => {
   const result = array.map((value) => {
     const key = Object.keys(object).find((x) =>
@@ -21,10 +26,16 @@ const fileFinder = (str: string, object: { [key: string]: any }) => {
   return object[key].default;
 };
 
-const sceneFinder = (str: string, object: { [key: string]: any }) => {
-  const key = Object.keys(object).find((x) =>
-    x.includes(_.capitalize(str) ?? 'default')
-  ) as string;
+const sceneFinder = (
+  str: string,
+  object: { [key: string]: any },
+  index: number
+): sceneFinderProps => {
+  const key = Object.keys(object).find((x) => {
+    if (content.sceneTypes[index].length > 0)
+      return x.includes(content.sceneTypes[index]);
+    return x.includes(_.capitalize(str) ?? 'default');
+  });
 
   return {
     custom: key ? true : false,
@@ -35,3 +46,4 @@ const sceneFinder = (str: string, object: { [key: string]: any }) => {
 };
 
 export { fileArrayFinder, fileFinder, sceneFinder };
+export type { sceneFinderProps };
