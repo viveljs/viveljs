@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { WorkSheet } from 'xlsx';
 import { arrayParse } from './arrayParse';
-import { characterAliasSplit } from './characterAliasSplit';
+import { characterFlowSplit } from './characterFlowSplit';
 import { componentParse } from './componentParse';
 
 interface JSONProps {
@@ -27,9 +27,13 @@ const columnValues = (ws: WorkSheet) => {
 
   const changedColumnValues = changedColumnKeys.map((key) => {
     const result = _.mapValues(key, (value, key) => {
-      if (key == 'Character') return value.replace(/\s+/gm, '');
       if (key == 'Component') return componentParse(value);
+      if (key == 'Character') return value.replace(/\s+/gm, '');
       if (key == 'Option') return arrayParse(value);
+      if (key == 'Alias') return arrayParse(value.replace(/\s+/gm, ''));
+      if (key == 'Mood') return arrayParse(value.replace(/\s+/gm, ''));
+      if (key == 'Item' || key == 'Additional Item')
+        return arrayParse(value.replace(/\s+/gm, ''));
       if (key == 'Next Scene') return arrayParse(value);
       if (key == 'Value')
         return arrayParse(value, (x: string) => parseToBoolean(x));
@@ -43,12 +47,12 @@ const columnValues = (ws: WorkSheet) => {
     return _.map(changedColumnValues, key);
   });
 
-  const characterSplitted = characterAliasSplit(mappedObject[7]);
+  const characterSplitted = characterFlowSplit(mappedObject[7]);
   const finalValues = [
-    ...characterSplitted,
     mappedObject[2],
     ...mappedObject.slice(4, 7),
-    ...mappedObject.slice(9),
+    ...characterSplitted,
+    ...mappedObject.slice(8),
   ];
 
   return finalValues;

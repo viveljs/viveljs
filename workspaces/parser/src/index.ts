@@ -13,21 +13,24 @@ const parser = yargs(hideBin(process.argv)).options({
 const main = async () => {
   const argv = await parser.argv;
   const keys = [
-    'character',
-    'characterFlow',
-    'alias',
     'scene',
     'sceneType',
     'background',
     'bgm',
+    'character',
+    'characterFlow',
+    'alias',
+    'mood',
     'line',
     'component',
     'series',
+    'item',
     'option',
     'value',
     'code',
     'tempVar',
     'sfx',
+    'formula',
     'to',
     ...argv.fields,
   ];

@@ -2,9 +2,9 @@ import _ from 'lodash';
 
 const lowerCaseMap = (array: string[]) => array.map((str) => _.lowerCase(str));
 
-const characterAliasSplit = (values: string[]) => {
+const characterFlowSplit = (values: string[]) => {
   const characterArray = values.map((value) => {
-    const array = value.replace(/(\w+)\(\w+\)/g, '$1').split(',');
+    const array = value.split('|');
     const sanitizedArray = _.compact(array);
     return lowerCaseMap(sanitizedArray);
   });
@@ -14,13 +14,7 @@ const characterAliasSplit = (values: string[]) => {
     array.map((value) => characters.indexOf(value))
   );
 
-  const alias = values.map((value) => {
-    const aliasArray = value.replace(/\w+\s?\((\S+)\)/g, '$1').split(',');
-    const sanitizedArray = _.compact(aliasArray);
-    return lowerCaseMap(sanitizedArray);
-  });
-
-  return [characters, characterFlow, alias];
+  return [characters, characterFlow];
 };
 
-export { characterAliasSplit };
+export { characterFlowSplit };

@@ -1,6 +1,6 @@
 {
   "name": "@viveljs/parser",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Parser for VivelJS",
   "author": "Muhammad Tsany Qudsi",
   "license": "ISC",
@@ -14,7 +14,7 @@
   "main": "./dist/parser.js",
   "scripts": {
     "build": "rollup -c",
-    "start": "node dist/parser.js --file ../../VivelProTest.xlsx",
+    "start": "node dist/parser.js --file ../../VivelDialog.xlsx",
     "trial": "npm run build && npm start"
   },
   "devDependencies": {
