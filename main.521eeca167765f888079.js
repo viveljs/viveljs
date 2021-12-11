@@ -46423,12 +46423,6 @@ var FullScreenButton = function FullScreenButton(props) {
   var _props$icon$;
 
   return /*#__PURE__*/react.createElement("button", {
-    style: {
-      position: 'fixed',
-      right: '1rem',
-      bottom: '1rem',
-      userSelect: 'none'
-    },
     onClick: props.handle.active ? props.handle.exit : props.handle.enter,
     className: props.buttonClass
   }, props.icon ? /*#__PURE__*/react.createElement("img", {
@@ -77000,4 +76994,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.c526cb94a14d373fdced.js.map
+//# sourceMappingURL=main.521eeca167765f888079.js.map
