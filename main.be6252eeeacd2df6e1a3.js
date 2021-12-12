@@ -34116,6 +34116,7 @@ var Button = function Button(props) {
   };
 
   return /*#__PURE__*/react.createElement("button", {
+    style: props.style,
     onClick: handleClick,
     id: "button-".concat(props.index),
     className: props.className
@@ -46249,7 +46250,6 @@ var Character = function Character(props) {
       display: 'flex',
       position: 'fixed',
       bottom: '2rem',
-      zIndex: 0,
       justifyContent: 'around',
       alignItems: 'end',
       width: '50%'
@@ -76994,4 +76994,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.521eeca167765f888079.js.map
+//# sourceMappingURL=main.be6252eeeacd2df6e1a3.js.map
