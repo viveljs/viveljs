@@ -27,7 +27,6 @@ export const Character = (props: CharacterProps) => {
         display: 'flex',
         position: 'fixed',
         bottom: '2rem',
-        zIndex: 0,
         justifyContent: 'around',
         alignItems: 'end',
         width: '50%',

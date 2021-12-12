@@ -5,6 +5,7 @@ interface ButtonProps {
   text: string;
   onClick?: (arg0: number, arg1?: string) => any;
   className?: string;
+  style?: React.CSSProperties;
   index?: number;
 }
 
@@ -14,6 +15,7 @@ export const Button = (props: ButtonProps) => {
   };
   return (
     <button
+      style={props.style}
       onClick={handleClick}
       id={`button-${props.index}`}
       className={props.className}
