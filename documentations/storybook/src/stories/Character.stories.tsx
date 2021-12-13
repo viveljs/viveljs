@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Character, Button } from '../../../../workspaces/ui/src';
 import { useValue } from 'react-cosmos/fixture';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import buttonStyle from './styles/button.module.css';
 
@@ -12,7 +13,12 @@ import arthur from './images/arthur.png';
 const characters = ['Charlie', 'Tom', 'Arthur', 'Lee'];
 const characterImages = [charlie, tom, arthur, lee];
 
-const Single = () => {
+export default {
+  title: "Components/Character",
+  component: Character,
+}as ComponentMeta<typeof Character>;
+
+export const Single: ComponentStory<typeof Character> = () => {
   return (
     <Character
       characters={characters}
@@ -23,7 +29,7 @@ const Single = () => {
   );
 };
 
-const Double = () => {
+export const Double: ComponentStory<typeof Character> = () => {
   return (
     <Character
       characters={characters}
@@ -34,7 +40,7 @@ const Double = () => {
   );
 };
 
-const Triple = () => {
+export const Triple: ComponentStory<typeof Character> = () => {
   return (
     <Character
       characters={characters}
@@ -45,7 +51,7 @@ const Triple = () => {
   );
 };
 
-const All = () => {
+export const All: ComponentStory<typeof Character> = () => {
   return (
     <Character
       characters={characters}
@@ -56,7 +62,7 @@ const All = () => {
   );
 };
 
-const WithButton = () => {
+export const WithButton: ComponentStory<typeof Character> = () => {
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
   const handleClick = () => {
     if (index < characters.length - 1) setIndex(index + 1);
@@ -76,12 +82,4 @@ const WithButton = () => {
       />
     </div>
   );
-};
-
-export default {
-  Single: <Single />,
-  Double: <Double />,
-  Triple: <Triple />,
-  'All Characters': <All />,
-  'Change Index with Button': <WithButton />,
 };

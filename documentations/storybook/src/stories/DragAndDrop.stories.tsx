@@ -1,7 +1,13 @@
 import { DragAndDrop } from '../../../../workspaces/ui/src/responses/DragAndDrop'
 import React from 'react'
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
-const DragAndDropFixture = () => {
+export default {
+  title: "Components/Drag and Drop",
+  component: DragAndDrop,
+}as ComponentMeta<typeof DragAndDrop>;
+
+export const DragAndDropFixture: ComponentStory<typeof DragAndDrop> = () => {
   // const [markUp, setMarkUp] = React.useState<any>(null)
   const [items, setItems] = React.useState<any>([
     {
@@ -42,5 +48,3 @@ const DragAndDropFixture = () => {
   </div>  
   )
 }
-
-export default DragAndDropFixture;

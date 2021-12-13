@@ -5,6 +5,7 @@ import exit from './images/fullExit.png';
 import enter from './images/fullEnter.png';
 import slideStyles from './styles/slide.module.css';
 import { Bare } from './MultipleChoice.stories';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import bg0 from './images/background0.jpg';
 import bg1 from './images/background1.png';
@@ -16,7 +17,12 @@ const slides = images.map((image, index) => {
   return <img key={index} src={image} />;
 });
 
-const SingleSlide = () => {
+export default {
+  title: "Components/Slide",
+  component: Slide,
+}as ComponentMeta<typeof Slide>;
+
+export const SingleSlide: ComponentStory<typeof Slide> = () => {
   return (
     <Slide
       slides={slides}
@@ -29,7 +35,7 @@ const SingleSlide = () => {
   );
 };
 
-const Options = () => {
+export const Options: ComponentStory<typeof Slide> = () => {
   return (
     <Slide
       slides={slides}
@@ -40,9 +46,4 @@ const Options = () => {
       component={<Bare />}
     />
   );
-};
-
-export default {
-  'Single image Slide': <SingleSlide />,
-  'Multiple Image with options': <Options />,
 };
