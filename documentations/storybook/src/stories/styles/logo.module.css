@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Molle:ital@1&display=swap');
+
+.logo {
+  font-family: 'Molle', cursive;
+  font-size: 7rem;
+  color: rgb(190, 46, 154);
+  animation: glow 7s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8), 0 0 10px rgba(255, 255, 255, 0.8), 0 0 0 rgba(230,0,115,0.5), 0 0 0 rgba(230,0,115,0.5), 0 0 0 rgba(230,0,115,0.5), 0 0 0 rgba(230,0,115,0.5), 0 0 0 rgba(230,0,115,0.5);
+  }
+  
+  to {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 77, 166, 0.6), 0 0 30px rgba(255, 77, 166, 0.6),0 0 40px rgba(255, 77, 166, 0.6), 0 0 50px rgba(255, 77, 166, 0.6), 0 0 60px rgba(255, 77, 166, 0.6), 0 0 70px rgba(255, 77, 166, 0.6);
+  }
+}
