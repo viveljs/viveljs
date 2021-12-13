@@ -46191,13 +46191,15 @@ var CinematicScene = function CinematicScene(props) {
   var _props$video$type;
 
   return /*#__PURE__*/react.createElement(esm_components_Player, {
-    muted: true,
     autoplay: true,
     onVmPlaybackEnded: props.onEnded,
     style: {
       height: '100vh',
       width: '100vw',
-      position: 'fixed'
+      position: 'fixed',
+      display: 'flex',
+      alignItems: 'center',
+      backgroundColor: '#000'
     }
   }, /*#__PURE__*/react.createElement(esm_components_Video, {
     poster: props.video.poster
@@ -76994,4 +76996,4 @@ if (false) {}
 
 /******/ })()
 ;
-//# sourceMappingURL=main.be6252eeeacd2df6e1a3.js.map
+//# sourceMappingURL=main.bbfedb5bd34a3c7d7c8f.js.map
