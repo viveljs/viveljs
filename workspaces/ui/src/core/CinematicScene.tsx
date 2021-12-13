@@ -1,18 +1,5 @@
 import * as React from 'react';
-import {
-  Player,
-  DefaultUi as DefaultUI,
-  Video,
-  Spinner,
-  Poster,
-  Controls,
-  ControlSpacer,
-  TimeProgress,
-  PlaybackControl,
-  MuteControl,
-  Scrim,
-} from '@vime/react';
-import '@vime/core/themes/default.css';
+import ReactPlayer from 'react-player/file';
 
 interface SubtitleProps {
   src: string;
@@ -23,68 +10,50 @@ interface SubtitleProps {
 interface VideoProps {
   src: string;
   poster: string;
-  type?: string;
 }
 
 interface CinematicSceneProps {
   containerClassName?: string;
-  containerBackground?: string;
   video: VideoProps;
   subtitle?: SubtitleProps;
   onEnded?: () => void;
-  nextScene?: 'string';
+  volume?: number;
+  onProgress?: (arg1: {
+    played: number;
+    playedSeconds: number;
+    loaded: number;
+    loadedSeconds: number;
+  }) => void;
 }
 
 export const CinematicScene = (props: CinematicSceneProps) => {
   return (
-    <Player
-      autoplay={true}
-      onVmPlaybackEnded={props.onEnded}
-      style={{
-        height: '100vh',
-        width: '100vw',
-        position: 'fixed',
-        display: 'flex',
-        alignItems: 'center',
-        backgroundColor: '#000',
-      }}
-    >
-      <Video poster={props.video.poster}>
-        <source
-          src={props.video.src}
-          data-src={props.video.src}
-          type={props.video.type ?? 'video/mp4'}
-        />
-        {props.subtitle && (
-          <track
-            default
-            kind="subtitles"
-            src={props.subtitle.src}
-            srcLang={props.subtitle.lang}
-            label={props.subtitle.label}
-          />
-        )}
-      </Video>
-
-      <DefaultUI noControls>
-        <Scrim />
-        <Spinner />
-        <Poster />
-        <Controls fullWidth pin="topLeft">
-          <ControlSpacer />
-          <MuteControl />
-        </Controls>
-
-        <Controls fullWidth pin="center">
-          <ControlSpacer />
-          <PlaybackControl />
-          <ControlSpacer />
-        </Controls>
-
-        <Controls fullWidth pin="bottomLeft">
-          <TimeProgress />
-        </Controls>
-      </DefaultUI>
-    </Player>
+    <div className={props.containerClassName}>
+      <ReactPlayer
+        volume={props.volume}
+        playing
+        controls
+        onEnded={props.onEnded}
+        width="100vw"
+        height="100vh"
+        onProgress={(x) => props.onProgress && props.onProgress(x)}
+        url={props.video.src}
+        config={{
+          attributes: {
+            poster: props.video.poster,
+          },
+          tracks: props.subtitle
+            ? [
+                {
+                  kind: 'subtitle',
+                  src: props.subtitle.src,
+                  srcLang: props.subtitle.lang,
+                  label: props.subtitle.label,
+                },
+              ]
+            : [],
+        }}
+      />
+    </div>
   );
 };
