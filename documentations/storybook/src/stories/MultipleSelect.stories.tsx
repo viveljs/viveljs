@@ -2,12 +2,18 @@ import * as React from 'react';
 import { useValue } from 'react-cosmos/fixture';
 import { MultipleSelect } from '../../../../workspaces/ui/src';
 import { multipleResult } from '../../../../workspaces/ui/src/libs/multipleResults';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import styles from './styles/multipleSelect.module.css';
 import buttonStyle from './styles/button.module.css';
 const responses = ['Is it ?', 'Who did it ?', 'Why ?', 'When ?'];
 
-const Bare = () => {
+export default {
+  title: "Components/Multiple Select",
+  component: MultipleSelect,
+}as ComponentMeta<typeof MultipleSelect>;
+
+export const Bare: ComponentStory<typeof MultipleSelect> = () => {
   const [values, setValues] = React.useState<string[]>([]);
   const [answers] = useValue<string[]>('responses', {
     defaultValue: responses,
@@ -29,8 +35,4 @@ const Bare = () => {
       </div>
     </div>
   );
-};
-
-export default {
-  Bare: <Bare />,
 };

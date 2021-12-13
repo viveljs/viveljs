@@ -20,7 +20,7 @@
     "web:start": "npm run start -w @viveljs/website",
     "web:build": "npm run build -w @viveljs/website",
     "ts:dev": "npm run dev -w template-ts",
-    "storybook": "npm run dev -w @viveljs/storybook"
+    "storybook": "npm run storybook -w @viveljs/storybook"
   },
   "repository": {
     "type": "git",

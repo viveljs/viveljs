@@ -3,6 +3,7 @@ import { Avatar, Button } from '../../../../workspaces/ui/src';
 import { useValue } from 'react-cosmos/fixture';
 import styles from './styles/avatar.module.css';
 import buttonStyle from './styles/button.module.css';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import tom from './images/tom.png';
 import lee from './images/lee.png';
@@ -12,7 +13,12 @@ import arthur from './images/arthur.png';
 const characters = ['Charlie', 'Tom', 'Arthur', 'Lee'];
 const characterImages = [charlie, tom, arthur, lee];
 
-const Single = () => {
+export default {
+  title: "Components/Avatar",
+  component: Avatar,
+}as ComponentMeta<typeof Avatar>;
+
+export const Single: ComponentStory<typeof Avatar> = () => {
   return (
     <Avatar
       and="and"
@@ -27,7 +33,7 @@ const Single = () => {
   );
 };
 
-const Double = () => {
+export const Double: ComponentStory<typeof Avatar> = () => {
   return (
     <Avatar
       and="and"
@@ -42,7 +48,7 @@ const Double = () => {
   );
 };
 
-const Triple = () => {
+export const Triple: ComponentStory<typeof Avatar> = () => {
   return (
     <Avatar
       and="and"
@@ -57,7 +63,7 @@ const Triple = () => {
   );
 };
 
-const All = () => {
+export const All: ComponentStory<typeof Avatar> = () => {
   return (
     <Avatar
       and="and"
@@ -72,7 +78,7 @@ const All = () => {
   );
 };
 
-const Alias = () => {
+export const Alias: ComponentStory<typeof Avatar> = () => {
   return (
     <Avatar
       and="and"
@@ -87,7 +93,7 @@ const Alias = () => {
   );
 };
 
-const WithButton = () => {
+export const WithButton: ComponentStory<typeof Avatar> = () => {
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
   const handleClick = () => {
     if (index < characters.length - 1) setIndex(index + 1);
@@ -111,13 +117,4 @@ const WithButton = () => {
       />
     </div>
   );
-};
-
-export default {
-  Single: <Single />,
-  Double: <Double />,
-  Triple: <Triple />,
-  'All Characters': <All />,
-  'Custom Alias': <Alias />,
-  'Change Index with Button': <WithButton />,
 };

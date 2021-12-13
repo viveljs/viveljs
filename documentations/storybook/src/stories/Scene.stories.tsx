@@ -9,6 +9,7 @@ import {
   Character,
   CharacterNames,
 } from '../../../../workspaces/ui/src';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import xStyle from './styles/dialogueX.module.css';
 import styles from './styles/avatar.module.css';
@@ -38,7 +39,12 @@ import bg3 from './images/background3.png';
 
 const scenes = [bg0, bg1, bg2, bg3];
 
-export const DefaultSingle = () => {
+export default {
+  title: "Components/Scene",
+  component: DefaultScene,
+}as ComponentMeta<typeof DefaultScene>;
+
+export const DefaultSingle: ComponentStory<typeof DefaultScene> = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -81,7 +87,7 @@ export const DefaultSingle = () => {
   );
 };
 
-export const CharacterSingle = () => {
+export const CharacterSingle: ComponentStory<typeof DefaultScene> = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -127,7 +133,7 @@ export const CharacterSingle = () => {
   );
 };
 
-const TransitionSingle = () => {
+export const TransitionSingle: ComponentStory<typeof DefaultScene> = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -157,7 +163,7 @@ const TransitionSingle = () => {
   );
 };
 
-const Instant = () => {
+export const Instant: ComponentStory<typeof DefaultScene> = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -187,11 +193,4 @@ const Instant = () => {
       />
     </TransitionScene>
   );
-};
-
-export default {
-  'Default Scene with avatar element': <DefaultSingle />,
-  'Default Scene with character element': <CharacterSingle />,
-  'Transition Scene with one element': <TransitionSingle />,
-  'Instant Transition Scene with two elements': <Instant />,
 };

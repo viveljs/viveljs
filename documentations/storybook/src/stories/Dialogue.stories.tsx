@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useValue } from 'react-cosmos/fixture';
 import { Dialogue, Button, Avatar } from '../../../../workspaces/ui/src';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 import xStyle from './styles/dialogueX.module.css';
 import yStyle from './styles/dialogueY.module.css';
@@ -21,7 +22,12 @@ const dialogue = [
   'Have fun using VivelJS',
 ];
 
-const Horizontal = () => {
+export default {
+  title: "Components/Dialogue",
+  component: Dialogue,
+}as ComponentMeta<typeof Dialogue>;
+
+export const Horizontal: ComponentStory<typeof Dialogue> = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -50,7 +56,7 @@ const Horizontal = () => {
   );
 };
 
-const Vertical = () => {
+export const Vertical: ComponentStory<typeof Dialogue> = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -79,7 +85,7 @@ const Vertical = () => {
   );
 };
 
-const BothX = () => {
+export const BothX: ComponentStory<typeof Dialogue> = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -115,7 +121,7 @@ const BothX = () => {
   );
 };
 
-const BothY = () => {
+export const BothY: ComponentStory<typeof Dialogue> = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -156,7 +162,7 @@ const BothY = () => {
   );
 };
 
-const BothNone = () => {
+export const BothNone: ComponentStory<typeof Dialogue> = () => {
   const [lines] = useValue('lines', { defaultValue: dialogue });
 
   const [index, setIndex] = useValue<number>('index', { defaultValue: 0 });
@@ -195,15 +201,4 @@ const BothNone = () => {
       linesClassName={xStyle.lines}
     />
   );
-};
-
-export default {
-  'Bare with no additional element or css': (
-    <Dialogue text={dialogue} index={0} delayed="none" />
-  ),
-  'Additional vertical element': <Vertical />,
-  'Additional horizontal element': <Horizontal />,
-  'Horizontal delayed element with both add on': <BothX />,
-  'Vertical delayed element with both add on': <BothY />,
-  'No delayed element with both add on': <BothNone />,
 };

@@ -2,10 +2,16 @@ import * as React from 'react';
 import { MultipleChoice } from '../../../../workspaces/ui/src';
 import buttonStyles from './styles/button.module.css';
 import styles from './styles/multipleChoice.module.css';
+import { ComponentStory, ComponentMeta } from '@storybook/react';
 
 const responses = ['You choose options ', 'Who did it ?', 'Why ?'];
 
-export const Bare = () => {
+export default {
+  title: "Components/Multiple Choice",
+  component: MultipleChoice,
+}as ComponentMeta<typeof MultipleChoice>;
+
+export const Bare: ComponentStory<typeof MultipleChoice> = () => {
   const [value, setValue] = React.useState<number>(0);
 
   const handleClick = (index: number) => {
@@ -36,8 +42,4 @@ export const Bare = () => {
       </div>
     </div>
   );
-};
-
-export default {
-  'Bare example': <Bare />,
 };
