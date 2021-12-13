@@ -38,10 +38,16 @@ interface CinematicSceneProps {
 export const CinematicScene = (props: CinematicSceneProps) => {
   return (
     <Player
-      muted
-      autoplay
+      autoplay={true}
       onVmPlaybackEnded={props.onEnded}
-      style={{ height: '100vh', width: '100vw', position: 'fixed' }}
+      style={{
+        height: '100vh',
+        width: '100vw',
+        position: 'fixed',
+        display: 'flex',
+        alignItems: 'center',
+        backgroundColor: '#000',
+      }}
     >
       <Video poster={props.video.poster}>
         <source
