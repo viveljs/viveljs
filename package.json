@@ -40,7 +40,8 @@
   "dependencies": {
     "@viveljs/ui": "file:workspaces/ui",
     "react": "17.0.x",
-    "react-dom": "17.0.x"
+    "react-dom": "17.0.x",
+    "react-player": "^2.9.0"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.5",
