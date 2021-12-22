@@ -9,10 +9,6 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "render": "npm run start:renderer -w @viveljs/cosmos",
-    "rc": "npm run cosmos -w @viveljs/cosmos",
-    "rc:start": "npm start -w @viveljs/cosmos",
-    "rc:export": "npm run cosmos:export -w @viveljs/cosmos",
     "ui:build": "npm run build -w @viveljs/ui",
     "p:build": "npm run build -w @viveljs/parser",
     "p:run": "npm start -w @viveljs/parser",
@@ -20,7 +16,8 @@
     "web:start": "npm run start -w @viveljs/website",
     "web:build": "npm run build -w @viveljs/website",
     "ts:dev": "npm run dev -w template-ts",
-    "storybook": "npm run storybook -w @viveljs/storybook"
+    "sb:start": "npm run storybook -w @viveljs/storybook",
+    "sb:build": "npm run storybook:build -w @viveljs/storybook"
   },
   "repository": {
     "type": "git",

@@ -6,7 +6,7 @@
     "build": "tsc && vite build",
     "serve": "vite preview",
     "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "storybook:build": "build-storybook -- --out=../public"
   },
   "dependencies": {
     "@saucelabs/theme-github-codeblock": "^0.1.1",
