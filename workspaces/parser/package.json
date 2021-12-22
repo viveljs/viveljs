@@ -34,6 +34,7 @@
   "dependencies": {
     "plur": "^4.0.0",
     "xlsx": "^0.17.2",
-    "yargs": "^17.1.1"
+    "yargs": "^17.1.1",
+    "inherits": "^2.0.3"
   }
 }
