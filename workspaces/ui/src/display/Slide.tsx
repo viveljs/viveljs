@@ -18,6 +18,7 @@ interface ZoomProps {
   imageClass?: string;
   fullscreenClass?: string;
   buttonClass?: string;
+  swiperSlideClass?: string;
   icons?: string[];
   slideClass?: string;
 }
@@ -48,7 +49,10 @@ export const Slide = (props: ZoomProps) => {
           <div slot="wrapper-start">{props.wrapperStart}</div>
           {props.slides.map((slide, index) => {
             return (
-              <SwiperSlide key={`slide_${index}`}>
+              <SwiperSlide
+                className={props.swiperSlideClass}
+                key={`slide_${index}`}
+              >
                 <div
                   style={{
                     ...inlineStyle,
