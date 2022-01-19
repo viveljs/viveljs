@@ -1,11 +1,12 @@
 import * as React from 'react';
-import useOutsideClick from '../libs/useOutsideClick';
+import { AiFillSound } from 'react-icons/ai';
+import useOutsideClick from '@hooks/useOutsideClick';
 
 interface SettingsProps {
   children: React.ReactNode;
   className: string;
   buttonClass: string;
-  icon: React.ReactNode;
+  iconClass: string;
   childrenContainerClass: string;
 }
 
@@ -21,7 +22,7 @@ const Settings = (props: SettingsProps) => {
         className={props.buttonClass}
         onClick={() => setVisibility(!visible)}
       >
-        {props.icon}
+        <AiFillSound size={25} className={props.iconClass} />
       </div>
       {visible && (
         <div className={props.childrenContainerClass}>{props.children}</div>

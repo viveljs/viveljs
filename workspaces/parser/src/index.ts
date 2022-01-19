@@ -18,6 +18,7 @@ const main = async () => {
     'background',
     'bgm',
     'character',
+    'characterIMG',
     'characterFlow',
     'alias',
     'mood',

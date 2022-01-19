@@ -8,30 +8,29 @@ import { fileFinder } from '@libs/finder';
 
 import contents from '@contentJSON';
 
-const BGM = () => {
+const SFX = () => {
   const [state] = useAtom(globalStateAtom);
   const [sounds] = useAtom(soundsAtom);
   const [currentSound, setCurrentSound] = React.useState<string>(
-    fileFinder(contents.bgms[state.index], sounds, false)
+    fileFinder(contents.sfxes[state.index], sounds, false)
   );
 
-  const [playBGM, { stop }] = useSound(currentSound, {
-    volume: state.bgmVolume,
-    loop: true,
+  const [play] = useSound(currentSound, {
+    volume: state.sfxVolume,
   });
 
   React.useEffect(() => {
-    if (!currentSound.includes(contents.bgms[state.index])) {
-      stop();
-      setCurrentSound(fileFinder(contents.bgms[state.index], sounds, false));
+    if (contents.sfxes[state.index].length > 0) {
+      setCurrentSound(fileFinder(contents.sfxes[state.index], sounds, false));
     }
     return () => {};
-  }, [contents.bgms[state.index]]);
+  }, [contents.sfxes[state.index]]);
 
   React.useEffect(() => {
-    playBGM();
-  }, [playBGM]);
+    play();
+  }, [play]);
+
   return null;
 };
 
-export { BGM };
+export { SFX };

@@ -1,42 +1,45 @@
 import * as React from 'react';
-import useSound from '@viveljs/use-sound';
+import { FullScreenButton } from './FullScreenButton';
+import { FullScreen, useFullScreenHandle } from 'react-full-screen';
+import Carousel from 'nuka-carousel';
 
-interface SliderProps {
-  text: string;
-  containerClassName?: string;
-  headerClassName?: string;
-  labelClassName?: string;
-  valueClassName?: string;
-  inputClassName?: string;
-  value: number;
-  callback: (arg1: string) => void;
+interface SlideProps {
+  enableFullScreen?: boolean;
+  fullScreenClass?: string;
+  containerClass?: string;
+  iconEnterFullScreen?: React.ReactElement;
+  iconExitFullScreen?: React.ReactElement;
+  buttonFullScreen?: string;
+  slides: React.ReactNode[];
 }
 
-const Slider = (props: SliderProps) => {
-  const [play] = useSound(pop, { volume: state.sfxVolume });
-
-  const handleChange = (value: string) => {
-    props.callback(value);
-    play();
-  };
+export const Slide = (props: SlideProps) => {
+  const slideHandle = useFullScreenHandle();
 
   return (
-    <div className={props.containerClassName}>
-      <div className={props.headerClassName}>
-        <div className={props.labelClassName}>{props.text}</div>
-        <div className={props.valueClassName}>{props.value * 100} %</div>
-      </div>
-      <input
-        type="range"
-        className={props.inputClassName}
-        min="0"
-        max="10"
-        value={props.value * 10}
-        onChange={(event) => handleChange(event.target.value)}
-        step="2"
-      />
-    </div>
+    <FullScreen
+      handle={slideHandle}
+      className={
+        slideHandle.active ? props.fullScreenClass : props.containerClass
+      }
+    >
+      <Carousel
+        initialSlideWidth={300}
+        renderBottomCenterControls={() => {
+          if (props.enableFullScreen) {
+            return (
+              <FullScreenButton
+                handle={slideHandle}
+                iconEnterFullScreen={props.iconEnterFullScreen}
+                iconExitFullScreen={props.iconExitFullScreen}
+                buttonClass={props.buttonFullScreen}
+              />
+            );
+          }
+        }}
+      >
+        {props.slides}
+      </Carousel>
+    </FullScreen>
   );
 };
-
-export { Slider };

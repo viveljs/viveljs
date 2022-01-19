@@ -19,7 +19,6 @@ export const Character = (props: CharacterProps) => {
       : (props.characterFlow[props.index] as number[]).map((flow) => {
           return props.characterImages ? props.characterImages[flow] : null;
         });
-
   return (
     <section
       id="characters"

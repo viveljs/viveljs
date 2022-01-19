@@ -28,7 +28,7 @@ const columnValues = (ws: WorkSheet) => {
   const changedColumnValues = changedColumnKeys.map((key) => {
     const result = _.mapValues(key, (value, key) => {
       if (key == 'Component') return componentParse(value);
-      if (key == 'Character') return value.replace(/\s+/gm, '');
+      if (key == 'Character') return arrayParse(value.replace(/\s+/gm, ''));
       if (key == 'Option') return arrayParse(value);
       if (key == 'Alias') return arrayParse(value.replace(/\s+/gm, ''));
       if (key == 'Mood') return arrayParse(value.replace(/\s+/gm, ''));
@@ -47,7 +47,10 @@ const columnValues = (ws: WorkSheet) => {
     return _.map(changedColumnValues, key);
   });
 
-  const characterSplitted = characterFlowSplit(mappedObject[7]);
+  const characterSplitted = characterFlowSplit(
+    mappedObject[7],
+    mappedObject[9]
+  );
   const finalValues = [
     mappedObject[2],
     ...mappedObject.slice(4, 7),
