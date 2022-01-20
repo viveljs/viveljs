@@ -31,7 +31,6 @@ const main = async () => {
     'code',
     'tempVar',
     'sfx',
-    'formula',
     'to',
     ...argv.fields,
   ];
