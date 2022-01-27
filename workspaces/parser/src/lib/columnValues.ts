@@ -41,12 +41,13 @@ const parseNextScene = (x: string) => {
     const array = x.split('|');
     const result = array.map((x) => {
       return {
+        key: '',
         to: x,
       };
     });
     return result;
   }
-  return [''];
+  return [];
 };
 
 const columnValues = (ws: WorkSheet) => {
