@@ -1,0 +1,246 @@
+---
+sidebar_position: 3
+---
+
+# Excel Template
+
+Nama kolom pada template merupakan ```case-sensitive```, sehingga dimohon untuk penamaan kolom pada template sesuai dengan table of contents di bagian kanan halaman.
+
+## <Highlight color="#d569a5"> Segment </Highlight>
+
+![Segment](/img/segment.png)
+
+Mendefinisikan segment - segment yang terdapat pada template. Terdiri oleh 2 kolom, yaitu ```Name``` dan ```Sub```.
+
+### <Highlight color="#c03582"> Name </Highlight>
+
+Nama dari sebuah segment, ditulis sekali.
+
+### <Highlight color="#c03582"> Sub </Highlight>
+
+Nama dari sebuah sub-segment, ditulis sekali.
+
+## <Highlight color="#d569a5"> Scene </Highlight>
+
+![Scene](/img/scene.png)
+
+Mengandung detail-detail mengenai scene yang terdapat pada template. Terdiri oleh 5 kolom, yaitu ```Scene Number```, ```Scene Description```, ```Scene Type```, ```Background``` dan ```BGM```.
+
+### <Highlight color="#c03582"> Scene Number </Highlight>
+
+Penomoran scene, ditulis sekali setiap pergantian scene.
+
+### <Highlight color="#c03582"> Scene Description </Highlight>
+
+Deskripsi pada scene, ditulis sekali. Khusus untuk scene yang memiliki transition diisi dengan ```$TRANSITION```, berikut juga dengan cinematic yang menggunakan ```$CINEMATIC```.
+
+### <Highlight color="#c03582"> Scene Type </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Merupakan tipe - tipe scene yang ada pada template. Terdiri oleh 3 kolom, yaitu ```Transition``` untuk scene transisi, dan ```Cinematic``` untuk scene cinematic.
+
+Untuk tipe ke - 3 yaitu scene minigame, dapat ditulis dengan nama minigamenya, namun setiap kata diawali dengan huruf kapital dengan tidak ada spasi.
+
+contoh: ```BalonAir``` untuk minigame balon air.
+
+Hanya boleh terdapat 1 jenis dalam setiap baris.
+
+### <Highlight color="#c03582"> Background </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Diisi dengan background yang ingin ditampilkan pada scene. Penulisan nama background harus sesuai dengan nama yang terdapat pada asset. Hanya boleh terdapat 1 jenis dalam setiap baris.
+
+:::tip Perhatian!
+Dimohon untuk mengisi setiap baris pada kolom ```Background```.
+:::
+
+### <Highlight color="#c03582"> BGM </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Diisi dengan background music yang ingin ditampilkan pada scene. Penulisan nama background music harus sesuai dengan nama yang terdapat pada asset. Hanya boleh terdapat 1 jenis dalam setiap baris.
+
+:::tip Perhatian!
+Dimohon untuk mengisi setiap baris pada kolom ```BGM```.
+:::
+
+## <Highlight color="#d569a5"> Line </Highlight>
+
+![Line](/img/line.png)
+
+Mengandung percakapan dialog yang terdapat pada template. Terdiri oleh 4 kolom, yaitu ```Character```, ```Alias```, ```Mood```, ```Dialogue```.
+
+### <Highlight color="#c03582"> Character </Highlight>
+
+Diisi dengan karakter yang akan ditampilkan untuk mengucapkan dialog. Ditulis untuk setiap baris karakter tersebut harus dimunculkan.
+
+:::tip Perhatian!
+Jika terdapat ```Transition```, ```Cinematic```, ```Minigame``` maka dimohon untuk mengosongkan kolom ini.
+:::
+
+### <Highlight color="#c03582"> Alias </Highlight>
+
+Diisi dengan nama alias untuk mengubah nama bawaan karakter tersebut. Ditulis untuk setiap baris nama alias tersebut harus dimunculkan.
+
+:::tip Perhatian!
+Jika terdapat ```Transition```, ```Cinematic```, ```Minigame``` maka dimohon untuk mengosongkan kolom ini.
+:::
+
+### <Highlight color="#c03582"> Mood </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Tampilan pose atau raut wajah karakter yang ditampilkan. Ditulis untuk setiap baris yang memiliki karakter.
+
+### <Highlight color="#c03582"> Dialogue </Highlight>
+
+Kalimat yang perlu diucapkan oleh karakter.
+
+Jika terdapat ```Cinematic``` maka cinematic yang ingin ditampilkan dapat ditulis di kolom ini (ini ```case-sensitive```).
+
+:::tip Perhatian!
+Jika terdapat ```Minigame``` maka dimohon untuk mengosongkan kolom ini.
+:::
+
+## <Highlight color="#d569a5"> Mechanics </Highlight>
+
+![Mechanics](/img/mechanics.png)
+
+Berisi mekanik yang muncul di permainan selain dialog. Terdiri oleh 6 kolom, yaitu ```Component```, ```Seri```, ```Additional Item```, ```Option```, ```Value```, ```Code item```, dan ```Misc```.
+
+### <Highlight color="#c03582"> Component </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Merupakan jenis mekanik selain dialogue yang perlu dimunculkan. Diisi apabila perlu ditampilkan.
+```jsx title="Terdapat 6 jenis komponen, seperti:"
+slides          : untuk menampilkan slide.
+options         : untuk menampilkan option.
+slideoption     : untuk menampilkan gabungan slide dan option.
+Video           : untuk menampilkan cuplikan video. (video yang dimaksud disini berbeda dengan cinematic)
+rating          : untuk menampilkan menu rating.
+inputlongtext   : untuk menampilkan isian text.
+```
+
+### <Highlight color="#c03582"> Seri </Highlight>
+
+Berisi kode seri yang akan dipakai untuk keperluan penilaian. Diisi untuk setiap baris yang bersangkutan.
+
+### <Highlight color="#c03582"> Additional Item </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Berisi slide atau video yang ingin ditampilkan. Ditulis pada baris yang sama dimana terdapat ```slides```, ```slideoption```, dan ```Video```.
+
+### <Highlight color="#c03582"> Option </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Berisi pilihan-pilihan untuk dipilih pemain.
+
+```jsx title="Berikut cara penulisan Option:"
+- setiap pilihan dipisah oleh penanda garis tegak lurus "|".
+- jangan ada spasi di antara pemisah.
+- jumlah pilihan di kolom Option harus sama dengan jumlah skor pada kolom Value.
+```
+
+### <Highlight color="#c03582"> Value </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Berisi skor yang menentukan apakah jawaban pemain benar atau salah.
+
+```jsx title="Berikut cara penulisan Value:"
+- angka 1 untuk jawaban yang benar, angka 0 untuk jawaban yang salah.
+- setiap skor dipisah oleh penanda garis tegak lurus "|".
+- jangan ada spasi di antara pemisah.
+- jumlah skor di kolom Value harus sama dengan jumlah pilihan pada kolom Option.
+```
+
+### <Highlight color="#c03582"> Code item </Highlight>
+
+Berisi kode yang berhubungan dengan peniliaian option. Ditulis di akhir seri atau pada option yang ingin dinilai.
+
+:::tip PERHATIAN!
+Huruf "i" pada ```Code item``` memang kecil dan harus kecil!
+:::
+
+## <Highlight color="#d569a5"> Misc </Highlight>
+
+![Misc](/img/misc.png)
+
+Terdiri oleh 3 kolom, yaitu ```Variable Changes```, ```SFX```, ```Next Scene```.
+
+### <Highlight color="#c03582"> Variable Changes </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Berisi variable dengan nilai yang dapat berubah.
+
+```jsx title="Berikut cara penulisan Variable Changes"
+- ditulis setiap kali value pada variable akan mengalami perubahan.
+- format penulisan ["var", 1]
+    dimana var diganti dengan kode variable,
+    dan 1 menandakan value nya bertambah 1.
+- value selalu dimulai dari 0.
+- hanya ditambah bila jawaban pemain benar.
+```
+
+### <Highlight color="#c03582"> SFX </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Berisi sound effect yang perlu ditampilkan pada baris tertentu.
+
+### <Highlight color="#c03582"> Next Scene </Highlight>
+
+:::danger CASE-SENSITIVE!
+Harap memperhatikan penulisan pada kolom!
+:::
+
+Berisi scene tujuan setelah pemain melalui pilihan / scene.
+
+```jsx title="Berikut cara penulisan Next Scene:"
+- setiap scene dipisah oleh penanda garis tegak lurus "|".
+- jangan ada spasi di antara pemisah.
+- jumlah scene di kolom Next Scene harus sama dengan jumlah pilihan pada kolom Option.
+- jika tidak terdapat option, maka cukup 1 saja.
+- jika berhubungan dengan code yang terdapat pada Seri, Code item, atau Variable Changes maka gunakan format ["code",value treshold,"scene"]
+    dimana code diganti dengan code yang dipakai untuk penilaian,
+    value treshold diganti dengan jumlah value yang perlu dicapai pemain; bila tidak ada value maka bisa menggunakan true/false,
+    dan scene diganti dengan scene tujuan.
+```
+
+
+export const Highlight = ({color, children}) => (
+  <span
+    style={{
+      borderRadius: '20px',
+      color: color,
+      cursor: 'pointer',
+    }}>
+    {children}
+  </span>
+);

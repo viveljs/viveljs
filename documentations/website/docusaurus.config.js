@@ -49,10 +49,14 @@ const config = {
         },
         items: [
           {
-            type: 'doc',
-            docId: 'intro',
+            to: '/docs/API/avatar',
             position: 'left',
             label: 'APIs',
+          },
+          {
+            to: '/docs/excel_template',
+            position: 'left',
+            label: 'Excel Template',
           },
           {to: '/blog', label: 'About Us', position: 'left'},
           {
@@ -70,7 +74,11 @@ const config = {
             items: [
               {
                 label: 'APIs',
-                to: '/docs/intro',
+                to: '/docs/API/avatar',
+              },
+              {
+                label: 'Excel Template',
+                to: '/docs/excel_template',
               },
             ],
           },
